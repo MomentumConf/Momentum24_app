@@ -30,6 +30,7 @@ dependencies:
   string_unescape: ^2.0.0
   package_info_plus: ^5.0.1
   cupertino_icons: ^1.0.6
+  web: ^0.4.2
   flutter_localizations:
     sdk: flutter
 dev_dependencies:

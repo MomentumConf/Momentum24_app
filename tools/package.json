@@ -1,0 +1,13 @@
+{
+    "name": "momentum-tools",
+    "version": "1.0.0",
+    "description": "Tools for deploying and manage Momentum App",
+    "author": "Bartosz Kazuła <bartosz@kazula.eu>",
+    "private": true,
+    "dependencies": {
+        "js-yaml": "^4.1.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.16"
+    }
+}

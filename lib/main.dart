@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart' as date_symbol_data_local;
 import 'package:momentum24_app/dependency_container.dart';
-import 'package:timeago/timeago.dart';
 import './pages/home_page.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 Future<void> main() async {
   registerDependencies();
   Intl.defaultLocale = 'pl';
-  setLocaleMessages('pl', PlMessages());
   date_symbol_data_local.initializeDateFormatting();
 
   // final sentryDsn = Platform.environment['SENTRY_DSN'];

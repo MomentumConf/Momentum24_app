@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 import 'package:get_it/get_it.dart';
@@ -16,7 +17,7 @@ class MapScreen extends StatefulWidget {
   State<MapScreen> createState() => MapScreenState();
 }
 
-class MapScreenState extends State<MapScreen> {
+class MapScreenState extends State<MapScreen> implements TickerProvider {
   final DataProviderService _dataProviderService =
       GetIt.instance.get<DataProviderService>();
 
@@ -116,6 +117,37 @@ class MapScreenState extends State<MapScreen> {
     }
   }
 
+  void _animatedMapMove(LatLng destLocation, double destZoom) {
+    final latTween = Tween<double>(
+        begin: _mapController.camera.center.latitude,
+        end: destLocation.latitude);
+    final lngTween = Tween<double>(
+        begin: _mapController.camera.center.longitude,
+        end: destLocation.longitude);
+    final zoomTween = Tween<double>(begin: _mapController.zoom, end: destZoom);
+
+    final controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    final Animation<double> animation =
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+
+    controller.addListener(() {
+      _mapController.move(
+          LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
+          zoomTween.evaluate(animation));
+    });
+
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.dispose();
+      } else if (status == AnimationStatus.dismissed) {
+        controller.dispose();
+      }
+    });
+
+    controller.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
@@ -174,7 +206,7 @@ class MapScreenState extends State<MapScreen> {
                           });
                           buildMarkers();
 
-                          _mapController.move(
+                          _animatedMapMove(
                             markers[value].coordinates,
                             zoom,
                           );
@@ -237,5 +269,10 @@ class MapScreenState extends State<MapScreen> {
               ],
             ),
     );
+  }
+
+  @override
+  Ticker createTicker(TickerCallback onTick) {
+    return Ticker(onTick);
   }
 }

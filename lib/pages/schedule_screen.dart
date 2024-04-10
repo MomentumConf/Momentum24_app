@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import '../models/event.dart';
@@ -96,6 +97,7 @@ class ScheduleScreenState extends State<ScheduleScreen>
     return Scaffold(
       appBar: AppBar(
         title: buildAppBarTitle(context),
+        centerTitle: false,
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
         bottom: isLoading || uniqueDays.isEmpty ? null : getTabBar(context),
@@ -110,18 +112,14 @@ class ScheduleScreenState extends State<ScheduleScreen>
     );
   }
 
-  Text buildAppBarTitle(BuildContext context) {
-    return Text(
-      'Momentum Konf  2024',
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.onPrimary,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        fontFeatures: const [FontFeature.enable('smcp')],
-      ),
+  Widget buildAppBarTitle(BuildContext context) {
+    return SvgPicture.asset(
+      'assets/images/logo.svg',
     );
   }
 
+  // A function that filters events for a given day, and returns a RefreshIndicator
+  // containing a ListView of ScheduleItem widgets based on the filtered events.
   Widget getEventDay(DateTime day, BuildContext context) {
     final events = filterEventsForDay(day);
     return RefreshIndicator(

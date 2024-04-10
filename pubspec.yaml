@@ -33,6 +33,7 @@ dependencies:
   web: ^0.4.2
   flutter_localizations:
     sdk: flutter
+    flutter_svg: ^2.0.10+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

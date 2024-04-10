@@ -3,7 +3,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import '../services/data_provider_service.dart';
 import '../models/notice.dart';
 
@@ -65,37 +64,39 @@ class NotificationsScreenState extends State<NotificationsScreen> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.end,
               children: notifications.asMap().entries.map((entry) {
                 final notification = entry.value;
                 final index = entry.key;
                 return TimelineTile(
-                  alignment: TimelineAlign.end,
-                  lineXY: 1,
+                  alignment: TimelineAlign.start,
                   isFirst: index == 0,
                   isLast: index == notifications.length - 1,
                   indicatorStyle: IndicatorStyle(
-                      width: 30,
+                      width: 40,
+                      indicatorXY: 0,
                       color: Theme.of(context).primaryColor,
                       iconStyle: IconStyle(
-                        color: Colors.white,
-                        iconData: Icons.notifications,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        iconData: Icons.notifications_outlined,
                       )),
                   beforeLineStyle: LineStyle(
-                      color: Theme.of(context).primaryColor, thickness: 2),
-                  startChild: Padding(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      thickness: 2),
+                  endChild: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              "${DateFormat('EEEE, HH:mm').format(notification.date)} (${timeago.format(notification.date, locale: 'pl')})",
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.black54),
+                              DateFormat('HH:mm // EEEE')
+                                  .format(notification.date),
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary),
                               textAlign: TextAlign.end,
                               textWidthBasis: TextWidthBasis.parent,
                             ),

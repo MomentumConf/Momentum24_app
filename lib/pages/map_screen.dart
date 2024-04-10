@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_map/flutter_map.dart' as map;
@@ -150,7 +152,8 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDarkTheme = theme.brightness == Brightness.dark;
 
     return Scaffold(
       body: isLoading
@@ -214,10 +217,10 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
                         itemBuilder: (context, index) {
                           final marker = markers[index];
                           final color = currentMarkerIndex == index
-                              ? Theme.of(context).primaryColor
-                              : Colors.red;
+                              ? theme.primaryColor
+                              : theme.colorScheme.onPrimary;
                           return Container(
-                            width: 200, // specify your desired width here
+                            width: 200,
                             margin: const EdgeInsets.symmetric(horizontal: 5),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -242,21 +245,14 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
                               ),
                               title: Text(
                                 marker.title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                        height: 1.1,
-                                        fontWeight: FontWeight.w600),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                    height: 1.1, fontWeight: FontWeight.w600),
                               ),
                               subtitle: Text(
                                 marker.address,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      height: 1.1,
-                                    ),
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  height: 1.1,
+                                ),
                               ),
                               onTap: () {
                                 _pageController.animateToPage(index,

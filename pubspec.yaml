@@ -14,7 +14,6 @@ dependencies:
     shared_preferences: ^2.2.2
     flutter_markdown: ^0.6.22
     intl: ^0.18.1
-    avatar_stack: ^1.2.0
     timeline_tile: ^2.0.0
     flutter_map: ^6.1.0
     latlong2: ^0.9.0

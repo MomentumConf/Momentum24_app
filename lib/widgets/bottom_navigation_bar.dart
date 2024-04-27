@@ -20,6 +20,7 @@ class BottomNavigation extends StatelessWidget {
       selectedIndex: selectedIndex,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       onDestinationSelected: onDestinationSelected,
+      indicatorShape: ContinuousRectangleBorder(),
       destinations: [
         NavigationDestination(
           icon: const Icon(Icons.schedule_outlined),

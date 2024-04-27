@@ -28,6 +28,7 @@ class SanityApiService implements ApiService {
           "imageUrl": imageUrl.asset->url,
           "imageLqip": imageUrl.asset->metadata.lqip,
         },
+        category->,
         subevents[] {
           title,
           description,
@@ -63,6 +64,8 @@ class SanityApiService implements ApiService {
       _id,
       name,
       description,
+      "coverUrl": cover.asset->url,
+      "coverLqip": cover.asset->metadata.lqip,
       "imageUrl": imageUrl.asset->url,
       "imageLqip": imageUrl.asset->metadata.lqip,
       "events": *[_type == "event" && references(^._id)] | order(start asc) {

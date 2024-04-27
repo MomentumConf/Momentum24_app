@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import './information/regulations_screen.dart';
 import './information/songs_screen.dart';
@@ -50,35 +49,40 @@ class InformationScreen extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Image.asset(image, fit: BoxFit.contain),
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Container(
-                alignment: AlignmentDirectional.bottomEnd,
-                padding: const EdgeInsets.all(4),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFeatures: [FontFeature.enable('smcp')],
-                    shadows: <Shadow>[
-                      // Optional: Adds a shadow to the text for better readability
-                      Shadow(
-                        offset: Offset(1.0, 1.0),
-                        blurRadius: 3.0,
-                        color: Colors.black,
-                      ),
-                    ],
+        child: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Image.asset(image, fit: BoxFit.contain)),
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Container(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  padding: const EdgeInsets.all(4),
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFeatures: [FontFeature.enable('smcp')],
+                      shadows: <Shadow>[
+                        // Optional: Adds a shadow to the text for better readability
+                        Shadow(
+                          offset: Offset(1.0, 1.0),
+                          blurRadius: 3.0,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -7,7 +6,6 @@ import '../models/event.dart';
 import '../services/data_provider_service.dart';
 import '../widgets/schedule_item.dart';
 import '../widgets/active_tab_indicator.dart';
-import '../services/cache_manager.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -19,7 +17,6 @@ class ScheduleScreen extends StatefulWidget {
 class ScheduleScreenState extends State<ScheduleScreen>
     with TickerProviderStateMixin {
   TabController? _tabController;
-  final CacheManager _cacheManager = GetIt.instance.get<CacheManager>();
   DataProviderService _dataProviderService =
       GetIt.instance.get<DataProviderService>();
   List<Event> schedule = [];
@@ -139,19 +136,18 @@ class ScheduleScreenState extends State<ScheduleScreen>
         itemCount: events.length,
         itemBuilder: (context, index) {
           final event = events[index];
-          final colors =
-              getColors(index + (_tabController?.index ?? 0), context);
+          final color = getColor(index + (_tabController?.index ?? 0), context);
           return ScheduleItem(
             event: event,
-            color: colors[0],
-            nextColor:
-                (events.length > index + 1) ? colors[1] : Colors.transparent,
+            color: color,
           );
         },
       ),
     );
   }
 
+  // Filter events in the schedule for a specific day.
+  // Adjust the event date for comparison if it's before 3 AM.
   List<Event> filterEventsForDay(DateTime day) {
     return schedule.where((event) {
       DateTime eventDate = event.start;
@@ -164,64 +160,68 @@ class ScheduleScreenState extends State<ScheduleScreen>
     }).toList();
   }
 
-  List<Color> getColors(int index, BuildContext context) {
-    final theme = Theme.of(context);
+  Color getColor(int index, BuildContext context) {
     List<Color> colors = [
-      theme.primaryColorLight,
-      theme.colorScheme.secondary,
-      theme.colorScheme.tertiary,
-      theme.primaryColorDark
+      const Color(0xFF0066FF),
+      const Color(0xFFFF3399),
+      const Color(0xFF00CC33),
+      const Color(0xFFFFD140),
+      const Color(0xFFE51813),
     ];
     int currentIndex = index % colors.length;
-    int nextIndex = (index + 1) % colors.length;
-    return [colors[currentIndex], colors[nextIndex]];
+    return colors[currentIndex];
   }
 
-  TabBar getTabBar(BuildContext context) {
+  PreferredSizeWidget getTabBar(BuildContext context) {
     return TabBar(
       controller: _tabController,
-      indicator: ActiveTabIndicator(color: Colors.white, radius: 10),
+      indicator: ActiveTabIndicator(color: const Color(0xFFFFD143), radius: 10),
       indicatorSize: TabBarIndicatorSize.label,
       indicatorPadding: const EdgeInsets.all(0),
       dividerHeight: 0,
       tabs: uniqueDays.map((day) {
+        final weekday =
+            DateFormat('EEE').format(day).replaceAll(RegExp(r'\.$'), '');
+        final dayOfMonth = DateFormat('d').format(day);
+
+        final scale = 1.0 -
+            (uniqueDays.indexOf(day) - _tabController!.animation!.value)
+                .abs()
+                .clamp(0.0, 1.0);
+
         return Tab(
           child: AnimatedBuilder(
             animation: _tabController!.animation!,
-            builder: (BuildContext context, Widget? child) {
-              final double scale =
-                  (_tabController!.animation!.value - uniqueDays.indexOf(day))
-                      .abs()
-                      .clamp(0.0, 1.0);
-              final Color color = ColorTween(
-                begin: Theme.of(context).primaryColor,
-                end: Colors.white70,
-              ).lerp(scale)!;
-              return Transform.scale(
-                scale: 1.0 + (0.3 * (1.0 - scale)),
-                child: SizedBox(
-                  width: 65,
-                  height: 65,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        DateFormat('EEE')
-                            .format(day)
-                            .replaceAll(RegExp(r'\.$'), ''), // Weekday name
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: color, fontSize: 12), // Adjusted font size
+            builder: (context, child) {
+              // final color = ColorTween(
+              //   begin: const Color(0xFF00CC33),
+              //   end: Theme.of(context).colorScheme.onPrimary,
+              // ).lerp(scale)!;
+              final color = Theme.of(context).colorScheme.onPrimary;
+
+              return SizedBox(
+                width: 50,
+                height: 50,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      weekday.toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: color,
+                        fontSize: 12,
                       ),
-                      Text(
-                        DateFormat('d').format(day), // Day number
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: color,
-                            fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      dayOfMonth,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: color,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             },

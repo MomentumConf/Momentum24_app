@@ -1,9 +1,9 @@
-import 'package:avatar_stack/avatar_stack.dart';
-import 'package:avatar_stack/positions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
+import 'package:momentum24_app/widgets/pill_button.dart';
 import '../pages/information/speakers_screen.dart';
 import '../models/event.dart';
 
@@ -12,12 +12,10 @@ class ScheduleItem extends StatelessWidget {
     super.key,
     required this.event,
     required this.color,
-    required this.nextColor,
   });
 
   final Event event;
   final Color color;
-  final Color nextColor;
 
   @override
   Widget build(BuildContext context) {
@@ -28,187 +26,145 @@ class ScheduleItem extends StatelessWidget {
         }
       },
       child: Container(
-        decoration: BoxDecoration(
-          color: nextColor,
-        ),
-        margin: const EdgeInsets.all(0),
+        margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
         padding: const EdgeInsets.all(0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(80.0),
-            ),
-          ),
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 20.0,
-            bottom: event.speakers.isNotEmpty ? 20.0 : 50.0,
-          ),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      DateFormat('HH:mm').format(event.start),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    if (event.location != null)
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.location_on,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            event.location!,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        bottomLeft: Radius.circular(20))),
+                padding: const EdgeInsets.only(top: 35),
+                width: 100,
+                child: Text(
+                  DateFormat('HH:mm').format(event.start),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          bottomRight: Radius.circular(20))),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(children: [
+                          Flexible(
+                            child: Text(
+                              event.title,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontSize: 22,
+                                  height: 1.3,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ],
-                      ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        event.title,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: event.subevents.isEmpty
-                                ? Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.fontSize
-                                : Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .fontSize! *
-                                    1.2,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: event.subevents.isEmpty ? 40 : 50,
-                      ),
-                      if (event.description != null && event.subevents.isEmpty)
-                        const Icon(
-                          Icons.info,
-                          color: Colors.white,
-                        ),
-                    ]),
-                if (event.subevents.isNotEmpty)
-                  for (var subevent in event.subevents)
-                    GestureDetector(
-                      onTap: () => _buildSubeventModal(context, subevent),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        ]),
+                        if (event.location != null) ...[
                           Text(
-                            subevent.title,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+                            "// ${event.location!}",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 12,
+                                height: 0.7),
                           ),
-                          const Icon(
-                            Icons.info,
-                            color: Colors.white,
-                          ),
+                          SizedBox(height: 5)
                         ],
-                      ),
-                    ),
-                if (event.speakers.isNotEmpty)
-                  _buildSpeakersList(event, context, true),
-              ]),
+                        if (event.subevents.isNotEmpty)
+                          for (var subevent in event.subevents)
+                            PillButton(
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.info_outline,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Flexible(
+                                      child: Text(
+                                        subevent.title,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                            fontSize: 12,
+                                            height: 1.1,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () =>
+                                    _buildSubeventModal(context, subevent)),
+                        if (event.speakers.isNotEmpty)
+                          _buildSpeakersList(event, context, true),
+                        if (event.description != null &&
+                            event.subevents.isEmpty) ...[
+                          const SizedBox(height: 10),
+                          Icon(
+                            Icons.info_outline,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        ]
+                      ]),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Row _buildSpeakersList(
+  Widget _buildSpeakersList(
       Event event, BuildContext context, bool hasLightBackground) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        Expanded(
-          child: SizedBox(
-            height: 50,
-            child: WidgetStack(
-              positions:
-                  RestrictedPositions(maxCoverage: 0.4, minCoverage: 0.1),
-              buildInfoWidget: (surplus) => BorderedCircleAvatar(
-                  border: BorderSide(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      width: 1.0),
-                  child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          '+$surplus',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ))),
-              stackedWidgets: event.speakers
-                  .map((speaker) => GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  SpeakersScreen(speaker: speaker.id),
-                            ),
-                          );
-                        },
-                        child: BorderedCircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider(
-                              '${speaker.imageUrl}?w=100&h=150&fit=fillmax&auto=format&q=100'),
-                          border: BorderSide(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              width: 1.0),
-                        ),
-                      ))
-                  .toList(),
-            ),
-          ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: event.speakers
-              .map((speaker) => TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SpeakersScreen(speaker: speaker.id),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    speaker.name,
-                    style: TextStyle(
-                        color: hasLightBackground
-                            ? Theme.of(context).colorScheme.background
-                            : Theme.of(context).colorScheme.onBackground),
-                  )))
-              .toList(),
-        ),
+        for (var speaker in event.speakers)
+          PillButton(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SpeakersScreen(speaker: speaker.id),
+                ),
+              );
+            },
+            child: Row(children: [
+              CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(speaker.imageUrl),
+                radius: 12.5,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                speaker.name,
+                maxLines: 1,
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              )
+            ]),
+          )
       ],
     );
   }

@@ -22,7 +22,7 @@ class _MyTabIndicatorPainter extends BoxPainter {
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
     final Rect rect =
-        Offset(offset.dx, -7.5) & Size(configuration.size!.width, 60);
+        Offset(offset.dx, -7.5) & Size(configuration.size!.width, 56);
     canvas.drawRRect(
         RRect.fromRectAndRadius(rect, Radius.circular(radius)), _paint);
   }

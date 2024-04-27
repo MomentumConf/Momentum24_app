@@ -1,7 +1,5 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/scheduler/ticker.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 import 'package:get_it/get_it.dart';
@@ -126,7 +124,8 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
     final lngTween = Tween<double>(
         begin: _mapController.camera.center.longitude,
         end: destLocation.longitude);
-    final zoomTween = Tween<double>(begin: _mapController.zoom, end: destZoom);
+    final zoomTween =
+        Tween<double>(begin: _mapController.camera.zoom, end: destZoom);
 
     final controller = AnimationController(
         duration: const Duration(milliseconds: 500), vsync: this);

@@ -51,7 +51,7 @@ class Event {
   final String? description;
   final DateTime start;
   final String? location;
-  final List<Speaker> speakers;
+  final List<EventSpeaker> speakers;
   final List<Event> subevents;
   final Category? category;
 
@@ -60,7 +60,7 @@ class Event {
     this.description,
     required this.start,
     this.location,
-    this.speakers = const <Speaker>[],
+    this.speakers = const <EventSpeaker>[],
     this.subevents = const <Event>[],
     this.category,
   });
@@ -71,11 +71,12 @@ class Event {
       description: json['description'],
       start: json['start'] != null
           ? DateTime.parse(json['start']).toLocal()
-          : DateTime.now(),
+          : DateTime.now(), // Subevents have no start date
       location: json['location'],
       speakers: json['speakers'] != null
-          ? List<Speaker>.from(json['speakers'].map((x) => Speaker.fromJson(x)))
-          : <Speaker>[],
+          ? List<EventSpeaker>.from(
+              json['speakers'].map((x) => EventSpeaker.fromJson(x)))
+          : <EventSpeaker>[],
       subevents: json['subevents'] != null
           ? List<Event>.from(json['subevents'].map((x) => Event.fromJson(x)))
           : [],

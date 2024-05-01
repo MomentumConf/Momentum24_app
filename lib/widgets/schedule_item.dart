@@ -124,7 +124,8 @@ class ScheduleItem extends StatelessWidget {
             },
             child: Row(children: [
               CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(speaker.imageUrl),
+                backgroundImage:
+                    CachedNetworkImageProvider("${speaker.imageUrl}?w=50&h=50"),
                 radius: 12.5,
               ),
               const SizedBox(

@@ -37,7 +37,6 @@ class SanityApiService implements ApiService {
           "speakers": speakers[]->{
             _id,
             name,
-            description,
             "imageUrl": imageUrl.asset->url,
             "imageLqip": imageUrl.asset->metadata.lqip,
           },

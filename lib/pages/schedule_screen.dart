@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import '../models/event.dart';
+import '../models/event.dart' show Event;
 import '../services/data_provider_service.dart';
 import '../widgets/schedule_item.dart';
 import '../widgets/active_tab_indicator.dart';
@@ -136,10 +136,16 @@ class ScheduleScreenState extends State<ScheduleScreen>
         itemCount: events.length,
         itemBuilder: (context, index) {
           final event = events[index];
-          final color = getColor(index + (_tabController?.index ?? 0), context);
+          final color = event.category == null
+              ? Theme.of(context).primaryColor
+              : Color(event.category!.color.hex);
+          final textColor = event.category == null
+              ? Theme.of(context).colorScheme.onPrimary
+              : Color(event.category!.textColor.hex);
           return ScheduleItem(
             event: event,
             color: color,
+            textColor: textColor,
           );
         },
       ),
@@ -158,18 +164,6 @@ class ScheduleScreenState extends State<ScheduleScreen>
       eventDate = DateTime(eventDate.year, eventDate.month, eventDate.day);
       return eventDate == day;
     }).toList();
-  }
-
-  Color getColor(int index, BuildContext context) {
-    List<Color> colors = [
-      const Color(0xFF0066FF),
-      const Color(0xFFFF3399),
-      const Color(0xFF00CC33),
-      const Color(0xFFFFD140),
-      const Color(0xFFE51813),
-    ];
-    int currentIndex = index % colors.length;
-    return colors[currentIndex];
   }
 
   PreferredSizeWidget getTabBar(BuildContext context) {
@@ -193,10 +187,6 @@ class ScheduleScreenState extends State<ScheduleScreen>
           child: AnimatedBuilder(
             animation: _tabController!.animation!,
             builder: (context, child) {
-              // final color = ColorTween(
-              //   begin: const Color(0xFF00CC33),
-              //   end: Theme.of(context).colorScheme.onPrimary,
-              // ).lerp(scale)!;
               final color = Theme.of(context).colorScheme.onPrimary;
 
               return SizedBox(

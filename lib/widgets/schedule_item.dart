@@ -12,10 +12,12 @@ class ScheduleItem extends StatelessWidget {
     super.key,
     required this.event,
     required this.color,
+    required this.textColor,
   });
 
   final Event event;
   final Color color;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class ScheduleItem extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.onPrimary,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         bottomLeft: Radius.circular(20))),
                 padding: const EdgeInsets.only(top: 35),
@@ -69,8 +71,7 @@ class ScheduleItem extends StatelessWidget {
                             child: Text(
                               event.title,
                               style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                  color: textColor,
                                   fontSize: 22,
                                   height: 1.3,
                                   fontWeight: FontWeight.bold),
@@ -81,40 +82,12 @@ class ScheduleItem extends StatelessWidget {
                           Text(
                             "// ${event.location!}",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 12,
-                                height: 0.7),
+                                color: textColor, fontSize: 12, height: 0.7),
                           ),
-                          SizedBox(height: 5)
+                          const SizedBox(height: 5)
                         ],
                         if (event.subevents.isNotEmpty)
-                          for (var subevent in event.subevents)
-                            PillButton(
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.info_outline,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Flexible(
-                                      child: Text(
-                                        subevent.title,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary,
-                                            fontSize: 12,
-                                            height: 1.1,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                onTap: () =>
-                                    _buildSubeventModal(context, subevent)),
+                          ..._buildSubeventsList(event.subevents, context),
                         if (event.speakers.isNotEmpty)
                           _buildSpeakersList(event, context, true),
                         if (event.description != null &&
@@ -122,7 +95,7 @@ class ScheduleItem extends StatelessWidget {
                           const SizedBox(height: 10),
                           Icon(
                             Icons.info_outline,
-                            color: Theme.of(context).colorScheme.onPrimary,
+                            color: textColor,
                           ),
                         ]
                       ]),
@@ -167,6 +140,33 @@ class ScheduleItem extends StatelessWidget {
           )
       ],
     );
+  }
+
+  List<Widget> _buildSubeventsList(
+      List<Event> subevents, BuildContext context) {
+    return subevents
+        .map((subevent) => PillButton(
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  color: textColor,
+                ),
+                const SizedBox(width: 5),
+                Flexible(
+                  child: Text(
+                    subevent.title,
+                    style: TextStyle(
+                        color: textColor,
+                        fontSize: 12,
+                        height: 1.1,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            onTap: () => _buildSubeventModal(context, subevent)))
+        .toList();
   }
 
   _buildBottomModal(BuildContext context) {

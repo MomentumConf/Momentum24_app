@@ -68,7 +68,6 @@ class InformationScreen extends StatelessWidget {
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                      fontFeatures: [FontFeature.enable('smcp')],
                       shadows: <Shadow>[
                         // Optional: Adds a shadow to the text for better readability
                         Shadow(

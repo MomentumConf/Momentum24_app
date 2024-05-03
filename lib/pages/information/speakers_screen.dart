@@ -90,7 +90,6 @@ class _SpeakersScreenState extends State<SpeakersScreen> {
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        fontFeatures: [FontFeature.enable('smcp')],
                         shadows: <Shadow>[
                           Shadow(
                             offset: Offset(1.0, 1.0),

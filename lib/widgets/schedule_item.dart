@@ -157,6 +157,7 @@ class ScheduleItem extends StatelessWidget {
                 Flexible(
                   child: Text(
                     subevent.title,
+                    textAlign: TextAlign.start,
                     style: TextStyle(
                         color: textColor,
                         fontSize: 12,

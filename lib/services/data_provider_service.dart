@@ -71,7 +71,9 @@ class DataProviderService {
       cacheManager.cacheScheduleData(json.encode(apiData));
       cacheManager.setLastUpdate(CacheManager.scheduleKey, DateTime.now());
 
-      return mapToEventList(apiData);
+      final data = mapToEventList(apiData);
+      changesNotifier(data);
+      return data;
     } catch (e) {
       await Sentry.captureException(e);
       log("$e");
@@ -103,6 +105,7 @@ class DataProviderService {
       final apiData = await apiService.fetchRegulations();
       cacheManager.cacheRegulationsData(apiData);
       cacheManager.setLastUpdate(CacheManager.regulationsKey, DateTime.now());
+      changesNotifier(apiData);
 
       return apiData;
     } catch (e) {
@@ -147,7 +150,9 @@ class DataProviderService {
       cacheManager.cacheSpeakersData(json.encode(apiData));
       cacheManager.setLastUpdate(CacheManager.speakersKey, DateTime.now());
 
-      return mapToSpeakerList(apiData);
+      final data = mapToSpeakerList(apiData);
+      changesNotifier(data);
+      return data;
     } catch (e) {
       await Sentry.captureException(e);
       log("$e");
@@ -188,7 +193,9 @@ class DataProviderService {
       cacheManager.cacheNotificationsData(json.encode(apiData));
       cacheManager.setLastUpdate(CacheManager.notificationsKey, DateTime.now());
 
-      return mapToNoticeList(apiData);
+      final data = mapToNoticeList(apiData);
+      changesNotifier(data);
+      return data;
     } catch (e) {
       await Sentry.captureException(e);
       log("$e");
@@ -228,7 +235,9 @@ class DataProviderService {
       cacheManager.cacheSongsData(json.encode(apiData));
       cacheManager.setLastUpdate(CacheManager.songsKey, DateTime.now());
 
-      return mapToSongList(apiData);
+      final data = mapToSongList(apiData).cast<Song>();
+      changesNotifier(data);
+      return data;
     } catch (e) {
       await Sentry.captureException(e);
       log("$e");
@@ -269,7 +278,9 @@ class DataProviderService {
       cacheManager.cacheMapData(json.encode(apiData));
       cacheManager.setLastUpdate(CacheManager.mapDataKey, DateTime.now());
 
-      return mapToMapData(apiData);
+      final data = mapToMapData(apiData);
+      changesNotifier(data);
+      return data;
     } catch (e) {
       await Sentry.captureException(e);
       log("$e");

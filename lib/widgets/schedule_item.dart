@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:momentum24_app/widgets/pill_button.dart';
-import '../pages/information/speakers_screen.dart';
+import '../pages/information/speaker_details_screen.dart';
 import '../models/event.dart';
 
 class ScheduleItem extends StatelessWidget {
@@ -118,7 +118,8 @@ class ScheduleItem extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SpeakersScreen(speaker: speaker.id),
+                  builder: (context) =>
+                      SpeakerDetailsScreen(speakerId: speaker.id),
                 ),
               );
             },

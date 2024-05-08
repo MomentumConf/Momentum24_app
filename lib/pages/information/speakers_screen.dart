@@ -61,7 +61,8 @@ class _SpeakersScreenState extends State<SpeakersScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SpeakerDetailsScreen(speaker: speaker),
+                  builder: (context) =>
+                      SpeakerDetailsScreen(speakerId: speaker.id),
                 ));
           },
           child: Container(

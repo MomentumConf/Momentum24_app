@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:momentum24_app/pages/information/speaker_details_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

@@ -178,11 +178,6 @@ class ScheduleScreenState extends State<ScheduleScreen>
             DateFormat('EEE').format(day).replaceAll(RegExp(r'\.$'), '');
         final dayOfMonth = DateFormat('d').format(day);
 
-        final scale = 1.0 -
-            (uniqueDays.indexOf(day) - _tabController!.animation!.value)
-                .abs()
-                .clamp(0.0, 1.0);
-
         return Tab(
           child: AnimatedBuilder(
             animation: _tabController!.animation!,

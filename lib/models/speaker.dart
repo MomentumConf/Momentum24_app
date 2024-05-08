@@ -23,11 +23,11 @@ class Speaker {
     return Speaker(
         id: json['_id'],
         name: json['name'],
-        description: json['description'],
-        coverUrl: json['coverUrl'],
-        coverLqip: json['coverLqip'],
-        imageUrl: json['imageUrl'],
-        imageLqip: json['imageLqip'],
+        description: json['description'] ?? '',
+        coverUrl: json['coverUrl'] ?? '',
+        coverLqip: json['coverLqip'] ?? '',
+        imageUrl: json['imageUrl'] ?? '',
+        imageLqip: json['imageLqip'] ?? '',
         events: json['events'] ?? []);
   }
 

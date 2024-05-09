@@ -62,7 +62,8 @@ class SongsScreenState extends State<SongsScreen> {
                       style: ListTileStyle.list,
                       tileColor: Colors.white10,
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
+                        Navigator.of(context, rootNavigator: true)
+                            .push(MaterialPageRoute(
                           builder: (context) {
                             return SingleSongScreen(song: song);
                           },

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart' as date_symbol_data_local;
 import 'package:momentum24_app/dependency_container.dart';
@@ -11,6 +12,16 @@ Future<void> main() async {
   registerDependencies();
   Intl.defaultLocale = 'pl';
   date_symbol_data_local.initializeDateFormatting();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  // make navigation bar transparent
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+    ),
+  );
+  // make flutter draw behind navigation bar
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   // final sentryDsn = Platform.environment['SENTRY_DSN'];
   const sentryDsn = String.fromEnvironment('SENTRY_DSN');

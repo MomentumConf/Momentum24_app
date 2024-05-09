@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:momentum24_app/widgets/pill_button.dart';
@@ -115,8 +114,7 @@ class ScheduleItem extends StatelessWidget {
         for (var speaker in event.speakers)
           PillButton(
             onTap: () {
-              Navigator.push(
-                context,
+              Navigator.of(context, rootNavigator: true).push(
                 MaterialPageRoute(
                   builder: (context) =>
                       SpeakerDetailsScreen(speakerId: speaker.id),

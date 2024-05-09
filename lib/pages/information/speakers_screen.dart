@@ -57,12 +57,9 @@ class _SpeakersScreenState extends State<SpeakersScreen> {
     return Center(
       child: GestureDetector(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      SpeakerDetailsScreen(speakerId: speaker.id),
-                ));
+            Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+              builder: (context) => SpeakerDetailsScreen(speakerId: speaker.id),
+            ));
           },
           child: Container(
               width: 400,

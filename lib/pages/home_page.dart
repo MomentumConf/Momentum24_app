@@ -1,16 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import '../services/data_provider_service.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import './schedule_screen.dart';
-import './notifications_screen.dart';
-import './information_screen.dart';
-import './map_screen.dart';
+
+import '../main.dart';
 import '../services/api_service.dart';
 import '../services/cache_manager.dart';
-import '../widgets/bottom_navigation_bar.dart';
+import '../services/data_provider_service.dart';
+import '../widgets/persistent_navbar_style.dart';
+import './information_screen.dart';
+import './map_screen.dart';
+import './notifications_screen.dart';
+import './schedule_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,12 +28,11 @@ class HomePageState extends State<HomePage> {
   final _updateInterval = const Duration(minutes: 1);
 
   int unreadNotifications = 0;
-  int _currentIndex = 0;
   final List<Widget> _screens = [
-    const ScheduleScreen(),
-    const NotificationsScreen(),
-    const InformationScreen(),
-    const MapScreen(),
+    const SafeArea(child: ScheduleScreen()),
+    const SafeArea(child: NotificationsScreen()),
+    const SafeArea(child: InformationScreen()),
+    const SafeArea(child: MapScreen()),
   ];
 
   final ApiService _apiService = GetIt.instance.get<ApiService>();
@@ -97,20 +100,79 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: _screens[_currentIndex],
-        bottomNavigationBar: BottomNavigation(
-          onDestinationSelected: (index) {
-            setState(() {
-              _currentIndex = index;
-              if (index == 1) {
+        body: PersistentTabView(
+          popAllScreensOnTapOfSelectedTab: true,
+          onTabChanged: (value) {
+            if (value == 1) {
+              setState(() {
                 _cacheManager
                     .saveLastReadNotificationDate(DateTime.now().toUtc());
                 unreadNotifications = 0;
-              }
-            });
+              });
+            }
           },
-          selectedIndex: _currentIndex,
-          unreadNotifications: unreadNotifications,
+          tabs: [
+            PersistentTabConfig(
+                screen: _screens[0],
+                item: ItemConfig(
+                  icon: const Icon(
+                    Icons.schedule,
+                    color: selectedColor,
+                  ),
+                  inactiveIcon: const Icon(Icons.schedule_outlined),
+                  title: AppLocalizations.of(context)!.schedule,
+                  activeForegroundColor: selectedColor,
+                  inactiveForegroundColor: colorBlack,
+                )),
+            PersistentTabConfig(
+              screen: _screens[1],
+              item: ItemConfig(
+                  icon: const Icon(
+                    Icons.notifications,
+                    color: selectedColor,
+                  ),
+                  title: AppLocalizations.of(context)!.notifications,
+                  inactiveIcon: Badge(
+                      isLabelVisible: unreadNotifications > 0,
+                      label: Text(
+                        unreadNotifications.toString(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      child: const Icon(Icons.notifications_outlined)),
+                  activeForegroundColor: selectedColor,
+                  inactiveForegroundColor: colorBlack),
+            ),
+            PersistentTabConfig(
+                screen: _screens[2],
+                item: ItemConfig(
+                    icon: const Icon(
+                      Icons.info,
+                      color: selectedColor,
+                    ),
+                    inactiveIcon: const Icon(Icons.info_outline),
+                    title: AppLocalizations.of(context)!.information,
+                    activeForegroundColor: selectedColor,
+                    inactiveForegroundColor: colorBlack)),
+            PersistentTabConfig(
+                screen: _screens[3],
+                item: ItemConfig(
+                    icon: const Icon(
+                      Icons.map,
+                      color: selectedColor,
+                    ),
+                    inactiveIcon: const Icon(Icons.map_outlined),
+                    title: AppLocalizations.of(context)!.map,
+                    activeForegroundColor: selectedColor,
+                    inactiveForegroundColor: colorBlack))
+          ],
+          navBarBuilder: (navBarConfig) => PersistentNavBarStyle(
+            navBarConfig: navBarConfig.copyWith(
+              navBarHeight: 60,
+            ),
+            navBarDecoration: NavBarDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
         ),
       ),
     );

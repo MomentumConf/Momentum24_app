@@ -105,8 +105,9 @@ class SpeakerDetailsScreen extends StatelessWidget {
                 ),
                 DraggableScrollableSheet(
                   initialChildSize: 0.3,
-                  minChildSize: 0.1,
+                  minChildSize: 0.05,
                   maxChildSize: 1.0,
+                  snap: true,
                   builder: (BuildContext context,
                       ScrollController scrollController) {
                     return Container(

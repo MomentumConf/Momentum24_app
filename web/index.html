@@ -45,6 +45,10 @@
 
     <body>
         <script>
+            window.flutterConfiguration = {
+                canvasKitBaseUrl: "/canvaskit/",
+            };
+
             window.addEventListener("load", function (ev) {
                 // Download main.dart.js
                 _flutter.loader.loadEntrypoint({
@@ -52,7 +56,7 @@
                         serviceWorkerVersion: serviceWorkerVersion,
                     },
                     onEntrypointLoaded: function (engineInitializer) {
-                        engineInitializer.initializeEngine("html").then(function (appRunner) {
+                        engineInitializer.initializeEngine().then(function (appRunner) {
                             appRunner.runApp();
                         });
                     },

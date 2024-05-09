@@ -1,5 +1,5 @@
 {
-    "buildCommand": "flutter build web",
+    "buildCommand": "flutter build web --web-renderer html --release",
     "outputDirectory": "build/web/",
     "installCommand": "flutter pub get",
     "rewrites": [

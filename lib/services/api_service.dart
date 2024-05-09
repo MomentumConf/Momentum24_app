@@ -58,8 +58,8 @@ class SanityApiService implements ApiService {
 
   @override
   Future<List<dynamic>> fetchSpeakers() async {
-    final List<dynamic> data =
-        await sanityClient.fetch<List<dynamic>>(r"""*[_type == "speaker"]{
+    final List<dynamic> data = await sanityClient
+        .fetch<List<dynamic>>(r"""*[_type == "speaker"]|order(orderRank){
       _id,
       name,
       description,
@@ -114,7 +114,8 @@ class SanityApiService implements ApiService {
 
   @override
   Future<List<dynamic>> fetchSongs() async {
-    final data = await sanityClient.fetch(r"""*[_type == "song"]{
+    final data =
+        await sanityClient.fetch(r"""*[_type == "song"]|order(orderRank){
         title,
         originalTitle,
         lyrics

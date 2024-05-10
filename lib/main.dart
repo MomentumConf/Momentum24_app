@@ -40,7 +40,8 @@ Future<void> main() async {
 }
 
 const colorBlack = Color.fromRGBO(25, 25, 24, 1);
-const primaryColor = Color.fromRGBO(233, 65, 144, 1);
+const primaryColor = Color(0xFFE94190);
+const secondary = Color(0xFF3463AC);
 const selectedColor = Color(0xFFFFD143);
 
 class ConferenceApp extends StatelessWidget {
@@ -58,33 +59,17 @@ class ConferenceApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor).copyWith(
           primary: primaryColor,
           onPrimary: const Color.fromRGBO(25, 25, 24, 1),
+          secondary: secondary,
+          onSecondary: Colors.white,
         ),
-        navigationBarTheme: NavigationBarThemeData(
-            backgroundColor: primaryColor,
-            indicatorColor: colorBlack,
-            iconTheme: MaterialStateProperty.resolveWith((state) {
-              if (state.contains(MaterialState.selected)) {
-                return const IconThemeData(color: selectedColor);
-              }
-              return const IconThemeData(color: colorBlack);
-            }),
-            labelTextStyle: MaterialStateProperty.resolveWith((state) {
-              Color color = colorBlack;
-
-              if (state.contains(MaterialState.selected)) {
-                color = selectedColor;
-              }
-
-              return TextStyle(
-                color: color,
-                fontSize: 13,
-              );
-            })),
         useMaterial3: true,
         brightness: Brightness.light,
       ).copyWith(
-        primaryColor: primaryColor,
-      ),
+          primaryColor: primaryColor,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: primaryColor,
+            foregroundColor: colorBlack,
+          )),
       // darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
       //   primaryColorDark: Colors.purple[900],
       //   textTheme: ThemeData.dark().textTheme.apply(

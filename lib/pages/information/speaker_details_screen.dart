@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:momentum24_app/models/speaker.dart';
-import 'package:momentum24_app/services/data_provider_service.dart';
 import 'package:string_unescape/string_unescape.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../models/speaker.dart';
+import '../../services/data_provider_service.dart';
+import '../../widgets/snapping_handler.dart';
 
 class SpeakerDetailsScreen extends StatelessWidget {
   final String speakerId;
@@ -121,22 +123,7 @@ class SpeakerDetailsScreen extends StatelessWidget {
                       child: ListView(
                         controller: scrollController,
                         children: <Widget>[
-                          Center(
-                            child: Container(
-                              width: 32,
-                              height: 4,
-                              margin:
-                                  const EdgeInsets.only(top: 15.0, bottom: 4.0),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant
-                                    .withOpacity(0.4),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(12.0)),
-                              ),
-                            ),
-                          ),
+                          const Center(child: SnappingHandler()),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: MarkdownBody(

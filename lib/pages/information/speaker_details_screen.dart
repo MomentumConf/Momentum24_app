@@ -79,6 +79,9 @@ class SpeakerDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyleWhiteColor = TextStyle(
+      color: Theme.of(context).colorScheme.onSecondary,
+    );
     return FutureBuilder(
       future: getSpeaker(),
       builder: (BuildContext context, AsyncSnapshot<Speaker> speaker) {
@@ -114,7 +117,7 @@ class SpeakerDetailsScreen extends StatelessWidget {
                       ScrollController scrollController) {
                     return Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColorLight,
+                        color: Theme.of(context).colorScheme.secondary,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20),
@@ -127,6 +130,12 @@ class SpeakerDetailsScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: MarkdownBody(
+                                styleSheet: MarkdownStyleSheet.fromTheme(
+                                        Theme.of(context))
+                                    .copyWith(
+                                        p: textStyleWhiteColor,
+                                        h2: textStyleWhiteColor,
+                                        strong: textStyleWhiteColor),
                                 data: speaker.data!.description +
                                     getEventsMarkdown(
                                         events: speaker.data!.events,

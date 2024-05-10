@@ -26,17 +26,19 @@ class SingleSongScreenState extends State<SingleSongScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ListenableBuilder(
       listenable: textScaleManager,
       builder: (context, _) => Scaffold(
-        backgroundColor: Theme.of(context).primaryColorLight,
+        backgroundColor: theme.colorScheme.secondary,
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
               expandedHeight: 120.0,
               pinned: true,
               stretch: true,
-              backgroundColor: Theme.of(context).primaryColorLight,
+              backgroundColor: theme.colorScheme.secondary,
+              foregroundColor: theme.colorScheme.onSecondary,
               flexibleSpace: FlexibleSpaceBar(
                 title: SizedBox(
                   width: double.infinity,
@@ -46,22 +48,18 @@ class SingleSongScreenState extends State<SingleSongScreen> {
                     children: [
                       Text(
                         widget.song.title,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  height: 1.4,
-                                ),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.onSecondary,
+                          height: 1.4,
+                        ),
                       ),
                       Text(
                         widget.song.originalTitle,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              height: 1.1,
-                              fontSize: 10,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.color
-                                  ?.withOpacity(0.3),
-                            ),
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: theme.colorScheme.onSecondary.withOpacity(0.3),
+                          height: 1.1,
+                          fontSize: 10,
+                        ),
                       ),
                     ],
                   ),
@@ -81,9 +79,8 @@ class SingleSongScreenState extends State<SingleSongScreen> {
                   padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 100),
                   child: MarkdownBody(
                     data: unescape(widget.song.lyrics),
-                    styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
-                        .copyWith(
-                            textScaleFactor: textScaleManager.scaleFactor),
+                    styleSheet: MarkdownStyleSheet.fromTheme(theme).copyWith(
+                        textScaleFactor: textScaleManager.scaleFactor),
                   ),
                 ),
               ),

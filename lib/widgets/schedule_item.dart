@@ -154,6 +154,7 @@ class ScheduleItem extends StatelessWidget {
                 ),
                 const SizedBox(width: 5),
                 Flexible(
+                  fit: FlexFit.tight,
                   child: Text(
                     subevent.title,
                     textAlign: TextAlign.start,

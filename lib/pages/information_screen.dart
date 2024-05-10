@@ -51,7 +51,7 @@ class InformationScreen extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.all(10.0),
+          margin: const EdgeInsets.only(top: 2.5, bottom: 2.5),
           child: Stack(
             alignment: Alignment.center,
             children: [

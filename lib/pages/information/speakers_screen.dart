@@ -53,6 +53,8 @@ class _SpeakersScreenState extends State<SpeakersScreen> {
   }
 
   Widget buildSpeaker(BuildContext context, int index) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double cardWidth = (screenWidth - 20).clamp(300, 400);
     final speaker = speakers[index];
     return Center(
       child: GestureDetector(
@@ -62,7 +64,7 @@ class _SpeakersScreenState extends State<SpeakersScreen> {
             ));
           },
           child: Container(
-              width: 400,
+              width: cardWidth,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
               ),

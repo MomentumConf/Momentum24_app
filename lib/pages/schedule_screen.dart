@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+
 import '../models/event.dart' show Event;
 import '../services/data_provider_service.dart';
-import '../widgets/schedule_item.dart';
 import '../widgets/active_tab_indicator.dart';
+import '../widgets/momentum_appbar.dart';
+import '../widgets/schedule_item.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -92,13 +93,8 @@ class ScheduleScreenState extends State<ScheduleScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: buildAppBarTitle(context),
-        centerTitle: false,
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0,
-        bottom: isLoading || uniqueDays.isEmpty ? null : getTabBar(context),
-      ),
+      appBar: MomentumAppBar(
+          bottom: isLoading || uniqueDays.isEmpty ? null : getTabBar(context)),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : TabBarView(
@@ -106,12 +102,6 @@ class ScheduleScreenState extends State<ScheduleScreen>
               children:
                   uniqueDays.map((day) => getEventDay(day, context)).toList(),
             ),
-    );
-  }
-
-  Widget buildAppBarTitle(BuildContext context) {
-    return SvgPicture.asset(
-      'assets/images/logo.svg',
     );
   }
 

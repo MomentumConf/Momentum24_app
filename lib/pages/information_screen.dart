@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../widgets/momentum_appbar.dart';
 import './information/regulations_screen.dart';
 import './information/songs_screen.dart';
 import './information/speakers_screen.dart';
@@ -10,6 +11,7 @@ class InformationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MomentumAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,

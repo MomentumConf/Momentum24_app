@@ -175,6 +175,7 @@ class ScheduleItem extends StatelessWidget {
     return showModalBottomSheet(
         context: context,
         showDragHandle: true,
+        useRootNavigator: true,
         builder: (context) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,6 +209,7 @@ class ScheduleItem extends StatelessWidget {
     return showModalBottomSheet(
         context: context,
         showDragHandle: true,
+        useRootNavigator: true,
         builder: (context) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

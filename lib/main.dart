@@ -23,7 +23,6 @@ Future<void> main() async {
   // make flutter draw behind navigation bar
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  // final sentryDsn = Platform.environment['SENTRY_DSN'];
   const sentryDsn = String.fromEnvironment('SENTRY_DSN');
   if (sentryDsn != "") {
     await SentryFlutter.init(
@@ -32,11 +31,9 @@ Future<void> main() async {
         options.tracesSampleRate = 1.0;
         options.environment = kDebugMode ? 'debug' : 'production';
       },
-      appRunner: () => runApp(const ConferenceApp()),
     );
-  } else {
-    runApp(const ConferenceApp());
   }
+  runApp(const ConferenceApp());
 }
 
 const colorBlack = Color.fromRGBO(25, 25, 24, 1);

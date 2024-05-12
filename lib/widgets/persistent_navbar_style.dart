@@ -77,26 +77,24 @@ class PersistentNavBarStyle extends StatelessWidget {
               ),
             ],
           ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: navBarConfig.items.map((item) {
-                final int index = navBarConfig.items.indexOf(item);
-                return Flexible(
-                  child: InkWell(
-                    onTap: () {
-                      navBarConfig.onItemSelected(index);
-                    },
-                    child: Center(
-                      child: _buildItem(
-                        item,
-                        navBarConfig.selectedIndex == index,
-                      ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: navBarConfig.items.map((item) {
+              final int index = navBarConfig.items.indexOf(item);
+              return Flexible(
+                child: InkWell(
+                  onTap: () {
+                    navBarConfig.onItemSelected(index);
+                  },
+                  child: Center(
+                    child: _buildItem(
+                      item,
+                      navBarConfig.selectedIndex == index,
                     ),
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),

@@ -71,9 +71,9 @@ class PersistentNavBarStyle extends StatelessWidget {
                 width: itemWidth,
                 height: 56,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: colorBlack,
-                ),
+                decoration: const BoxDecoration(
+                    color: colorBlack,
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
               ),
             ],
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart' as date_symbol_data_local;
 import 'package:momentum24_app/dependency_container.dart';
@@ -41,6 +42,17 @@ const primaryColor = Color(0xFFE94190);
 const secondary = Color(0xFF3463AC);
 const selectedColor = Color(0xFFFFD143);
 
+final baseTheme = ThemeData(
+  colorScheme: ColorScheme.fromSeed(seedColor: primaryColor).copyWith(
+    primary: primaryColor,
+    onPrimary: const Color.fromRGBO(25, 25, 24, 1),
+    secondary: secondary,
+    onSecondary: Colors.white,
+  ),
+  useMaterial3: true,
+  brightness: Brightness.light,
+);
+
 class ConferenceApp extends StatelessWidget {
   const ConferenceApp({super.key});
 
@@ -52,21 +64,14 @@ class ConferenceApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
 
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: primaryColor).copyWith(
-          primary: primaryColor,
-          onPrimary: const Color.fromRGBO(25, 25, 24, 1),
-          secondary: secondary,
-          onSecondary: Colors.white,
+      theme: baseTheme.copyWith(
+        primaryColor: primaryColor,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: primaryColor,
+          foregroundColor: colorBlack,
         ),
-        useMaterial3: true,
-        brightness: Brightness.light,
-      ).copyWith(
-          primaryColor: primaryColor,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: primaryColor,
-            foregroundColor: colorBlack,
-          )),
+        textTheme: GoogleFonts.latoTextTheme(baseTheme.textTheme),
+      ),
       // darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
       //   primaryColorDark: Colors.purple[900],
       //   textTheme: ThemeData.dark().textTheme.apply(

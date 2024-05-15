@@ -18,6 +18,18 @@ class ScheduleItem extends StatelessWidget {
   final Color color;
   final Color textColor;
 
+  double getHourTopPadding(Event event) {
+    if (event.description != null ||
+        event.subevents.isNotEmpty ||
+        event.speakers.isNotEmpty) {
+      return 35;
+    }
+    if (event.description == null && event.location == null) {
+      return 12;
+    }
+    return 18;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -40,7 +52,7 @@ class ScheduleItem extends StatelessWidget {
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         bottomLeft: Radius.circular(20))),
-                padding: const EdgeInsets.only(top: 35),
+                padding: EdgeInsets.only(top: getHourTopPadding(event)),
                 width: 100,
                 child: Text(
                   DateFormat('HH:mm').format(event.start),

@@ -65,7 +65,8 @@ class SongsScreenState extends State<SongsScreen> {
                         Navigator.of(context, rootNavigator: true)
                             .push(MaterialPageRoute(
                           builder: (context) {
-                            return SingleSongScreen(song: song);
+                            return SingleSongScreen(
+                                songs: songs, currentIndex: index);
                           },
                         ));
                       });

@@ -4,10 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart' as date_symbol_data_local;
-import 'package:momentum24_app/dependency_container.dart';
-import './pages/home_page.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import './dependency_container.dart';
+import './pages/home_page.dart';
+import './colors.dart';
 
 Future<void> main() async {
   registerDependencies();
@@ -37,16 +38,11 @@ Future<void> main() async {
   runApp(const ConferenceApp());
 }
 
-const colorBlack = Color.fromRGBO(25, 25, 24, 1);
-const primaryColor = Color(0xFFE94190);
-const secondary = Color(0xFF3463AC);
-const selectedColor = Color(0xFFFFD143);
-
 final baseTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(seedColor: primaryColor).copyWith(
     primary: primaryColor,
-    onPrimary: const Color.fromRGBO(25, 25, 24, 1),
-    secondary: secondary,
+    onPrimary: textColor,
+    secondary: secondaryColor,
     onSecondary: Colors.white,
   ),
   useMaterial3: true,
@@ -68,7 +64,7 @@ class ConferenceApp extends StatelessWidget {
         primaryColor: primaryColor,
         appBarTheme: const AppBarTheme(
           backgroundColor: primaryColor,
-          foregroundColor: colorBlack,
+          foregroundColor: textColor,
         ),
         textTheme: GoogleFonts.latoTextTheme(baseTheme.textTheme),
       ),

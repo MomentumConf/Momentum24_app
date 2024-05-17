@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
-import '../main.dart';
-
 class PersistentNavBarStyle extends StatelessWidget {
   const PersistentNavBarStyle({
     required this.navBarConfig,
@@ -50,6 +48,8 @@ class PersistentNavBarStyle extends StatelessWidget {
     final double itemWidth = (MediaQuery.of(context).size.width -
             navBarDecoration.padding.horizontal) /
         navBarConfig.items.length;
+
+    final boxColor = Theme.of(context).colorScheme.onPrimary;
     return DecoratedNavBar(
       decoration: navBarDecoration,
       filter: navBarConfig.selectedItem.filter,
@@ -71,9 +71,9 @@ class PersistentNavBarStyle extends StatelessWidget {
                 width: itemWidth,
                 height: 56,
                 alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                    color: colorBlack,
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                decoration: BoxDecoration(
+                    color: boxColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(12))),
               ),
             ],
           ),

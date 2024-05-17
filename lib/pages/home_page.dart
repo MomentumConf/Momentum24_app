@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-import '../main.dart';
+import '../colors.dart';
 import '../services/api_service.dart';
 import '../services/cache_manager.dart';
 import '../services/data_provider_service.dart';
@@ -117,19 +117,19 @@ class HomePageState extends State<HomePage> {
                 item: ItemConfig(
                   icon: const Icon(
                     Icons.schedule,
-                    color: selectedColor,
+                    color: highlightColor,
                   ),
                   inactiveIcon: const Icon(Icons.schedule_outlined),
                   title: AppLocalizations.of(context)!.schedule,
-                  activeForegroundColor: selectedColor,
-                  inactiveForegroundColor: colorBlack,
+                  activeForegroundColor: highlightColor,
+                  inactiveForegroundColor: textColor,
                 )),
             PersistentTabConfig(
               screen: _screens[1],
               item: ItemConfig(
                   icon: const Icon(
                     Icons.notifications,
-                    color: selectedColor,
+                    color: highlightColor,
                   ),
                   title: AppLocalizations.of(context)!.notifications,
                   inactiveIcon: Badge(
@@ -139,31 +139,31 @@ class HomePageState extends State<HomePage> {
                         style: const TextStyle(color: Colors.white),
                       ),
                       child: const Icon(Icons.notifications_outlined)),
-                  activeForegroundColor: selectedColor,
-                  inactiveForegroundColor: colorBlack),
+                  activeForegroundColor: highlightColor,
+                  inactiveForegroundColor: textColor),
             ),
             PersistentTabConfig(
                 screen: _screens[2],
                 item: ItemConfig(
                     icon: const Icon(
                       Icons.info,
-                      color: selectedColor,
+                      color: highlightColor,
                     ),
                     inactiveIcon: const Icon(Icons.info_outline),
                     title: AppLocalizations.of(context)!.information,
-                    activeForegroundColor: selectedColor,
-                    inactiveForegroundColor: colorBlack)),
+                    activeForegroundColor: highlightColor,
+                    inactiveForegroundColor: textColor)),
             PersistentTabConfig(
                 screen: _screens[3],
                 item: ItemConfig(
                     icon: const Icon(
                       Icons.map,
-                      color: selectedColor,
+                      color: highlightColor,
                     ),
                     inactiveIcon: const Icon(Icons.map_outlined),
                     title: AppLocalizations.of(context)!.map,
-                    activeForegroundColor: selectedColor,
-                    inactiveForegroundColor: colorBlack))
+                    activeForegroundColor: highlightColor,
+                    inactiveForegroundColor: textColor))
           ],
           navBarBuilder: (navBarConfig) => PersistentNavBarStyle(
             navBarConfig: navBarConfig.copyWith(

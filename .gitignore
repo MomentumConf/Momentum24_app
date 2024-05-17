@@ -53,3 +53,9 @@ tools/.yarn/*
 .pnp.cjs
 .pnp.loader.mjs
 .yarnrc.yml
+
+settings.json
+lib/colors.dart
+web/icons
+web/favicon.png
+assets/images/

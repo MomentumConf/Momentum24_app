@@ -76,7 +76,7 @@ class RegulationsScreenState extends State<RegulationsScreen> {
             height: 10,
           ),
           TextButton(
-              child: Text("Usuń cache"),
+              child: Text(AppLocalizations.of(context)!.clearCache),
               onPressed: () {
                 _dataProviderService.clearCache();
               })

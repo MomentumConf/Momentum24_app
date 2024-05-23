@@ -9,5 +9,6 @@
     "sessions": "Sessions",
     "navigateTo": "Navigate to",
     "aboutApp": "About app",
-    "privacyPolicy": "Privacy policy"
+    "privacyPolicy": "Privacy policy",
+    "clearCache": "Clear cache"
 }

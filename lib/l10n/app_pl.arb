@@ -3,11 +3,12 @@
     "notifications": "Powiadomienia",
     "information": "Informacje",
     "map": "Mapa",
-    "speakers": "Prelegenci",
+    "speakers": "Mówcy",
     "songs": "Koncert na plaży",
     "regulations": "Regulamin",
     "sessions": "Sesje",
     "navigateTo": "Wyznacz trasę",
     "aboutApp": "O aplikacji",
-    "privacyPolicy": "Polityka prywatności"
+    "privacyPolicy": "Polityka prywatności",
+    "clearCache": "Wyczyść cache"
 }

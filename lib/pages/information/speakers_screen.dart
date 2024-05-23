@@ -39,17 +39,19 @@ class _SpeakersScreenState extends State<SpeakersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.speakers),
-        ),
-        body: isLoading || speakers.isEmpty
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: speakers.length,
-                padding: EdgeInsets.zero,
-                itemBuilder: (context, index) => buildSpeaker(context, index),
-              ));
+    return SafeArea(
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.speakers),
+          ),
+          body: isLoading || speakers.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: speakers.length,
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (context, index) => buildSpeaker(context, index),
+                )),
+    );
   }
 
   Widget buildSpeaker(BuildContext context, int index) {

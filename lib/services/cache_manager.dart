@@ -25,6 +25,7 @@ abstract class CacheManager {
   Future<DateTime?> getLastUpdate(String key);
   Future<void> saveLastReadNotificationDate(DateTime date);
   Future<void> setLastUpdate(String key, DateTime time);
+  Future<void> clearCache();
 }
 
 class PreferencesCacheManager implements CacheManager {
@@ -120,5 +121,10 @@ class PreferencesCacheManager implements CacheManager {
   @override
   Future<String?> getMapData() async {
     return (await prefs).getString(CacheManager.mapDataKey);
+  }
+
+  @override
+  Future<void> clearCache() async {
+    await (await prefs).clear();
   }
 }

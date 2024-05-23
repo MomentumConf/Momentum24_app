@@ -305,4 +305,9 @@ class DataProviderService {
       log("$e");
     }
   }
+
+  Future<void> clearCache() async {
+    await cacheManager.clearCache();
+    prefetchAndCacheData();
+  }
 }

@@ -72,6 +72,14 @@ class RegulationsScreenState extends State<RegulationsScreen> {
                         ])
                   },
               child: Text(AppLocalizations.of(context)!.aboutApp)),
+          const SizedBox(
+            height: 10,
+          ),
+          TextButton(
+              child: Text("Usuń cache"),
+              onPressed: () {
+                _dataProviderService.clearCache();
+              })
         ],
       ),
     );

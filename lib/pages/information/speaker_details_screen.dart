@@ -62,7 +62,7 @@ class SpeakerDetailsScreen extends StatelessWidget {
     String eventsMarkdown = "  \n  \n  \n## $sessionsHeading\n";
     for (var event in getEventsWithSpeaker(events, currentSpeaker)) {
       eventsMarkdown +=
-          "**${event['title']}**  \n${DateFormat('EEEE, HH:mm').format(DateTime.parse(event['start']!))} - ${event['location']}\n\n";
+          "**${event['title']}**  \n${DateFormat('EEEE, HH:mm').format(DateTime.parse(event['start']!).toLocal())} - ${event['location']}\n\n";
     }
     return unescape(eventsMarkdown);
   }

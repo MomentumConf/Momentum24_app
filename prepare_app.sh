@@ -32,7 +32,7 @@ update_manifest_json() {
   echo "Updating manifest.json"
   SHORT_NAME=$(echo $APP_NAME | awk '{print $NF}')
   jq --arg appName "$APP_NAME" --arg shortName "$SHORT_NAME" --arg themeColor "$MAIN_COLOR" \
-    '.name = $appName | .short_name = $shortName | .theme_color = $themeColor' \
+    '.name = $appName | .short_name = $shortName | .theme_color = $themeColor | .background_color = $themeColor' \
     $MANIFEST_FILE > $MANIFEST_FILE.tmp && mv $MANIFEST_FILE.tmp $MANIFEST_FILE
 }
 

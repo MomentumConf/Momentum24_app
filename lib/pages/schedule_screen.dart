@@ -157,6 +157,7 @@ class ScheduleScreenState extends State<ScheduleScreen>
   }
 
   PreferredSizeWidget getTabBar(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
     return TabBar(
       controller: _tabController,
       indicator: ActiveTabIndicator(color: const Color(0xFFFFD143), radius: 10),
@@ -175,13 +176,16 @@ class ScheduleScreenState extends State<ScheduleScreen>
               final color = Theme.of(context).colorScheme.onPrimary;
 
               return SizedBox(
-                width: 50,
+                width: deviceWidth / uniqueDays.length,
                 height: 50,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      weekday.toUpperCase(),
+                      ((deviceWidth > 365 || weekday.length == 2)
+                              ? weekday
+                              : weekday[0] + weekday[2])
+                          .toUpperCase(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: color,
@@ -191,7 +195,7 @@ class ScheduleScreenState extends State<ScheduleScreen>
                     Text(
                       dayOfMonth,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         color: color,
                         fontWeight: FontWeight.bold,
                       ),

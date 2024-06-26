@@ -96,7 +96,7 @@ class NotificationsScreenState extends State<NotificationsScreen> {
                             children: [
                               Text(
                                 DateFormat('HH:mm // EEEE')
-                                    .format(notification.date),
+                                    .format(notification.date.toLocal()),
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Theme.of(context)

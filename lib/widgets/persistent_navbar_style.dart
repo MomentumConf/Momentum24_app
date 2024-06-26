@@ -63,13 +63,13 @@ class PersistentNavBarStyle extends StatelessWidget {
                 duration: itemAnimationProperties.duration,
                 curve: itemAnimationProperties.curve,
                 width: itemWidth * navBarConfig.selectedIndex,
-                height: 56,
+                height: navBarConfig.navBarHeight * 96 / 100,
               ),
               AnimatedContainer(
                 duration: itemAnimationProperties.duration,
                 curve: itemAnimationProperties.curve,
                 width: itemWidth,
-                height: 56,
+                height: navBarConfig.navBarHeight * 96 / 100,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     color: boxColor,

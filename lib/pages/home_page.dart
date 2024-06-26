@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:html' as html;
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -15,6 +18,13 @@ import './information_screen.dart';
 import './map_screen.dart';
 import './notifications_screen.dart';
 import './schedule_screen.dart';
+
+double getBottomPaddingBasedOnDevice() {
+  if (kIsWeb && html.window.navigator.userAgent.contains('iPhone')) {
+    return 20.0;
+  }
+  return 5.0;
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -99,7 +109,6 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      maintainBottomViewPadding: true,
       child: Scaffold(
         body: PersistentTabView(
           popAllScreensOnTapOfSelectedTab: true,
@@ -168,11 +177,12 @@ class HomePageState extends State<HomePage> {
           ],
           navBarBuilder: (navBarConfig) => PersistentNavBarStyle(
             navBarConfig: navBarConfig.copyWith(
-              navBarHeight: 60,
+              navBarHeight: 60 + (getBottomPaddingBasedOnDevice() / 2),
             ),
             navBarDecoration: NavBarDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
+                color: Theme.of(context).primaryColor,
+                padding: EdgeInsets.fromLTRB(
+                    2, 5, 2, getBottomPaddingBasedOnDevice())),
           ),
         ),
       ),

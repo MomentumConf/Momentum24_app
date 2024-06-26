@@ -99,6 +99,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      maintainBottomViewPadding: true,
       child: Scaffold(
         body: PersistentTabView(
           popAllScreensOnTapOfSelectedTab: true,

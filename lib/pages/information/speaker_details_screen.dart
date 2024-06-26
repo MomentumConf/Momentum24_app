@@ -110,7 +110,7 @@ class SpeakerDetailsScreen extends StatelessWidget {
                 ),
                 DraggableScrollableSheet(
                   initialChildSize: 0.3,
-                  minChildSize: 0.05,
+                  minChildSize: 0.1,
                   maxChildSize: 1.0,
                   snap: true,
                   builder: (BuildContext context,
@@ -128,7 +128,7 @@ class SpeakerDetailsScreen extends StatelessWidget {
                         children: <Widget>[
                           const Center(child: SnappingHandler()),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.fromLTRB(8, 36, 8, 8),
                             child: MarkdownBody(
                                 styleSheet: MarkdownStyleSheet.fromTheme(
                                         Theme.of(context))

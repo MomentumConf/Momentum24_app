@@ -17,7 +17,7 @@ class ScheduleScreen extends StatefulWidget {
 
 class ScheduleScreenState extends State<ScheduleScreen>
     with TickerProviderStateMixin {
-  TabController? _tabController;
+  late TabController _tabController;
   DataProviderService _dataProviderService =
       GetIt.instance.get<DataProviderService>();
   List<Event> schedule = [];
@@ -126,12 +126,12 @@ class ScheduleScreenState extends State<ScheduleScreen>
         itemCount: events.length,
         itemBuilder: (context, index) {
           final event = events[index];
-          final color = event.category == null
-              ? Theme.of(context).primaryColor
-              : Color(event.category!.color.hex);
-          final textColor = event.category == null
-              ? Theme.of(context).colorScheme.onPrimary
-              : Color(event.category!.textColor.hex);
+          final color = event.category != null
+              ? Color(event.category?.color.hex ?? 0xFFFFFF)
+              : Theme.of(context).primaryColor;
+          final textColor = event.category != null
+              ? Color(event.category?.textColor.hex ?? 0xFFFFFF)
+              : Theme.of(context).colorScheme.onPrimary;
           return ScheduleItem(
             event: event,
             color: color,
@@ -171,7 +171,7 @@ class ScheduleScreenState extends State<ScheduleScreen>
 
         return Tab(
           child: AnimatedBuilder(
-            animation: _tabController!.animation!,
+            animation: _tabController.animation!,
             builder: (context, child) {
               final color = Theme.of(context).colorScheme.onPrimary;
 

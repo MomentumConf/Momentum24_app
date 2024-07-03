@@ -11,11 +11,11 @@ import './pages/home_page.dart';
 import './colors.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   registerDependencies();
   Intl.defaultLocale = 'pl';
   date_symbol_data_local.initializeDateFormatting();
 
-  WidgetsFlutterBinding.ensureInitialized();
   // make navigation bar transparent
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(

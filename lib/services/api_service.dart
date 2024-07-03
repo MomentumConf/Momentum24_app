@@ -86,7 +86,7 @@ class SanityApiService implements ApiService {
 
   @override
   Future<List<dynamic>> fetchNotifications() async {
-    final currentDate = DateTime.now().toIso8601String();
+    final currentDate = DateTime.now().toUtc().toIso8601String();
     final data = await sanityClient
         .fetch(r"""*[_type == "notification" && date <= $currentDate] | order(date desc) {
   _id,

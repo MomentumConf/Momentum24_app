@@ -93,64 +93,61 @@ class SpeakerDetailsScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(speaker.data!.name),
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 1.0),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomCenter,
-              children: <Widget>[
-                Positioned.fill(
-                  child: CachedNetworkImage(
-                    imageUrl: "${speaker.data!.imageUrl}?auto=format&q=100",
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Image.memory(
-                      Uri.parse(speaker.data!.imageLqip).data!.contentAsBytes(),
-                      fit: BoxFit.contain,
-                    ),
+          body: Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: <Widget>[
+              Positioned.fill(
+                child: CachedNetworkImage(
+                  imageUrl: "${speaker.data!.imageUrl}?auto=format&q=100",
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Image.memory(
+                    Uri.parse(speaker.data!.imageLqip).data!.contentAsBytes(),
+                    fit: BoxFit.contain,
                   ),
                 ),
-                DraggableScrollableSheet(
-                  initialChildSize: 0.3,
-                  minChildSize: 0.1,
-                  maxChildSize: 1.0,
-                  snap: true,
-                  builder: (BuildContext context,
-                      ScrollController scrollController) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
+              ),
+              DraggableScrollableSheet(
+                initialChildSize: 0.3,
+                minChildSize: 0.1,
+                maxChildSize: 1.0,
+                snap: true,
+                builder:
+                    (BuildContext context, ScrollController scrollController) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondary,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
-                      child: ListView(
-                        controller: scrollController,
-                        children: <Widget>[
-                          const Center(child: SnappingHandler()),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 36, 8, 8),
-                            child: MarkdownBody(
-                                styleSheet: MarkdownStyleSheet.fromTheme(
-                                        Theme.of(context))
-                                    .copyWith(
-                                        p: textStyleWhiteColor,
-                                        h2: textStyleWhiteColor,
-                                        strong: textStyleWhiteColor),
-                                data: speaker.data!.description +
-                                    getEventsMarkdown(
-                                        events: speaker.data!.events,
-                                        currentSpeaker: speaker.data!.id,
-                                        sessionsHeading:
-                                            AppLocalizations.of(context)!
-                                                .sessions)),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+                    ),
+                    child: ListView(
+                      controller: scrollController,
+                      children: <Widget>[
+                        const Center(child: SnappingHandler()),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 36, 8, 8),
+                          child: MarkdownBody(
+                              styleSheet: MarkdownStyleSheet.fromTheme(
+                                      Theme.of(context))
+                                  .copyWith(
+                                      p: textStyleWhiteColor,
+                                      h2: textStyleWhiteColor,
+                                      strong: textStyleWhiteColor),
+                              data: speaker.data!.description +
+                                  getEventsMarkdown(
+                                      events: speaker.data!.events,
+                                      currentSpeaker: speaker.data!.id,
+                                      sessionsHeading:
+                                          AppLocalizations.of(context)!
+                                              .sessions)),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         );
       },

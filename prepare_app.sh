@@ -55,6 +55,10 @@ download_and_resize_icons() {
   done
 }
 
+copy_icon_to_assets() {
+  cp $ICONS_DIR/Icon-512.png $ASSETS_DIR/icon.png
+}
+
 create_favicon() {
   local BASE_URL="${APP_ICON}?w=32&h=32"
   wget -O $FAVICON_FILE $BASE_URL
@@ -78,8 +82,9 @@ main() {
   create_colors_file
   update_index_html
   update_manifest_json
-  download_images
   download_and_resize_icons
+  download_images
+  copy_icon_to_assets
   create_favicon
 }
 

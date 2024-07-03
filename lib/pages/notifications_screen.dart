@@ -3,6 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/notice.dart';
 import '../services/data_provider_service.dart';
@@ -111,8 +112,12 @@ class NotificationsScreenState extends State<NotificationsScreen> {
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold)),
                           Expanded(
-                              child:
-                                  MarkdownBody(data: notification.description)),
+                              child: MarkdownBody(
+                            data: notification.description,
+                            onTapLink: (text, href, title) {
+                              launchUrl(Uri.parse(href!));
+                            },
+                          )),
                         ],
                       ),
                     ),

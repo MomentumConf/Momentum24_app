@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html' as html;
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,6 +51,7 @@ class HomePageState extends State<HomePage> {
   final DataProviderService _dataProviderService =
       GetIt.instance.get<DataProviderService>();
   late Timer _timer;
+  final AsyncMemoizer _memorizer = AsyncMemoizer();
 
   Future<int?> getUnreadNotifications() async {
     try {
@@ -108,7 +110,8 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _dataProviderService.prefetchAndCacheData(),
+      future:
+          _memorizer.runOnce(() => _dataProviderService.prefetchAndCacheData()),
       builder: (context, snapshot) {
         Widget child;
         final loadingImageSize = (MediaQuery.of(context).size.width * 0.8);

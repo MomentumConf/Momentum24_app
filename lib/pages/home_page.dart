@@ -78,7 +78,6 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _dataProviderService.prefetchAndCacheData();
     getUnreadNotificationsCount();
     startTimer();
   }
@@ -108,6 +107,37 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _dataProviderService.prefetchAndCacheData(),
+      builder: (context, snapshot) {
+        Widget child;
+        final loadingImageSize = (MediaQuery.of(context).size.width * 0.8);
+        if (snapshot.connectionState != ConnectionState.done) {
+          child = Scaffold(
+            body: Container(
+              color: Theme.of(context).primaryColor,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/icon.png',
+                        width: loadingImageSize, height: loadingImageSize),
+                  ],
+                ),
+              ),
+            ),
+          );
+        } else {
+          child = buildHomePage(context);
+        }
+
+        return AnimatedSwitcher(
+            duration: const Duration(seconds: 1), child: child);
+      },
+    );
+  }
+
+  Widget buildHomePage(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: PersistentTabView(

@@ -19,7 +19,7 @@ class ScheduleScreen extends StatefulWidget {
 class ScheduleScreenState extends State<ScheduleScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  DataProviderService _dataProviderService =
+  final DataProviderService _dataProviderService =
       GetIt.instance.get<DataProviderService>();
   List<Event> schedule = [];
   bool isLoading = true;
@@ -28,16 +28,8 @@ class ScheduleScreenState extends State<ScheduleScreen>
   @override
   void initState() {
     super.initState();
-    initializeServices();
     loadSchedule();
     _tabController = TabController(length: 0, vsync: this);
-  }
-
-  void initializeServices() {
-    _dataProviderService = _dataProviderService.setNotifier((value) {
-      setState(() => schedule = value);
-      updateTabController(value);
-    });
   }
 
   @override
@@ -48,8 +40,8 @@ class ScheduleScreenState extends State<ScheduleScreen>
 
   Future<void> loadSchedule() async {
     final apiData = await _dataProviderService.getSchedule();
-    updateTabController(apiData);
     setState(() {
+      updateTabController(apiData);
       schedule = apiData;
       isLoading = false;
     });
@@ -115,8 +107,8 @@ class ScheduleScreenState extends State<ScheduleScreen>
         return _dataProviderService
             .getSchedule(forceNewData: true)
             .then((value) {
-          updateTabController(value);
           setState(() {
+            updateTabController(value);
             schedule = value;
           });
         });

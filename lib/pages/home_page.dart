@@ -114,18 +114,14 @@ class HomePageState extends State<HomePage> {
           _memorizer.runOnce(() => _dataProviderService.prefetchAndCacheData()),
       builder: (context, snapshot) {
         Widget child;
-        final loadingImageSize = (MediaQuery.of(context).size.width * 0.8);
         if (snapshot.connectionState != ConnectionState.done) {
           child = Scaffold(
             body: Container(
               color: Theme.of(context).primaryColor,
-              child: Center(
+              child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/icon.png',
-                        width: loadingImageSize, height: loadingImageSize),
-                  ],
+                  children: [CircularProgressIndicator(color: highlightColor)],
                 ),
               ),
             ),

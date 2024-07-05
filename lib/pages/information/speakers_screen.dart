@@ -79,7 +79,10 @@ class _SpeakersScreenState extends State<SpeakersScreen> {
                       imageUrl: speaker.coverUrl,
                       fit: BoxFit.contain,
                       placeholder: (context, url) => Image.memory(
-                          Uri.parse(speaker.coverLqip).data!.contentAsBytes()),
+                        Uri.parse(speaker.coverLqip).data!.contentAsBytes(),
+                        fit: BoxFit.cover,
+                        width: cardWidth,
+                      ),
                     ),
                   ),
                   Positioned(

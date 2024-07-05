@@ -5,6 +5,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:string_unescape/string_unescape.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/speaker.dart';
 import '../../services/data_provider_service.dart';
@@ -128,12 +129,20 @@ class SpeakerDetailsScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(8, 36, 8, 8),
                           child: MarkdownBody(
+                              onTapLink: (text, href, title) {
+                                launchUrl(Uri.parse(href!));
+                              },
                               styleSheet: MarkdownStyleSheet.fromTheme(
                                       Theme.of(context))
                                   .copyWith(
                                       p: textStyleWhiteColor,
                                       h2: textStyleWhiteColor,
-                                      strong: textStyleWhiteColor),
+                                      strong: textStyleWhiteColor,
+                                      a: textStyleWhiteColor.copyWith(
+                                        decoration: TextDecoration.underline,
+                                        decorationColor:
+                                            textStyleWhiteColor.color,
+                                      )),
                               data: speaker.data!.description +
                                   getEventsMarkdown(
                                       events: speaker.data!.events,

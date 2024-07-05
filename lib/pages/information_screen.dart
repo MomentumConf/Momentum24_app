@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/momentum_appbar.dart';
@@ -57,30 +58,39 @@ class InformationScreen extends StatelessWidget {
             children: [
               ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
-                  child: Image.asset(image, fit: BoxFit.contain)),
-              AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Container(
-                  alignment: AlignmentDirectional.bottomEnd,
-                  padding: const EdgeInsets.all(4),
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      shadows: <Shadow>[
-                        // Optional: Adds a shadow to the text for better readability
-                        Shadow(
-                          offset: Offset(1.0, 1.0),
-                          blurRadius: 3.0,
-                          color: Colors.black,
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Stack(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: "/$image",
+                          fit: BoxFit.contain,
+                          fadeInDuration: const Duration(seconds: 0),
+                          placeholder: (context, url) =>
+                              Image.asset(image, fit: BoxFit.contain),
                         ),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: <Shadow>[
+                                Shadow(
+                                  offset: Offset(1.0, 1.0),
+                                  blurRadius: 3.0,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                  ),
-                ),
-              ),
+                  )),
             ],
           ),
         ),

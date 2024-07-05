@@ -1,6 +1,7 @@
 {
     "name": "Konferencja Momentum",
     "short_name": "Momentum",
+    "description": "Momentum to impuls do tego, by wprowadzać w ruch Boże rzeczy, które On dla Ciebie przygotował. Momentum to wydarzenie, które napędzi Cię do tworzenia nowej jakości oraz życia pełnego wiary i miłości.",
     "version": "1.0.1",
     "lang": "pl-PL",
     "default_locale": "pl",
@@ -9,7 +10,7 @@
     "background_color": "#e94190",
     "theme_color": "#e94190",
     "orientation": "portrait-primary",
-    "prefer_related_applications": false,
+    "prefer_related_applications": true,
     "icons": [
         {
             "src": "icons/Icon-72.png",

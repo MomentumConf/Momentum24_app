@@ -5,7 +5,7 @@
     "version": "1.0.1",
     "lang": "pl-PL",
     "default_locale": "pl",
-    "start_url": "/",
+    "start_url": ".",
     "display": "standalone",
     "background_color": "#e94190",
     "theme_color": "#e94190",

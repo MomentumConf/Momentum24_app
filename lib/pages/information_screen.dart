@@ -63,7 +63,7 @@ class InformationScreen extends StatelessWidget {
                     child: Stack(
                       children: [
                         CachedNetworkImage(
-                          imageUrl: "/$image",
+                          imageUrl: "/assets/$image",
                           fit: BoxFit.contain,
                           fadeInDuration: const Duration(seconds: 0),
                           placeholder: (context, url) =>

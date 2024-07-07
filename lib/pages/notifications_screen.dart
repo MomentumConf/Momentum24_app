@@ -113,7 +113,9 @@ class NotificationsScreenState extends State<NotificationsScreen> {
                                   fontSize: 20, fontWeight: FontWeight.bold)),
                           Expanded(
                               child: MarkdownBody(
-                            data: notification.description,
+                            data: notification.description.isEmpty
+                                ? " "
+                                : notification.description,
                             onTapLink: (text, href, title) {
                               launchUrl(Uri.parse(href!));
                             },

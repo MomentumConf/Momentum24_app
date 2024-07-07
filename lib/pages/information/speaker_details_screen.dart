@@ -122,37 +122,41 @@ class SpeakerDetailsScreen extends StatelessWidget {
                         topRight: Radius.circular(20),
                       ),
                     ),
-                    child: ListView(
-                      controller: scrollController,
-                      children: <Widget>[
-                        const Center(child: SnappingHandler()),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 36, 8, 8),
-                          child: MarkdownBody(
-                              onTapLink: (text, href, title) {
-                                launchUrl(Uri.parse(href!));
-                              },
-                              styleSheet: MarkdownStyleSheet.fromTheme(
-                                      Theme.of(context))
-                                  .copyWith(
-                                      p: textStyleWhiteColor,
-                                      h2: textStyleWhiteColor,
-                                      strong: textStyleWhiteColor,
-                                      a: textStyleWhiteColor.copyWith(
-                                        decoration: TextDecoration.underline,
-                                        decorationColor:
-                                            textStyleWhiteColor.color,
-                                      )),
-                              data: speaker.data!.description +
-                                  getEventsMarkdown(
-                                      events: speaker.data!.events,
-                                      currentSpeaker: speaker.data!.id,
-                                      sessionsHeading:
-                                          AppLocalizations.of(context)!
-                                              .sessions)),
-                        )
-                      ],
-                    ),
+                    child: (speaker.data!.description.isNotEmpty ||
+                            speaker.data!.events.isNotEmpty)
+                        ? ListView(
+                            controller: scrollController,
+                            children: <Widget>[
+                              const Center(child: SnappingHandler()),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 36, 8, 8),
+                                child: MarkdownBody(
+                                    onTapLink: (text, href, title) {
+                                      launchUrl(Uri.parse(href!));
+                                    },
+                                    styleSheet: MarkdownStyleSheet.fromTheme(
+                                            Theme.of(context))
+                                        .copyWith(
+                                            p: textStyleWhiteColor,
+                                            h2: textStyleWhiteColor,
+                                            strong: textStyleWhiteColor,
+                                            a: textStyleWhiteColor.copyWith(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor:
+                                                  textStyleWhiteColor.color,
+                                            )),
+                                    data: speaker.data!.description +
+                                        getEventsMarkdown(
+                                            events: speaker.data!.events,
+                                            currentSpeaker: speaker.data!.id,
+                                            sessionsHeading:
+                                                AppLocalizations.of(context)!
+                                                    .sessions)),
+                              )
+                            ],
+                          )
+                        : null,
                   );
                 },
               ),

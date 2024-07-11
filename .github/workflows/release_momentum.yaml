@@ -41,8 +41,7 @@ jobs:
                   yarn set version stable
 
             - name: Create settings.json file
-              # @TODO: Project ID from env file/secrets
-              run: curl https://q5zach5q.api.sanity.io/v2022-03-07/data/query/production\?query\=\*%5B_type+%3D%3D+%22settings%22%5D%5B0%5D+%7B%0A++appName%2C%0A++%22appIcon%22%3A+appIcon.asset-%3Eurl%2C%0A++%22logo%22%3A+logo.asset-%3Eurl%2C%0A++%22speakersTileImage%22%3A+speakersTileImage.asset-%3Eurl%2C%0A++%22songsTileImage%22%3A+songsTileImage.asset-%3Eurl%2C%0A++%22regulationsTileImage%22%3A+regulationsTileImage.asset-%3Eurl%2C%0A++%22mainColor%22%3A+mainColor.hex%2C%0A++%22secondaryColor%22%3A+secondaryColor.hex%2C%0A++%22textColor%22%3A+textColor.hex%2C%0A++%22highlightColor%22%3A+highlightColor.hex%2C%0A%7D | jq '.result' > settings.json
+              run: curl https://${{ secrets.SANITY_PROJECT_ID_MOMENTUM }}.api.sanity.io/v2022-03-07/data/query/production\?query\=\*%5B_type+%3D%3D+%22settings%22%5D%5B0%5D+%7B%0A++appName%2C%0A++%22appIcon%22%3A+appIcon.asset-%3Eurl%2C%0A++%22logo%22%3A+logo.asset-%3Eurl%2C%0A++%22speakersTileImage%22%3A+speakersTileImage.asset-%3Eurl%2C%0A++%22songsTileImage%22%3A+songsTileImage.asset-%3Eurl%2C%0A++%22regulationsTileImage%22%3A+regulationsTileImage.asset-%3Eurl%2C%0A++%22mainColor%22%3A+mainColor.hex%2C%0A++%22secondaryColor%22%3A+secondaryColor.hex%2C%0A++%22textColor%22%3A+textColor.hex%2C%0A++%22highlightColor%22%3A+highlightColor.hex%2C%0A%7D | jq '.result' > settings.json
 
             - name: Prepare application
               run: bash prepare_app.sh
@@ -51,7 +50,8 @@ jobs:
               env:
                   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
                   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-                  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+                  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MOMENTUM }}
+                  SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID_MOMENTUM }}
               run: npx vercel pull --yes --token ${{ secrets.VERCEL_TOKEN }} && YARN_ENABLE_IMMUTABLE_INSTALLS=false npx vercel build ${{ github.event_name == 'pull_request' && '' || '--prod'}} --token ${{ secrets.VERCEL_TOKEN }}
 
             - name: Change SW to cache everything on install
@@ -62,7 +62,7 @@ jobs:
               env:
                   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
                   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-                  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+                  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MOMENTUM }}
               run: |
                   npx vercel deploy ${{ github.event_name == 'pull_request' && '' || '--prod'}} --prebuilt --token ${{ secrets.VERCEL_TOKEN }} &> deploy.log
                   cat deploy.log

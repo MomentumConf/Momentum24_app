@@ -1,0 +1,78 @@
+name: Flutter Web CI
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+    push:
+        branches:
+            - master
+    workflow_dispatch:
+    repository_dispatch:
+
+permissions:
+    contents: read
+    issues: write
+    pull-requests: write
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+                  ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || 'refs/heads/master' }}
+
+            - name: Set up Flutter actions
+              uses: subosito/flutter-action@v2
+              with:
+                  flutter-version: "3.22"
+                  channel: stable
+
+            - name: Install dependencies
+              run: flutter pub get
+
+            # Build and deploy with vercel
+            - name: Prepare yarn v2
+              run: |
+                  corepack enable
+                  yarn set version stable
+
+            - name: Create settings.json file
+              run: curl https://${{ secrets.SANITY_PROJECT_ID_ZDOBYWCY }}.api.sanity.io/v2022-03-07/data/query/production\?query\=\*%5B_type+%3D%3D+%22settings%22%5D%5B0%5D+%7B%0A++appName%2C%0A++%22appIcon%22%3A+appIcon.asset-%3Eurl%2C%0A++%22logo%22%3A+logo.asset-%3Eurl%2C%0A++%22speakersTileImage%22%3A+speakersTileImage.asset-%3Eurl%2C%0A++%22songsTileImage%22%3A+songsTileImage.asset-%3Eurl%2C%0A++%22regulationsTileImage%22%3A+regulationsTileImage.asset-%3Eurl%2C%0A++%22mainColor%22%3A+mainColor.hex%2C%0A++%22secondaryColor%22%3A+secondaryColor.hex%2C%0A++%22textColor%22%3A+textColor.hex%2C%0A++%22highlightColor%22%3A+highlightColor.hex%2C%0A%7D | jq '.result' > settings.json
+
+            - name: Prepare application
+              run: bash prepare_app.sh
+
+            - name: Build with Vercel using NPX
+              env:
+                  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+                  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+                  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ZDOBYWCY }}
+                  SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID_ZDOBYWCY }}
+              run: npx vercel pull --yes --token ${{ secrets.VERCEL_TOKEN }} && YARN_ENABLE_IMMUTABLE_INSTALLS=false npx vercel build ${{ github.event_name == 'pull_request' && '' || '--prod'}} --token ${{ secrets.VERCEL_TOKEN }}
+
+            - name: Change SW to cache everything on install
+              run: sed -i 's/caches.open(TEMP).then((cache) => {/caches.open(RESOURCES).then((cache) => {/' .vercel/output/static/flutter_service_worker.js
+
+            - name: Deploy prebuilt with Vercel
+              id: deploy
+              env:
+                  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+                  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+                  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ZDOBYWCY }}
+              run: |
+                  npx vercel deploy ${{ github.event_name == 'pull_request' && '' || '--prod'}} --prebuilt --token ${{ secrets.VERCEL_TOKEN }} &> deploy.log
+                  cat deploy.log
+                  echo "url=$(grep -m1 -o 'https://[a-zA-Z0-9-]*.vercel.app' deploy.log)" >> "$GITHUB_OUTPUT"
+
+            - name: Comment Pull Request with URL
+              if: github.event_name == 'pull_request'
+              uses: thollander/actions-comment-pull-request@v2
+              with:
+                  message: |
+                      :rocket: Deployed to Vercel Preview URL: ${{ steps.deploy.outputs.url }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  pr_number: ${{ github.event.pull_request.number }}

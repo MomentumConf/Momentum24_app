@@ -1,4 +1,4 @@
-name: Flutter Web CI
+name: Zdobywcy Build
 
 on:
     pull_request:

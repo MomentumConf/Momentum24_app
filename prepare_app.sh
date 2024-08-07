@@ -24,9 +24,10 @@ EOL
     cat $COLORS_FILE
 }
 
-update_index_html() {
+update_titles() {
   echo "Updating index.html"
   sed -i "s/<title>.*<\/title>/<title>${APP_NAME}<\/title>/" $INDEX_FILE
+  sed -i "s/title: .*,$/title: "\""${APP_NAME}"\"",/" lib/main.dart
 }
 
 update_manifest_json() {
@@ -76,16 +77,18 @@ parse_settings() {
   REGULATIONS_TILE_IMAGE=$(jq -r '.regulationsTileImage' $SETTINGS_FILE)
   SONGS_TILE_IMAGE=$(jq -r '.songsTileImage' $SETTINGS_FILE)
   APP_ICON=$(jq -r '.appIcon' $SETTINGS_FILE)
+  ANALYTICS_ID=$(jq -r '.analyticsId' $SETTINGS_FILE)
 }
 
 update_project_id() {
   sed -i "s/projectId: .*,$/projectId: '${SANITY_PROJECT_ID}',/g" $CLIENT_FILE
+  sed -i "s/_paq.push(['setSiteId', '\d+']);/_paq.push(['setProjectId', '${ANALYTICS_ID}']);/g" $CLIENT_FILE
 }
 
 main() {
   parse_settings
   create_colors_file
-  update_index_html
+  update_titles
   update_manifest_json
   download_and_resize_icons
   download_images

@@ -46,6 +46,7 @@ jobs:
             - name: Prepare application
               env:
                   SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID_ZDOBYWCY }}
+                  ONESIGNAL_APPID: ${{ secrets.ONESIGNAL_APPID_ZDOBYWCY }}
               run: bash prepare_app.sh
 
             - name: Build with Vercel using NPX

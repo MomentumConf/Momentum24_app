@@ -83,6 +83,7 @@ parse_settings() {
 update_project_id() {
   sed -i "s/projectId: .*,$/projectId: '${SANITY_PROJECT_ID}',/g" $CLIENT_FILE
   sed -i "s/_paq.push(['setSiteId', '\d+']);/_paq.push(['setProjectId', '${ANALYTICS_ID}']);/g" $CLIENT_FILE
+  sed -i "s/appId: .*,$/appId: '${ONESIGNAL_APPID}',/g" $INDEX_FILE
 }
 
 main() {

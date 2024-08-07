@@ -2,6 +2,7 @@
 
 SETTINGS_FILE="settings.json"
 COLORS_FILE="lib/colors.dart"
+CLIENT_FILE="lib/client.dart"
 INDEX_FILE="web/index.html"
 MANIFEST_FILE="web/manifest.json"
 ASSETS_DIR="assets/images"
@@ -25,7 +26,7 @@ EOL
 
 update_index_html() {
   echo "Updating index.html"
-  sed -i '' "s/<title>.*<\/title>/<title>${APP_NAME}<\/title>/" $INDEX_FILE
+  sed -i "s/<title>.*<\/title>/<title>${APP_NAME}<\/title>/" $INDEX_FILE
 }
 
 update_manifest_json() {
@@ -77,6 +78,10 @@ parse_settings() {
   APP_ICON=$(jq -r '.appIcon' $SETTINGS_FILE)
 }
 
+update_project_id() {
+  sed -i "s/projectId: .*,$/projectId: '${SANITY_PROJECT_ID}',/g" $CLIENT_FILE
+}
+
 main() {
   parse_settings
   create_colors_file
@@ -86,6 +91,7 @@ main() {
   download_images
   copy_icon_to_assets
   create_favicon
+  update_project_id
 }
 
 main

@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:momentum24_app/pages/information/speakers_screen.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -181,17 +182,30 @@ class HomePageState extends State<HomePage> {
                   activeForegroundColor: highlightColor,
                   inactiveForegroundColor: textColor),
             ),
-            PersistentTabConfig(
-                screen: _screens[2],
-                item: ItemConfig(
-                    icon: const Icon(
-                      Icons.info,
-                      color: highlightColor,
-                    ),
-                    inactiveIcon: const Icon(Icons.info_outline),
-                    title: AppLocalizations.of(context)!.information,
-                    activeForegroundColor: highlightColor,
-                    inactiveForegroundColor: textColor)),
+            // @FIXME: It needs a better condition
+            false
+                ? PersistentTabConfig(
+                    screen: _screens[2],
+                    item: ItemConfig(
+                        icon: const Icon(
+                          Icons.info,
+                          color: highlightColor,
+                        ),
+                        inactiveIcon: const Icon(Icons.info_outline),
+                        title: AppLocalizations.of(context)!.information,
+                        activeForegroundColor: highlightColor,
+                        inactiveForegroundColor: textColor))
+                : PersistentTabConfig(
+                    screen: const SafeArea(child: SpeakersScreen()),
+                    item: ItemConfig(
+                        icon: const Icon(
+                          Icons.people_alt,
+                          color: highlightColor,
+                        ),
+                        inactiveIcon: const Icon(Icons.people_alt_outlined),
+                        title: AppLocalizations.of(context)!.speakers,
+                        activeForegroundColor: highlightColor,
+                        inactiveForegroundColor: textColor)),
             PersistentTabConfig(
                 screen: _screens[3],
                 item: ItemConfig(

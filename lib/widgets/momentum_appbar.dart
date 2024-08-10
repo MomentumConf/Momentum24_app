@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class MomentumAppBar extends StatelessWidget implements PreferredSizeWidget {
   PreferredSizeWidget? bottom;
@@ -22,6 +23,8 @@ class MomentumAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget buildAppBarTitle(BuildContext context) {
     return SvgPicture.asset(
       'assets/images/logo.svg',
+      fit: BoxFit.contain,
+      height: preferredSize.height * 0.5,
     );
   }
 

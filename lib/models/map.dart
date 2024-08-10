@@ -48,7 +48,7 @@ class Marker {
 
   factory Marker.fromJson(Map<String, dynamic> json) {
     return Marker(
-      address: json['address'],
+      address: json['address'] ?? "",
       coordinates: LatLng(
           json['coordinates']['latitude'], json['coordinates']['longitude']),
       icon: json['icon'],

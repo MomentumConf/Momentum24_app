@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:momentum24_app/colors.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -49,7 +50,7 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
             },
             child: Icon(
               getMarkerIcon(marker.icon),
-              color: currentMarkerIndex == index ? Colors.purple : Colors.red,
+              color: currentMarkerIndex == index ? primaryColor : textColor,
               size: currentMarkerIndex == index ? 40 : 30,
             ),
           ),

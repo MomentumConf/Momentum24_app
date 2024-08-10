@@ -3,6 +3,7 @@
 SETTINGS_FILE="settings.json"
 COLORS_FILE="lib/colors.dart"
 CLIENT_FILE="lib/client.dart"
+MAIN_FILE="lib/main.dart"
 INDEX_FILE="web/index.html"
 MANIFEST_FILE="web/manifest.json"
 ASSETS_DIR="assets/images"
@@ -25,9 +26,9 @@ EOL
 }
 
 update_titles() {
-  echo "Updating index.html"
+  echo "Updating titles in $INDEX_FILE and $MAIN_FILE"
   sed -i "s/<title>.*<\/title>/<title>${APP_NAME}<\/title>/" $INDEX_FILE
-  sed -i "s/title: .*,$/title: "\""${APP_NAME}"\"",/" lib/main.dart
+  sed -i "s/title: .*,$/title: "\""${APP_NAME}"\"",/" $MAIN_FILE
 }
 
 update_manifest_json() {
@@ -82,7 +83,7 @@ parse_settings() {
 
 update_project_id() {
   sed -i "s/projectId: .*,$/projectId: '${SANITY_PROJECT_ID}',/g" $CLIENT_FILE
-  sed -i "s/_paq.push(["\""setSiteId"\""', "\""\d+"\""]);/_paq.push(['setSiteId', '${ANALYTICS_ID}']);/g" $CLIENT_FILE
+  sed -i "s/_paq.push(\[\"setSiteId\", \"[0-9]*\"\])/_paq.push(\[\"setSiteId\", \"${ANALYTICS_ID}\"\])/" $INDEX_FILE
   sed -i "s/appId: .*,$/appId: '${ONESIGNAL_APPID}',/g" $INDEX_FILE
 }
 

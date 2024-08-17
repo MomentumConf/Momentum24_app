@@ -107,6 +107,8 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
         return Icons.sports_basketball;
       case 'local_cafe':
         return Icons.local_cafe;
+      case 'pets':
+        return Icons.pets;
       case 'pin':
       default:
         return Icons.pin_drop_outlined;

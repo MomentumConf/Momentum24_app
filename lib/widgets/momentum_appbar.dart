@@ -13,7 +13,7 @@ class MomentumAppBar extends StatelessWidget implements PreferredSizeWidget {
   PreferredSizeWidget build(BuildContext context) {
     return AppBar(
       title: buildAppBarTitle(context),
-      centerTitle: false,
+      centerTitle: true,
       backgroundColor: Theme.of(context).primaryColor,
       elevation: 0,
       bottom: bottom,
@@ -24,7 +24,7 @@ class MomentumAppBar extends StatelessWidget implements PreferredSizeWidget {
     return SvgPicture.asset(
       'assets/images/logo.svg',
       fit: BoxFit.contain,
-      height: preferredSize.height * 0.5,
+      height: 40,
     );
   }
 

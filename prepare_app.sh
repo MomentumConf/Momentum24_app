@@ -29,6 +29,7 @@ update_titles() {
   echo "Updating titles in $INDEX_FILE and $MAIN_FILE"
   sed -i "s/%TITLE%/${APP_NAME}/" $INDEX_FILE
   sed -i "s/%DESCRIPTION%/${APP_DESCRIPTION}/" $INDEX_FILE
+  sed -i "s/%TITLE%/${APP_NAME}/" $MAIN_FILE
 }
 
 update_manifest_json() {

@@ -61,7 +61,7 @@ jobs:
             - name: Change SW to cache everything on install
               run: |
                   sed -i 's/caches.open(TEMP).then((cache) => {/caches.open(CACHE_NAME).then((cache) => {/' .vercel/output/static/flutter_service_worker.js
-                  sed -i "s/CORE.map((value) => new Request(value, {'cache': 'reload'})));/Object.keys(RESOURCES).map((value) => new Request(value, {'cache': 'reload'})));/" .vercel/output/static/flutter_service_worker.js
+                  sed -i "s/CORE.map((value) => new Request(value, {'cache': 'reload'}))/Object.keys(RESOURCES)/" .vercel/output/static/flutter_service_worker.js
 
             - name: Deploy prebuilt with Vercel
               id: deploy

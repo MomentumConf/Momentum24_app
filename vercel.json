@@ -1,5 +1,5 @@
 {
-    "buildCommand": "flutter build web --web-renderer html --release",
+    "buildCommand": "flutter build web --web-renderer html --dart-define=SENTRY_DSN=$SENTRY_DSN --release",
     "outputDirectory": "build/web/",
     "installCommand": "flutter pub get",
     "rewrites": [

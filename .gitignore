@@ -58,4 +58,5 @@ settings.json
 lib/colors.dart
 web/icons
 web/favicon.png
+web/manifest.json
 assets/images/

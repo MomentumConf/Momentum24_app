@@ -27,15 +27,15 @@ EOL
 
 update_titles() {
   echo "Updating titles in $INDEX_FILE and $MAIN_FILE"
-  sed -i "s/<title>.*<\/title>/<title>${APP_NAME}<\/title>/" $INDEX_FILE
-  sed -i "s/title: .*,$/title: "\""${APP_NAME}"\"",/" $MAIN_FILE
+  sed -i "s/%TITLE%/${APP_NAME}/" $INDEX_FILE
+  sed -i "s/%DESCRIPTION%/${APP_DESCRIPTION}/" $INDEX_FILE
 }
 
 update_manifest_json() {
   echo "Updating manifest.json"
   SHORT_NAME=$(echo $APP_NAME | awk '{print $NF}')
-  jq --arg appName "$APP_NAME" --arg shortName "$SHORT_NAME" --arg themeColor "$MAIN_COLOR" \
-    '.name = $appName | .short_name = $shortName | .theme_color = $themeColor | .background_color = $themeColor' \
+  jq --arg appName "$APP_NAME" --arg description "$APP_DESCRIPTION" --arg shortName "$SHORT_NAME" --arg themeColor "$MAIN_COLOR" \
+    '.name = $appName | .description = $description | .short_name = $shortName | .theme_color = $themeColor | .background_color = $themeColor' \
     $MANIFEST_FILE > $MANIFEST_FILE.tmp && mv $MANIFEST_FILE.tmp $MANIFEST_FILE
 }
 
@@ -73,6 +73,7 @@ parse_settings() {
   HIGHLIGHT_COLOR=$(jq -r '.highlightColor' $SETTINGS_FILE)
   TEXT_COLOR=$(jq -r '.textColor' $SETTINGS_FILE)
   APP_NAME=$(jq -r '.appName' $SETTINGS_FILE)
+  APP_DESCRIPTION=$(jq -r '.description' $SETTINGS_FILE)
   LOGO=$(jq -r '.logo' $SETTINGS_FILE)
   SPEAKERS_TILE_IMAGE=$(jq -r '.speakersTileImage' $SETTINGS_FILE)
   REGULATIONS_TILE_IMAGE=$(jq -r '.regulationsTileImage' $SETTINGS_FILE)

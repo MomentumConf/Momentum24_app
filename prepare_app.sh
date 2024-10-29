@@ -27,9 +27,9 @@ EOL
 
 update_titles() {
   echo "Updating titles in $INDEX_FILE and $MAIN_FILE"
-  sed -i "s/%TITLE%/${APP_NAME}/g" $INDEX_FILE
-  sed -i "s/%DESCRIPTION%/${APP_DESCRIPTION}/" $INDEX_FILE
-  sed -i "s/%TITLE%/${APP_NAME}/" $MAIN_FILE
+  sed -i '' "s/%TITLE%/${APP_NAME}/g" $INDEX_FILE
+  sed -i '' "s/%DESCRIPTION%/${APP_DESCRIPTION}/" $INDEX_FILE
+  sed -i '' "s/%TITLE%/${APP_NAME}/" $MAIN_FILE
 }
 
 update_manifest_json() {
@@ -38,6 +38,11 @@ update_manifest_json() {
   jq --arg appName "$APP_NAME" --arg description "$APP_DESCRIPTION" --arg shortName "$SHORT_NAME" --arg themeColor "$MAIN_COLOR" \
     '.name = $appName | .description = $description | .short_name = $shortName | .theme_color = $themeColor | .background_color = $themeColor' \
     $MANIFEST_FILE > $MANIFEST_FILE.tmp && mv $MANIFEST_FILE.tmp $MANIFEST_FILE
+}
+
+update_enabled_modules() {
+  echo "Updating enabled modules"
+  sed -i '' "s/%ENABLED_MODULES%/$ENABLED_MODULES/" lib/pages/home_page.dart
 }
 
 download_images() {
@@ -81,11 +86,12 @@ parse_settings() {
   SONGS_TILE_IMAGE=$(jq -r '.songsTileImage' $SETTINGS_FILE)
   APP_ICON=$(jq -r '.appIcon' $SETTINGS_FILE)
   ANALYTICS_ID=$(jq -r '.analyticsId' $SETTINGS_FILE)
+  ENABLED_MODULES=$(jq -c '.enabledModules' $SETTINGS_FILE)
 }
 
 update_project_id() {
-  sed -i "s/_paq.push(\[\"setSiteId\", \"[0-9]*\"\])/_paq.push(\[\"setSiteId\", \"${ANALYTICS_ID}\"\])/" $INDEX_FILE
-  sed -i "s/appId: .*,$/appId: '${ONESIGNAL_APPID}',/g" $INDEX_FILE
+  sed -i '' "s/_paq.push(\[\"setSiteId\", \"[0-9]*\"\])/_paq.push(\[\"setSiteId\", \"${ANALYTICS_ID}\"\])/" $INDEX_FILE
+  sed -i '' "s/appId: .*,$/appId: '${ONESIGNAL_APPID}',/g" $INDEX_FILE
 }
 
 main() {
@@ -93,6 +99,7 @@ main() {
   create_colors_file
   update_titles
   update_manifest_json
+  update_enabled_modules
   download_and_resize_icons
   download_images
   copy_icon_to_assets

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:io';
 
@@ -20,6 +21,9 @@ import './information_screen.dart';
 import './map_screen.dart';
 import './notifications_screen.dart';
 import './schedule_screen.dart';
+
+final List<String> enabledScreens =
+    List<String>.from(jsonDecode('%ENABLED_MODULES%'));
 
 double getBottomPaddingBasedOnDevice() {
   if (kIsWeb && html.window.navigator.userAgent.contains('iPhone')) {
@@ -152,6 +156,7 @@ class HomePageState extends State<HomePage> {
             }
           },
           tabs: [
+            // Schedule
             PersistentTabConfig(
                 screen: _screens[0],
                 item: ItemConfig(
@@ -164,6 +169,7 @@ class HomePageState extends State<HomePage> {
                   activeForegroundColor: highlightColor,
                   inactiveForegroundColor: textColor,
                 )),
+            // Notifications
             PersistentTabConfig(
               screen: _screens[1],
               item: ItemConfig(
@@ -182,41 +188,42 @@ class HomePageState extends State<HomePage> {
                   activeForegroundColor: highlightColor,
                   inactiveForegroundColor: textColor),
             ),
-            // @FIXME: It needs a better condition
-            false
-                ? PersistentTabConfig(
-                    screen: _screens[2],
-                    item: ItemConfig(
-                        icon: const Icon(
-                          Icons.info,
-                          color: highlightColor,
-                        ),
-                        inactiveIcon: const Icon(Icons.info_outline),
-                        title: AppLocalizations.of(context)!.information,
-                        activeForegroundColor: highlightColor,
-                        inactiveForegroundColor: textColor))
-                : PersistentTabConfig(
-                    screen: const SafeArea(child: SpeakersScreen()),
-                    item: ItemConfig(
-                        icon: const Icon(
-                          Icons.people_alt,
-                          color: highlightColor,
-                        ),
-                        inactiveIcon: const Icon(Icons.people_alt_outlined),
-                        title: AppLocalizations.of(context)!.speakers,
-                        activeForegroundColor: highlightColor,
-                        inactiveForegroundColor: textColor)),
-            PersistentTabConfig(
-                screen: _screens[3],
-                item: ItemConfig(
-                    icon: const Icon(
-                      Icons.map,
-                      color: highlightColor,
-                    ),
-                    inactiveIcon: const Icon(Icons.map_outlined),
-                    title: AppLocalizations.of(context)!.map,
-                    activeForegroundColor: highlightColor,
-                    inactiveForegroundColor: textColor))
+            if (enabledScreens.contains('info'))
+              PersistentTabConfig(
+                  screen: _screens[2],
+                  item: ItemConfig(
+                      icon: const Icon(
+                        Icons.info,
+                        color: highlightColor,
+                      ),
+                      inactiveIcon: const Icon(Icons.info_outline),
+                      title: AppLocalizations.of(context)!.information,
+                      activeForegroundColor: highlightColor,
+                      inactiveForegroundColor: textColor)),
+            if (enabledScreens.contains('speakers'))
+              PersistentTabConfig(
+                  screen: const SafeArea(child: SpeakersScreen()),
+                  item: ItemConfig(
+                      icon: const Icon(
+                        Icons.people_alt,
+                        color: highlightColor,
+                      ),
+                      inactiveIcon: const Icon(Icons.people_alt_outlined),
+                      title: AppLocalizations.of(context)!.speakers,
+                      activeForegroundColor: highlightColor,
+                      inactiveForegroundColor: textColor)),
+            if (enabledScreens.contains('map'))
+              PersistentTabConfig(
+                  screen: _screens[3],
+                  item: ItemConfig(
+                      icon: const Icon(
+                        Icons.map,
+                        color: highlightColor,
+                      ),
+                      inactiveIcon: const Icon(Icons.map_outlined),
+                      title: AppLocalizations.of(context)!.map,
+                      activeForegroundColor: highlightColor,
+                      inactiveForegroundColor: textColor))
           ],
           navBarBuilder: (navBarConfig) => PersistentNavBarStyle(
             navBarConfig: navBarConfig.copyWith(

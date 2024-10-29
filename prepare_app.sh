@@ -27,9 +27,9 @@ EOL
 
 update_titles() {
   echo "Updating titles in $INDEX_FILE and $MAIN_FILE"
-  sed -i '' "s/%TITLE%/${APP_NAME}/g" $INDEX_FILE
-  sed -i '' "s/%DESCRIPTION%/${APP_DESCRIPTION}/" $INDEX_FILE
-  sed -i '' "s/%TITLE%/${APP_NAME}/" $MAIN_FILE
+  sed -i "s/%TITLE%/${APP_NAME}/g" $INDEX_FILE
+  sed -i "s/%DESCRIPTION%/${APP_DESCRIPTION}/" $INDEX_FILE
+  sed -i "s/%TITLE%/${APP_NAME}/" $MAIN_FILE
 }
 
 update_manifest_json() {
@@ -42,7 +42,7 @@ update_manifest_json() {
 
 update_enabled_modules() {
   echo "Updating enabled modules"
-  sed -i '' "s/%ENABLED_MODULES%/$ENABLED_MODULES/" lib/pages/home_page.dart
+  sed -i "s/%ENABLED_MODULES%/$ENABLED_MODULES/" lib/pages/home_page.dart
 }
 
 download_images() {
@@ -90,8 +90,8 @@ parse_settings() {
 }
 
 update_project_id() {
-  sed -i '' "s/_paq.push(\[\"setSiteId\", \"[0-9]*\"\])/_paq.push(\[\"setSiteId\", \"${ANALYTICS_ID}\"\])/" $INDEX_FILE
-  sed -i '' "s/appId: .*,$/appId: '${ONESIGNAL_APPID}',/g" $INDEX_FILE
+  sed -i "s/_paq.push(\[\"setSiteId\", \"[0-9]*\"\])/_paq.push(\[\"setSiteId\", \"${ANALYTICS_ID}\"\])/" $INDEX_FILE
+  sed -i "s/appId: .*,$/appId: '${ONESIGNAL_APPID}',/g" $INDEX_FILE
 }
 
 main() {

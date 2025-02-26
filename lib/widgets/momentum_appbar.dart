@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class MomentumAppBar extends StatelessWidget implements PreferredSizeWidget {
-  PreferredSizeWidget? bottom;
-  MomentumAppBar({super.key, this.bottom})
+  final PreferredSizeWidget? bottom;
+  const MomentumAppBar({super.key, this.bottom})
       : preferredSize = bottom == null
             ? const Size.fromHeight(kToolbarHeight)
             : const Size.fromHeight(100);

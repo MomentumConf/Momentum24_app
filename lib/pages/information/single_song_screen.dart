@@ -88,8 +88,8 @@ class SingleSongScreenState extends State<SingleSongScreen> {
                             Text(
                               song.originalTitle,
                               style: theme.textTheme.titleSmall?.copyWith(
-                                color: theme.colorScheme.onSecondary
-                                    .withOpacity(0.3),
+                                color:
+                                    theme.colorScheme.onSecondary.withAlpha(77),
                                 height: 1.1,
                                 fontSize: 10,
                               ),
@@ -116,8 +116,8 @@ class SingleSongScreenState extends State<SingleSongScreen> {
                           data: unescape(song.lyrics),
                           styleSheet: MarkdownStyleSheet.fromTheme(theme)
                               .copyWith(
-                                  textScaleFactor:
-                                      textScaleManager.scaleFactor),
+                                  textScaler: TextScaler.linear(
+                                      textScaleManager.scaleFactor)),
                         ),
                       ),
                     ),

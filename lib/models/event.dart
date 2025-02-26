@@ -33,7 +33,7 @@ class ColorData {
     final hexInt = int.parse("ff$hexString", radix: 16);
 
     return ColorData(
-      alpha: json['alpha'],
+      alpha: (json['alpha'] as num).toDouble(),
       hex: hexInt,
     );
   }

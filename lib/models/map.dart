@@ -17,7 +17,7 @@ class MapData {
       markers: (json['markers'] as List)
           .map((marker) => Marker.fromJson(marker))
           .toList(),
-      zoom: json['zoom'] as double,
+      zoom: (json['zoom'] as num).toDouble(),
     );
   }
 

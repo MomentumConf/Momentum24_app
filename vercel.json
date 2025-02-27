@@ -1,5 +1,5 @@
 {
-    "buildCommand": "flutter build web --web-renderer html --dart-define=SENTRY_DSN=$SENTRY_DSN --dart-define=SANITY_PROJECT_ID=$SANITY_PROJECT_ID --release",
+    "buildCommand": "flutter build web --wasm --dart-define=SENTRY_DSN=$SENTRY_DSN --dart-define=SANITY_PROJECT_ID=$SANITY_PROJECT_ID --release",
     "outputDirectory": "build/web/",
     "installCommand": "flutter pub get",
     "rewrites": [

@@ -53,7 +53,7 @@ class NotificationsScreenState extends State<NotificationsScreen> {
     }
 
     return Scaffold(
-      appBar: MomentumAppBar(),
+      appBar: const MomentumAppBar(),
       body: RefreshIndicator(
         onRefresh: () async {
           await _dataProviderService.setNotifier(

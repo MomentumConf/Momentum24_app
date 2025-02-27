@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -98,12 +98,12 @@ class SpeakerDetailsScreen extends StatelessWidget {
             alignment: AlignmentDirectional.bottomCenter,
             children: <Widget>[
               Positioned.fill(
-                child: CachedNetworkImage(
-                  imageUrl: "${speaker.data!.imageUrl}?auto=format&q=100",
+                child: FastCachedImage(
+                  url: "${speaker.data!.imageUrl}?auto=format&q=100",
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Image.memory(
+                  loadingBuilder: (context, url) => Image.memory(
                     Uri.parse(speaker.data!.imageLqip).data!.contentAsBytes(),
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),

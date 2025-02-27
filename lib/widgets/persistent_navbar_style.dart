@@ -52,8 +52,8 @@ class PersistentNavBarStyle extends StatelessWidget {
     final boxColor = Theme.of(context).colorScheme.onPrimary;
     return DecoratedNavBar(
       decoration: navBarDecoration,
-      filter: navBarConfig.selectedItem.filter,
-      opacity: navBarConfig.selectedItem.opacity,
+      filter: navBarDecoration.filter,
+      opacity: navBarDecoration.color?.a ?? 1.0,
       height: navBarConfig.navBarHeight,
       child: Stack(
         children: <Widget>[

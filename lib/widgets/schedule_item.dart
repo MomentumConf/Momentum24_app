@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
@@ -136,7 +136,7 @@ class ScheduleItem extends StatelessWidget {
             child: Row(children: [
               CircleAvatar(
                 backgroundImage:
-                    CachedNetworkImageProvider("${speaker.imageUrl}?w=50&h=50"),
+                    FastCachedImageProvider("${speaker.imageUrl}?w=50&h=50"),
                 radius: 12.5,
               ),
               const SizedBox(

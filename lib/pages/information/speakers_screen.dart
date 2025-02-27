@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:momentum24_app/pages/information/speaker_details_screen.dart';
@@ -75,12 +75,12 @@ class _SpeakersScreenState extends State<SpeakersScreen> {
                 child: Stack(alignment: Alignment.center, children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: CachedNetworkImage(
-                      imageUrl: speaker.coverUrl,
+                    child: FastCachedImage(
+                      url: speaker.coverUrl,
                       fit: BoxFit.contain,
-                      placeholder: (context, url) => Image.memory(
+                      loadingBuilder: (context, url) => Image.memory(
                         Uri.parse(speaker.coverLqip).data!.contentAsBytes(),
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                         width: cardWidth,
                       ),
                     ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_map/flutter_map.dart' as map;
-import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:momentum24_app/colors.dart';
@@ -192,7 +191,7 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
                         ),
                         children: [
                           map.TileLayer(
-                              tileProvider: CancellableNetworkTileProvider(),
+                              tileProvider: map.NetworkTileProvider(),
                               urlTemplate: isDarkTheme
                                   ? "https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
                                   : "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"),

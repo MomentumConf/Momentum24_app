@@ -34,7 +34,7 @@ class ScheduleScreenState extends State<ScheduleScreen>
 
   @override
   void dispose() {
-    _tabController?.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -50,7 +50,7 @@ class ScheduleScreenState extends State<ScheduleScreen>
   void updateTabController(List<Event> apiData) {
     final uniqueDaysMap = _getUniqueDays(apiData);
     final initialIndex = _getInitialIndex(uniqueDaysMap);
-    _tabController?.dispose();
+    _tabController.dispose();
     _tabController = TabController(
       length: uniqueDaysMap.length,
       initialIndex: initialIndex,

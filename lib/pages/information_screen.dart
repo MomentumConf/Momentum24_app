@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/momentum_appbar.dart';
@@ -12,7 +11,7 @@ class InformationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MomentumAppBar(),
+      appBar: const MomentumAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -62,12 +61,9 @@ class InformationScreen extends StatelessWidget {
                     aspectRatio: 16 / 9,
                     child: Stack(
                       children: [
-                        CachedNetworkImage(
-                          imageUrl: "/assets/$image",
+                        Image.asset(
+                          "/$image",
                           fit: BoxFit.contain,
-                          fadeInDuration: const Duration(seconds: 0),
-                          placeholder: (context, url) =>
-                              Image.asset(image, fit: BoxFit.contain),
                         ),
                         Positioned(
                           bottom: 10,

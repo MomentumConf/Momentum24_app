@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:momentum24_app/colors.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,6 +38,11 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
 
   void buildMarkers() {
     var newMarkers = <map.Marker>{};
+    final theme = Theme.of(context);
+    final isDarkTheme = theme.brightness == Brightness.dark;
+    final primaryColor = theme.colorScheme.primary;
+    final onPrimaryColor = theme.colorScheme.onPrimary;
+    final surfaceColor = theme.colorScheme.surface;
     for (final (index, marker) in markers.indexed) {
       newMarkers.add(
         map.Marker(
@@ -49,7 +53,9 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
             },
             child: Icon(
               getMarkerIcon(marker.icon),
-              color: currentMarkerIndex == index ? primaryColor : textColor,
+              color: currentMarkerIndex == index
+                  ? primaryColor
+                  : (isDarkTheme ? surfaceColor : onPrimaryColor),
               size: currentMarkerIndex == index ? 40 : 30,
             ),
           ),
@@ -233,9 +239,10 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
                         },
                         itemBuilder: (context, index) {
                           final marker = markers[index];
-                          final color = currentMarkerIndex == index
+                          final isSelected = currentMarkerIndex == index;
+                          final color = isSelected
                               ? theme.primaryColor
-                              : theme.colorScheme.onPrimary;
+                              : theme.colorScheme.onSurface;
                           return Container(
                             width: 200,
                             margin: const EdgeInsets.symmetric(horizontal: 5),
@@ -246,7 +253,7 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
                                 color: color,
                                 width: 2,
                               ),
-                              color: Colors.white,
+                              color: theme.colorScheme.surface,
                             ),
                             child: ListTile(
                               contentPadding: const EdgeInsets.symmetric(
@@ -263,12 +270,15 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
                               title: Text(
                                 marker.title,
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                    height: 1.1, fontWeight: FontWeight.w600),
+                                    height: 1.1,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.colorScheme.onSurface),
                               ),
                               subtitle: Text(
                                 marker.address,
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   height: 1.1,
+                                  color: theme.colorScheme.onSurface,
                                 ),
                               ),
                               onTap: () {

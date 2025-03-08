@@ -181,11 +181,12 @@ class HomePageState extends State<HomePage> {
                   ),
                   title: AppLocalizations.of(context)!.notifications,
                   inactiveIcon: Badge(
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
                       isLabelVisible: unreadNotifications > 0,
                       label: Text(
                         unreadNotifications.toString(),
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary),
+                            color: Theme.of(context).colorScheme.onTertiary),
                       ),
                       child: const Icon(Icons.notifications_outlined)),
                   activeForegroundColor: Theme.of(context).colorScheme.tertiary,

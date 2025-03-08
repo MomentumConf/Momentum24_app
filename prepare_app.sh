@@ -20,6 +20,9 @@ const Color primaryColor = Color(0xFF${MAIN_COLOR:1});
 const Color secondaryColor = Color(0xFF${SECONDARY_COLOR:1});
 const Color highlightColor = Color(0xFF${HIGHLIGHT_COLOR:1});
 const Color textColor = Color(0xFF${TEXT_COLOR:1});
+const Color textOnPrimaryColor = Color(0xFF${TEXT_ON_PRIMARY_COLOR:1});
+const Color textOnSecondaryColor = Color(0xFF${TEXT_ON_SECONDARY_COLOR:1});
+const Color textOnHighlightColor = Color(0xFF${TEXT_ON_HIGHLIGHT_COLOR:1});
 EOL
 
     cat $COLORS_FILE
@@ -78,6 +81,9 @@ parse_settings() {
   SECONDARY_COLOR=$(jq -r '.secondaryColor' $SETTINGS_FILE)
   HIGHLIGHT_COLOR=$(jq -r '.highlightColor' $SETTINGS_FILE)
   TEXT_COLOR=$(jq -r '.textColor' $SETTINGS_FILE)
+  TEXT_ON_PRIMARY_COLOR=$(jq -r '.textOnPrimaryColor' $SETTINGS_FILE)
+  TEXT_ON_SECONDARY_COLOR=$(jq -r '.textOnSecondaryColor' $SETTINGS_FILE)
+  TEXT_ON_HIGHLIGHT_COLOR=$(jq -r '.textOnHighlightColor' $SETTINGS_FILE)
   APP_NAME=$(jq -r '.appName' $SETTINGS_FILE)
   APP_DESCRIPTION=$(jq -r '.description' $SETTINGS_FILE)
   LOGO=$(jq -r '.logo' $SETTINGS_FILE)

@@ -36,3 +36,4 @@ jobs:
                 sentry_dsn: ${{ secrets.SENTRY_DSN_MOMENTUM }}
                 is_pull_request: ${{ github.event_name == 'pull_request' }}
                 pr_number: ${{ github.event.pull_request.number }}
+                analytics_id: 1

@@ -49,7 +49,7 @@ class PersistentNavBarStyle extends StatelessWidget {
             navBarDecoration.padding.horizontal) /
         navBarConfig.items.length;
 
-    final boxColor = Theme.of(context).colorScheme.onPrimary;
+    final boxColor = Theme.of(context).colorScheme.onTertiary;
     return DecoratedNavBar(
       decoration: navBarDecoration,
       filter: navBarDecoration.filter,

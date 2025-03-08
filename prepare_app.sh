@@ -13,9 +13,16 @@ FAVICON_FILE="web/favicon.png"
 
 update_titles() {
   echo "Updating titles in $INDEX_FILE and $MAIN_FILE"
-  sed -i '' "s/%TITLE%/${APP_NAME}/g" $INDEX_FILE
-  sed -i '' "s/%DESCRIPTION%/${APP_DESCRIPTION}/" $INDEX_FILE
-  sed -i '' "s/%TITLE%/${APP_NAME}/" $MAIN_FILE
+  awk -i inplace -v app_name="$APP_NAME" -v app_desc="$APP_DESCRIPTION" '{
+    gsub(/%TITLE%/, app_name);
+    gsub(/%DESCRIPTION%/, app_desc);
+    print;
+  }' $INDEX_FILE
+  
+  awk -i inplace -v app_name="$APP_NAME" '{
+    gsub(/%TITLE%/, app_name);
+    print;
+  }' $MAIN_FILE
 }
 
 update_manifest_json() {
@@ -28,7 +35,7 @@ update_manifest_json() {
 
 update_enabled_modules() {
   echo "Updating enabled modules"
-  sed -i '' "s/%ENABLED_MODULES%/$ENABLED_MODULES/" lib/pages/home_page.dart
+  awk -i inplace -v modules="$ENABLED_MODULES" '{gsub(/%ENABLED_MODULES%/, modules); print}' lib/pages/home_page.dart
 }
 
 download_images() {
@@ -105,8 +112,8 @@ parse_settings() {
 }
 
 update_project_id() {
-  sed -i '' "s/_paq.push(\[\"setSiteId\", \"[0-9]*\"\])/_paq.push(\[\"setSiteId\", \"${ANALYTICS_ID}\"\])/" $INDEX_FILE
-  sed -i '' "s/appId: .*,$/appId: '${ONESIGNAL_APPID}',/g" $INDEX_FILE
+  awk -i inplace '{gsub(/_paq.push\(\["setSiteId", "[0-9]*"\]\)/, "_paq.push([\"setSiteId\", \"'${ANALYTICS_ID}'\"])"); print}' $INDEX_FILE
+  awk -i inplace '{gsub(/appId: .*,$/, "appId: '\''${ONESIGNAL_APPID}'\'',"); print}' $INDEX_FILE
 }
 
 main() {

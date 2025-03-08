@@ -2,7 +2,6 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart' as date_symbol_data_local;
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -40,17 +39,6 @@ Future<void> main() async {
   runApp(const ConferenceApp());
 }
 
-final baseTheme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: primaryColor).copyWith(
-    primary: primaryColor,
-    onPrimary: textColor,
-    secondary: secondaryColor,
-    onSecondary: Colors.white,
-  ),
-  useMaterial3: true,
-  brightness: Brightness.light,
-);
-
 class ConferenceApp extends StatelessWidget {
   const ConferenceApp({super.key});
 
@@ -61,15 +49,7 @@ class ConferenceApp extends StatelessWidget {
       title: "%TITLE%",
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-
-      theme: baseTheme.copyWith(
-        primaryColor: primaryColor,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: primaryColor,
-          foregroundColor: textColor,
-        ),
-        textTheme: GoogleFonts.latoTextTheme(baseTheme.textTheme),
-      ),
+      theme: lightTheme,
       // darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
       //   primaryColorDark: Colors.purple[900],
       //   textTheme: ThemeData.dark().textTheme.apply(

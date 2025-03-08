@@ -48,7 +48,7 @@ class ScheduleItem extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.onSurface,
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         bottomLeft: Radius.circular(20))),
@@ -57,8 +57,8 @@ class ScheduleItem extends StatelessWidget {
                 child: Text(
                   DateFormat('HH:mm').format(event.start),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: Colors.white,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
                       fontSize: 22,
                       fontWeight: FontWeight.bold),
                 ),
@@ -146,7 +146,7 @@ class ScheduleItem extends StatelessWidget {
                 speaker.name,
                 maxLines: 1,
                 style:
-                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
               )
             ]),
           )
@@ -162,7 +162,7 @@ class ScheduleItem extends StatelessWidget {
               children: [
                 Icon(
                   Icons.info_outline,
-                  color: textColor,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
                 const SizedBox(width: 5),
                 Flexible(
@@ -171,7 +171,7 @@ class ScheduleItem extends StatelessWidget {
                     subevent.title,
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                        color: textColor,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 12,
                         height: 1.1,
                         fontWeight: FontWeight.bold),

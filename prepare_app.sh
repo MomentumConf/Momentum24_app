@@ -11,25 +11,18 @@ ICONS_DIR="web/icons"
 FAVICON_FILE="web/favicon.png"
 
 
-create_colors_file() {
-    echo "Creating $COLORS_FILE"
-  cat <<EOL > $COLORS_FILE
-import 'dart:ui';
-
-const Color primaryColor = Color(0xFF${MAIN_COLOR:1});
-const Color secondaryColor = Color(0xFF${SECONDARY_COLOR:1});
-const Color highlightColor = Color(0xFF${HIGHLIGHT_COLOR:1});
-const Color textColor = Color(0xFF${TEXT_COLOR:1});
-EOL
-
-    cat $COLORS_FILE
-}
-
 update_titles() {
   echo "Updating titles in $INDEX_FILE and $MAIN_FILE"
-  sed -i "s/%TITLE%/${APP_NAME}/g" $INDEX_FILE
-  sed -i "s/%DESCRIPTION%/${APP_DESCRIPTION}/" $INDEX_FILE
-  sed -i "s/%TITLE%/${APP_NAME}/" $MAIN_FILE
+  awk -i inplace -v app_name="$APP_NAME" -v app_desc="$APP_DESCRIPTION" '{
+    gsub(/%TITLE%/, app_name);
+    gsub(/%DESCRIPTION%/, app_desc);
+    print;
+  }' $INDEX_FILE
+  
+  awk -i inplace -v app_name="$APP_NAME" '{
+    gsub(/%TITLE%/, app_name);
+    print;
+  }' $MAIN_FILE
 }
 
 update_manifest_json() {
@@ -42,7 +35,7 @@ update_manifest_json() {
 
 update_enabled_modules() {
   echo "Updating enabled modules"
-  sed -i "s/%ENABLED_MODULES%/$ENABLED_MODULES/" lib/pages/home_page.dart
+  awk -i inplace -v modules="$ENABLED_MODULES" '{gsub(/%ENABLED_MODULES%/, modules); print}' lib/pages/home_page.dart
 }
 
 download_images() {
@@ -73,11 +66,40 @@ create_favicon() {
   wget -O $FAVICON_FILE $BASE_URL
 }
 
+create_theme_file() {
+  echo "Creating $THEME_FILE"
+  python3 -c "
+import json
+from string import Template
+
+with open('${SETTINGS_FILE}', 'r') as f:
+    settings = json.load(f)
+    colors = {name: color.replace('#', '0xFF') for name, color in settings.items() if type(color) == str and color.startswith('#')}
+
+with open('${COLORS_FILE}', 'r+') as f:
+    file_content = f.read()
+    template = Template(file_content)
+    f.seek(0)
+    f.truncate()
+    try:
+        content = template.substitute(**colors)
+        f.write(content)
+    except Exception as e:
+        print(f'Error: {e}')
+        f.write(file_content)
+        raise e
+"
+
+  if [ $? -eq 0 ]; then
+    echo "Theme file created"
+  else
+    echo "Error: Failed to create theme file" >&2
+    exit 1
+  fi
+}
+
 parse_settings() {
   MAIN_COLOR=$(jq -r '.mainColor' $SETTINGS_FILE)
-  SECONDARY_COLOR=$(jq -r '.secondaryColor' $SETTINGS_FILE)
-  HIGHLIGHT_COLOR=$(jq -r '.highlightColor' $SETTINGS_FILE)
-  TEXT_COLOR=$(jq -r '.textColor' $SETTINGS_FILE)
   APP_NAME=$(jq -r '.appName' $SETTINGS_FILE)
   APP_DESCRIPTION=$(jq -r '.description' $SETTINGS_FILE)
   LOGO=$(jq -r '.logo' $SETTINGS_FILE)
@@ -90,13 +112,13 @@ parse_settings() {
 }
 
 update_project_id() {
-  sed -i "s/_paq.push(\[\"setSiteId\", \"[0-9]*\"\])/_paq.push(\[\"setSiteId\", \"${ANALYTICS_ID}\"\])/" $INDEX_FILE
-  sed -i "s/appId: .*,$/appId: '${ONESIGNAL_APPID}',/g" $INDEX_FILE
+  awk -i inplace '{gsub(/_paq.push\(\["setSiteId", "[0-9]*"\]\)/, "_paq.push([\"setSiteId\", \"'${ANALYTICS_ID}'\"])"); print}' $INDEX_FILE
+  awk -i inplace '{gsub(/appId: .*,$/, "appId: '\''${ONESIGNAL_APPID}'\'',"); print}' $INDEX_FILE
 }
 
 main() {
   parse_settings
-  create_colors_file
+  create_theme_file
   update_titles
   update_manifest_json
   update_enabled_modules

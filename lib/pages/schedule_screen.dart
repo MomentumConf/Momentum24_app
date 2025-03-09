@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:momentum24_app/colors.dart';
 
 import '../models/event.dart' show Event;
 import '../services/data_provider_service.dart';
@@ -153,7 +152,8 @@ class ScheduleScreenState extends State<ScheduleScreen>
     final deviceWidth = MediaQuery.of(context).size.width;
     return TabBar(
       controller: _tabController,
-      indicator: ActiveTabIndicator(color: highlightColor, radius: 10),
+      indicator: ActiveTabIndicator(
+          color: Theme.of(context).colorScheme.tertiary, radius: 10),
       indicatorSize: TabBarIndicatorSize.label,
       indicatorPadding: const EdgeInsets.all(0),
       dividerHeight: 0,

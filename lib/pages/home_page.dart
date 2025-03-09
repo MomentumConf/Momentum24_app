@@ -11,7 +11,6 @@ import 'package:momentum24_app/pages/information/speakers_screen.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-import '../colors.dart';
 import '../services/api_service.dart';
 import '../services/cache_manager.dart';
 import '../services/data_provider_service.dart';
@@ -22,7 +21,7 @@ import './notifications_screen.dart';
 import './schedule_screen.dart';
 
 final List<String> enabledScreens =
-    List<String>.from(jsonDecode('%ENABLED_MODULES%'));
+    List<String>.from(jsonDecode('["info", "map"]'));
 
 double getBottomPaddingBasedOnDevice() {
   if (kIsWeb && html.window.navigator.userAgent.contains('iPhone')) {
@@ -122,10 +121,13 @@ class HomePageState extends State<HomePage> {
           child = Scaffold(
             body: Container(
               color: Theme.of(context).primaryColor,
-              child: const Center(
+              child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [CircularProgressIndicator(color: highlightColor)],
+                  children: [
+                    CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.primary)
+                  ],
                 ),
               ),
             ),
@@ -159,70 +161,80 @@ class HomePageState extends State<HomePage> {
             PersistentTabConfig(
                 screen: _screens[0],
                 item: ItemConfig(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.schedule,
-                    color: highlightColor,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                   inactiveIcon: const Icon(Icons.schedule_outlined),
                   title: AppLocalizations.of(context)!.schedule,
-                  activeForegroundColor: highlightColor,
-                  inactiveForegroundColor: textColor,
+                  activeForegroundColor: Theme.of(context).colorScheme.tertiary,
+                  inactiveForegroundColor:
+                      Theme.of(context).colorScheme.onPrimary,
                 )),
             // Notifications
             PersistentTabConfig(
               screen: _screens[1],
               item: ItemConfig(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.notifications,
-                    color: highlightColor,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                   title: AppLocalizations.of(context)!.notifications,
                   inactiveIcon: Badge(
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
                       isLabelVisible: unreadNotifications > 0,
                       label: Text(
                         unreadNotifications.toString(),
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onTertiary),
                       ),
                       child: const Icon(Icons.notifications_outlined)),
-                  activeForegroundColor: highlightColor,
-                  inactiveForegroundColor: textColor),
+                  activeForegroundColor: Theme.of(context).colorScheme.tertiary,
+                  inactiveForegroundColor:
+                      Theme.of(context).colorScheme.onPrimary),
             ),
             if (enabledScreens.contains('info'))
               PersistentTabConfig(
                   screen: _screens[2],
                   item: ItemConfig(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.info,
-                        color: highlightColor,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                       inactiveIcon: const Icon(Icons.info_outline),
                       title: AppLocalizations.of(context)!.information,
-                      activeForegroundColor: highlightColor,
-                      inactiveForegroundColor: textColor)),
+                      activeForegroundColor:
+                          Theme.of(context).colorScheme.tertiary,
+                      inactiveForegroundColor:
+                          Theme.of(context).colorScheme.onPrimary)),
             if (enabledScreens.contains('speakers'))
               PersistentTabConfig(
                   screen: const SafeArea(child: SpeakersScreen()),
                   item: ItemConfig(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.people_alt,
-                        color: highlightColor,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                       inactiveIcon: const Icon(Icons.people_alt_outlined),
                       title: AppLocalizations.of(context)!.speakers,
-                      activeForegroundColor: highlightColor,
-                      inactiveForegroundColor: textColor)),
+                      activeForegroundColor:
+                          Theme.of(context).colorScheme.tertiary,
+                      inactiveForegroundColor:
+                          Theme.of(context).colorScheme.onSurface)),
             if (enabledScreens.contains('map'))
               PersistentTabConfig(
                   screen: _screens[3],
                   item: ItemConfig(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.map,
-                        color: highlightColor,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                       inactiveIcon: const Icon(Icons.map_outlined),
                       title: AppLocalizations.of(context)!.map,
-                      activeForegroundColor: highlightColor,
-                      inactiveForegroundColor: textColor))
+                      activeForegroundColor:
+                          Theme.of(context).colorScheme.tertiary,
+                      inactiveForegroundColor:
+                          Theme.of(context).colorScheme.onPrimary))
           ],
           navBarBuilder: (navBarConfig) => PersistentNavBarStyle(
             navBarConfig: navBarConfig.copyWith(

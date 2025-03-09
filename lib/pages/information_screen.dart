@@ -17,6 +17,7 @@ class InformationScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           _buildInfoTile(
+            context: context,
             title: AppLocalizations.of(context)!.speakers,
             image: 'assets/images/mowcy.jpg',
             onTap: () => Navigator.push(
@@ -25,12 +26,14 @@ class InformationScreen extends StatelessWidget {
                     builder: (context) => const SpeakersScreen())),
           ),
           _buildInfoTile(
+            context: context,
             title: AppLocalizations.of(context)!.songs,
             image: 'assets/images/teksty.jpg',
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const SongsScreen())),
           ),
           _buildInfoTile(
+            context: context,
             title: AppLocalizations.of(context)!.regulations,
             image: 'assets/images/regulamin.jpg',
             onTap: () => Navigator.push(
@@ -44,7 +47,8 @@ class InformationScreen extends StatelessWidget {
   }
 
   Widget _buildInfoTile(
-      {required String title,
+      {required BuildContext context,
+      required String title,
       required String image,
       required VoidCallback onTap}) {
     return Expanded(
@@ -70,11 +74,14 @@ class InformationScreen extends StatelessWidget {
                           right: 10,
                           child: Text(
                             title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              shadows: <Shadow>[
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Theme.of(context).colorScheme.onSurface
+                                  : Theme.of(context).colorScheme.surface,
+                              shadows: const <Shadow>[
                                 Shadow(
                                   offset: Offset(1.0, 1.0),
                                   blurRadius: 3.0,

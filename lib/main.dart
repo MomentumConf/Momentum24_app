@@ -2,9 +2,10 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart' as date_symbol_data_local;
+import 'package:momentum24_app/services/theme_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import './dependency_container.dart';
@@ -40,44 +41,26 @@ Future<void> main() async {
   runApp(const ConferenceApp());
 }
 
-final baseTheme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: primaryColor).copyWith(
-    primary: primaryColor,
-    onPrimary: textColor,
-    secondary: secondaryColor,
-    onSecondary: Colors.white,
-  ),
-  useMaterial3: true,
-  brightness: Brightness.light,
-);
-
 class ConferenceApp extends StatelessWidget {
   const ConferenceApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "%TITLE%",
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+    final themeService = GetIt.instance.get<ThemeService>();
 
-      theme: baseTheme.copyWith(
-        primaryColor: primaryColor,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: primaryColor,
-          foregroundColor: textColor,
-        ),
-        textTheme: GoogleFonts.latoTextTheme(baseTheme.textTheme),
-      ),
-      // darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
-      //   primaryColorDark: Colors.purple[900],
-      //   textTheme: ThemeData.dark().textTheme.apply(
-      //         bodyColor: Colors.white,
-      //         displayColor: Colors.white,
-      //       ),
-      // ),
-      home: const HomePage(),
-    );
+    return AnimatedBuilder(
+        animation: themeService,
+        builder: (context, _) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: "%TITLE%",
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeService.themeMode,
+            home: const HomePage(),
+          );
+        });
   }
 }

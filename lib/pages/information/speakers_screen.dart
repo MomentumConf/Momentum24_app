@@ -90,10 +90,10 @@ class _SpeakersScreenState extends State<SpeakersScreen> {
                     top: 40,
                     child: Text(
                       speaker.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onSurface,
                         shadows: <Shadow>[
                           Shadow(
                             offset: Offset(1.0, 1.0),

@@ -102,7 +102,7 @@ class NotificationsScreenState extends State<NotificationsScreen> {
                                     fontSize: 12,
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .onPrimary),
+                                        .onSurface),
                                 textAlign: TextAlign.end,
                                 textWidthBasis: TextWidthBasis.parent,
                               ),

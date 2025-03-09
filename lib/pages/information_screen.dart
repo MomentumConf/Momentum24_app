@@ -77,7 +77,10 @@ class InformationScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.surface,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Theme.of(context).colorScheme.onSurface
+                                  : Theme.of(context).colorScheme.surface,
                               shadows: const <Shadow>[
                                 Shadow(
                                   offset: Offset(1.0, 1.0),

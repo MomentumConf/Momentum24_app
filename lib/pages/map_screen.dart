@@ -42,7 +42,8 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
     final isDarkTheme = theme.brightness == Brightness.dark;
     final primaryColor = theme.colorScheme.primary;
     final onPrimaryColor = theme.colorScheme.onPrimary;
-    final surfaceColor = theme.colorScheme.surface;
+    final onSurfaceColor =
+        isDarkTheme ? theme.colorScheme.onSurface : theme.colorScheme.surface;
     for (final (index, marker) in markers.indexed) {
       newMarkers.add(
         map.Marker(
@@ -55,7 +56,7 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
               getMarkerIcon(marker.icon),
               color: currentMarkerIndex == index
                   ? primaryColor
-                  : (isDarkTheme ? surfaceColor : onPrimaryColor),
+                  : (isDarkTheme ? onSurfaceColor : onPrimaryColor),
               size: currentMarkerIndex == index ? 40 : 30,
             ),
           ),

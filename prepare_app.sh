@@ -2,8 +2,6 @@
 
 SETTINGS_FILE="settings.json"
 COLORS_FILE="lib/colors.dart"
-CLIENT_FILE="lib/client.dart"
-MAIN_FILE="lib/main.dart"
 INDEX_FILE="web/index.html"
 MANIFEST_FILE="web/manifest.json"
 ASSETS_DIR="assets/images"
@@ -12,7 +10,7 @@ FAVICON_FILE="web/favicon.png"
 
 
 update_titles() {
-  echo "Updating titles in $INDEX_FILE and $MAIN_FILE"
+  echo "Updating titles in $INDEX_FILE"
   awk -i inplace -v app_name="$APP_NAME" -v app_desc="$APP_DESCRIPTION" '{
     gsub(/%TITLE%/, app_name);
     gsub(/%DESCRIPTION%/, app_desc);
@@ -101,13 +99,43 @@ parse_settings() {
   ENABLED_MODULES=$(jq -c '.enabledModules' $SETTINGS_FILE)
 }
 
+prepare_dotenv_file() {
+  echo "SENTRY_DSN=$SENTRY_DSN" > .env
+  echo "SANITY_PROJECT_ID=$SANITY_PROJECT_ID" >> .env
+  echo "ONESIGNAL_APPID=$ONESIGNAL_APPID" >> .env
+  echo "TITLE=$APP_NAME" >> .env
+  echo "ENABLED_MODULES=$(echo $ENABLED_MODULES | jq -r 'join(";")')" >> .env
+
+  cat .env >> $GITHUB_ENV
+}
+
 update_project_id() {
   awk -i inplace '{gsub(/_paq.push\(\["setSiteId", "[0-9]*"\]\)/, "_paq.push([\"setSiteId\", \"'${ANALYTICS_ID}'\"])"); print}' $INDEX_FILE
   awk -i inplace '{gsub(/appId: .*,$/, "appId: '\''${ONESIGNAL_APPID}'\'',"); print}' $INDEX_FILE
 }
 
-main() {
+show_help() {
+  echo "Usage: $0 [command]"
+  echo ""
+  echo "If no command is specified, all commands will be executed."
+  echo ""
+  echo "Available commands:"
+  echo "  parse_settings           - Parse settings from JSON file"
+  echo "  prepare_dotenv_file      - Prepare .env file"
+  echo "  create_theme_file        - Create theme file with colors"
+  echo "  update_titles            - Update titles in index.html"
+  echo "  update_manifest_json     - Update manifest.json"
+  echo "  download_and_resize_icons - Download and resize app icons"
+  echo "  download_images          - Download images"
+  echo "  copy_icon_to_assets      - Copy icon to assets directory"
+  echo "  create_favicon           - Create favicon"
+  echo "  update_project_id        - Update project ID in files"
+  echo "  help                     - Show this help message"
+}
+
+run_all() {
   parse_settings
+  prepare_dotenv_file
   create_theme_file
   update_titles
   update_manifest_json
@@ -118,4 +146,28 @@ main() {
   update_project_id
 }
 
-main
+main() {
+  if [ $# -eq 0 ]; then
+    # No arguments provided, run all commands
+    run_all
+  else
+    # Run specific command
+    command="$1"
+    case "$command" in
+      parse_settings|prepare_dotenv_file|create_theme_file|update_titles|update_manifest_json|download_and_resize_icons|download_images|copy_icon_to_assets|create_favicon|update_project_id)
+        parse_settings  # Always parse settings first
+        $command
+        ;;
+      help|--help|-h)
+        show_help
+        ;;
+      *)
+        echo "Error: Unknown command '$command'"
+        show_help
+        exit 1
+        ;;
+    esac
+  fi
+}
+
+main "$@"

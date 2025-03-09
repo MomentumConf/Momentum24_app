@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/event.dart';
-import '../../services/data_provider_service.dart';
-import '../../widgets/schedule_item.dart';
+import 'package:momentum24_app/models/event.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/schedule_item.dart';
 
 class EventDayList extends StatelessWidget {
   final DateTime day;

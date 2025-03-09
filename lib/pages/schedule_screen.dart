@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../models/event.dart' show Event;
-import '../services/data_provider_service.dart';
-import '../widgets/active_tab_indicator.dart';
-import '../widgets/momentum_appbar.dart';
-import '../widgets/schedule/day_tab.dart';
-import '../widgets/schedule/event_day_list.dart';
+import 'package:momentum24_app/models/event.dart' show Event;
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/active_tab_indicator.dart';
+import 'package:momentum24_app/widgets/momentum_appbar.dart';
+import 'package:momentum24_app/widgets/schedule/day_tab.dart';
+import 'package:momentum24_app/widgets/schedule/event_day_list.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});

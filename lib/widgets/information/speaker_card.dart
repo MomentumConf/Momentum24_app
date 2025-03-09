@@ -1,7 +1,7 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/speaker.dart';
+import 'package:momentum24_app/models/speaker.dart';
 
 class SpeakerCard extends StatelessWidget {
   final Speaker speaker;

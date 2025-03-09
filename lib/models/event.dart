@@ -1,4 +1,4 @@
-import './speaker.dart';
+import 'package:momentum24_app/models/speaker.dart';
 
 class Category {
   final ColorData textColor;

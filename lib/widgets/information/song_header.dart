@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/song.dart';
+import 'package:momentum24_app/models/song.dart';
 
 class SongHeader extends StatelessWidget {
   final Song song;

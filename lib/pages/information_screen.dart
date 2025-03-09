@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../widgets/momentum_appbar.dart';
-import '../widgets/info_tile.dart';
-import './information/regulations_screen.dart';
-import './information/songs_screen.dart';
-import './information/speakers_screen.dart';
+import 'package:momentum24_app/widgets/momentum_appbar.dart';
+import 'package:momentum24_app/widgets/info_tile.dart';
+import 'package:momentum24_app/pages/information/regulations_screen.dart';
+import 'package:momentum24_app/pages/information/songs_screen.dart';
+import 'package:momentum24_app/pages/information/speakers_screen.dart';
 
 class InformationScreen extends StatelessWidget {
   const InformationScreen({super.key});

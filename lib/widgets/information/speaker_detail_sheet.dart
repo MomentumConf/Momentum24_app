@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../widgets/snapping_handler.dart';
+import 'package:momentum24_app/widgets/snapping_handler.dart';
 
 class SpeakerDetailSheet extends StatelessWidget {
   final String content;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/map.dart';
-import 'marker_icon_helper.dart';
+import 'package:momentum24_app/models/map.dart';
+import 'package:momentum24_app/widgets/map/marker_icon_helper.dart';
 
 class MarkerListItem extends StatelessWidget {
   final Marker marker;

@@ -1,9 +1,9 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/event.dart';
-import '../../pages/information/speaker_details_screen.dart';
-import '../../widgets/pill_button.dart';
+import 'package:momentum24_app/models/event.dart';
+import 'package:momentum24_app/pages/information/speaker_details_screen.dart';
+import 'package:momentum24_app/widgets/pill_button.dart';
 
 class SpeakersList extends StatelessWidget {
   final Event event;

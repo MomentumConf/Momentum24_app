@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../models/notice.dart';
+import 'package:momentum24_app/models/notice.dart';
 
 class NotificationTimelineTile extends StatelessWidget {
   final Notice notification;

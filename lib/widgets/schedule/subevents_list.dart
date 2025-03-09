@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/event.dart';
-import '../../widgets/pill_button.dart';
+import 'package:momentum24_app/models/event.dart';
+import 'package:momentum24_app/widgets/pill_button.dart';
 import 'event_detail_modal.dart';
 
 class SubeventsList extends StatelessWidget {

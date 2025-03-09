@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import '../../models/event.dart';
+import 'package:momentum24_app/models/event.dart';
 import 'speakers_list.dart';
 
 class EventDetailModal extends StatelessWidget {

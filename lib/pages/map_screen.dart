@@ -3,13 +3,13 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
-import '../models/map.dart';
-import '../services/data_provider_service.dart';
-import '../widgets/map/map_view.dart';
-import '../widgets/map/marker_list_item.dart';
-import '../widgets/map/navigation_button.dart';
-import '../widgets/map/marker_icon_helper.dart';
-import '../widgets/map/navigation_helper.dart';
+import 'package:momentum24_app/models/map.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/map/map_view.dart';
+import 'package:momentum24_app/widgets/map/marker_list_item.dart';
+import 'package:momentum24_app/widgets/map/navigation_button.dart';
+import 'package:momentum24_app/widgets/map/marker_icon_helper.dart';
+import 'package:momentum24_app/widgets/map/navigation_helper.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});

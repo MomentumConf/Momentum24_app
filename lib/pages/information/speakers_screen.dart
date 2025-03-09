@@ -3,9 +3,9 @@ import 'package:get_it/get_it.dart';
 import 'package:momentum24_app/pages/information/speaker_details_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../models/speaker.dart';
-import '../../services/data_provider_service.dart';
-import '../../widgets/information/speaker_card.dart';
+import 'package:momentum24_app/models/speaker.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/information/speaker_card.dart';
 
 class SpeakersScreen extends StatefulWidget {
   final String? speaker;

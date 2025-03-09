@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../models/notice.dart';
-import '../services/data_provider_service.dart';
-import '../widgets/momentum_appbar.dart';
-import '../widgets/notification_timeline_tile.dart';
+import 'package:momentum24_app/models/notice.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/momentum_appbar.dart';
+import 'package:momentum24_app/widgets/notification_timeline_tile.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});

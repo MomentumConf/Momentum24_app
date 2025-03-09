@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-import '../services/api_service.dart';
-import '../services/cache_manager.dart';
-import '../services/data_provider_service.dart';
-import '../widgets/loading_screen.dart';
-import '../widgets/navigation/app_navigation_tabs.dart';
-import '../widgets/navigation/home_page_content.dart';
+import 'package:momentum24_app/services/api_service.dart';
+import 'package:momentum24_app/services/cache_manager.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/loading_screen.dart';
+import 'package:momentum24_app/widgets/navigation/app_navigation_tabs.dart';
+import 'package:momentum24_app/widgets/navigation/home_page_content.dart';
 
 final List<String> enabledScreens =
     const String.fromEnvironment('ENABLED_MODULES', defaultValue: 'info;map')

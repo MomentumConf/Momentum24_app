@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/song.dart';
-import '../../managers/TextScaleManager.dart';
-import '../../widgets/information/song_header.dart';
-import '../../widgets/information/song_content.dart';
+import 'package:momentum24_app/models/song.dart';
+import 'package:momentum24_app/managers/TextScaleManager.dart';
+import 'package:momentum24_app/widgets/information/song_header.dart';
+import 'package:momentum24_app/widgets/information/song_content.dart';
 
 class SingleSongScreen extends StatefulWidget {
   final List<Song> songs;

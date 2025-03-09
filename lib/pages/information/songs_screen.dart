@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import './single_song_screen.dart';
-import '../../models/song.dart';
-import '../../services/data_provider_service.dart';
-import '../../widgets/information/song_list_item.dart';
+import 'package:momentum24_app/pages/information/single_song_screen.dart';
+import 'package:momentum24_app/models/song.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/information/song_list_item.dart';
 
 class SongsScreen extends StatefulWidget {
   const SongsScreen({super.key});

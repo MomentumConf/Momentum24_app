@@ -5,9 +5,9 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:string_unescape/string_unescape.dart';
 
-import '../../models/speaker.dart';
-import '../../services/data_provider_service.dart';
-import '../../widgets/information/speaker_detail_sheet.dart';
+import 'package:momentum24_app/models/speaker.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/information/speaker_detail_sheet.dart';
 
 class SpeakerDetailsScreen extends StatelessWidget {
   final String speakerId;

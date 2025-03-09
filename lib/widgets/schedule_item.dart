@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../models/event.dart';
-import 'schedule/event_detail_modal.dart';
-import 'schedule/speakers_list.dart';
-import 'schedule/subevents_list.dart';
+import 'package:momentum24_app/models/event.dart';
+import 'package:momentum24_app/widgets/schedule/event_detail_modal.dart';
+import 'package:momentum24_app/widgets/schedule/speakers_list.dart';
+import 'package:momentum24_app/widgets/schedule/subevents_list.dart';
 
 class ScheduleItem extends StatelessWidget {
   const ScheduleItem({

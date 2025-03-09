@@ -50,13 +50,7 @@ class ConferenceApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: lightTheme,
-      // darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
-      //   primaryColorDark: Colors.purple[900],
-      //   textTheme: ThemeData.dark().textTheme.apply(
-      //         bodyColor: Colors.white,
-      //         displayColor: Colors.white,
-      //       ),
-      // ),
+      darkTheme: darkTheme,
       home: const HomePage(),
     );
   }

@@ -45,3 +45,50 @@ ThemeData lightTheme = ThemeData(
     bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: Colors.white,
     ));
+
+TextTheme darkTextTheme = GoogleFonts.latoTextTheme(TextTheme(
+  bodyLarge: TextStyle(color: Color(0xFFEEEEEE)),
+  bodyMedium: TextStyle(color: Color(0xFFEEEEEE)),
+  bodySmall: TextStyle(color: Color(0xFFEEEEEE)),
+  titleLarge: TextStyle(color: Color(0xFFEEEEEE)),
+  titleMedium: TextStyle(color: Color(0xFFEEEEEE)),
+  titleSmall: TextStyle(color: Color(0xFFEEEEEE)),
+));
+
+ThemeData darkTheme = ThemeData(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Color($mainColor),
+      brightness: Brightness.dark,
+    ).copyWith(
+      primary: Color($mainColor),
+      onPrimary: Color($textOnPrimaryColor),
+      secondary: Color($secondaryColor),
+      onSecondary: Color($textOnSecondaryColor),
+      tertiary: Color($highlightColor),
+      onTertiary: Color($textOnHighlightColor),
+      surface: Color(0xFF121212),
+      onSurface: Color(0xFFEEEEEE),
+      background: Color(0xFF121212),
+      onBackground: Color(0xFFEEEEEE),
+    ),
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    iconTheme: const IconThemeData(
+      color: Color(0xFFEEEEEE),
+    ),
+    primaryColor: Color($mainColor),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xFF1E1E1E),
+      foregroundColor: Color($textOnPrimaryColor),
+    ),
+    textTheme: darkTextTheme,
+    cardTheme: const CardTheme(
+      color: Color(0xFF1E1E1E),
+    ),
+    scaffoldBackgroundColor: Color(0xFF191919),
+    dialogTheme: const DialogTheme(
+      backgroundColor: Color(0xFF1E1E1E),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: Color(0xFF1E1E1E),
+    ));

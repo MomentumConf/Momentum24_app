@@ -48,7 +48,9 @@ class ScheduleItem extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Theme.of(context).colorScheme.surface
+                        : Theme.of(context).colorScheme.onSurface,
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         bottomLeft: Radius.circular(20))),
@@ -58,7 +60,9 @@ class ScheduleItem extends StatelessWidget {
                   DateFormat('HH:mm').format(event.start),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Theme.of(context).colorScheme.onSurface
+                          : Theme.of(context).colorScheme.surface,
                       fontSize: 22,
                       fontWeight: FontWeight.bold),
                 ),

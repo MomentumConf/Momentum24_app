@@ -10,5 +10,7 @@
     "navigateTo": "Navigate to",
     "aboutApp": "About app",
     "privacyPolicy": "Privacy policy",
-    "clearCache": "Clear cache"
+    "clearCache": "Clear cache",
+    "switchToLightTheme": "Switch to light theme",
+    "switchToDarkTheme": "Switch to dark theme"
 }

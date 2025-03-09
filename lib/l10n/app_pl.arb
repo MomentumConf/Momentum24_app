@@ -10,5 +10,7 @@
     "navigateTo": "Wyznacz trasę",
     "aboutApp": "O aplikacji",
     "privacyPolicy": "Polityka prywatności",
-    "clearCache": "Wyczyść cache"
+    "clearCache": "Wyczyść cache",
+    "switchToLightTheme": "Przełącz na jasny motyw",
+    "switchToDarkTheme": "Przełącz na ciemny motyw"
 }

@@ -2,8 +2,10 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart' as date_symbol_data_local;
+import 'package:momentum24_app/services/theme_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import './dependency_container.dart';
@@ -44,14 +46,21 @@ class ConferenceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "%TITLE%",
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      home: const HomePage(),
-    );
+    final themeService = GetIt.instance.get<ThemeService>();
+
+    return AnimatedBuilder(
+        animation: themeService,
+        builder: (context, _) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: "%TITLE%",
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeService.themeMode,
+            home: const HomePage(),
+          );
+        });
   }
 }

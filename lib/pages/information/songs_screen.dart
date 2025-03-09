@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import './single_song_screen.dart';
 import '../../models/song.dart';
 import '../../services/data_provider_service.dart';
+import '../../widgets/information/song_list_item.dart';
 
 class SongsScreen extends StatefulWidget {
   const SongsScreen({super.key});
@@ -55,21 +56,18 @@ class SongsScreenState extends State<SongsScreen> {
                 itemCount: songs.length,
                 itemBuilder: (BuildContext context, int index) {
                   Song song = songs[index];
-                  return ListTile(
-                      title: Text(song.title),
-                      subtitle: Text(song.originalTitle),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      style: ListTileStyle.list,
-                      tileColor: Colors.white10,
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .push(MaterialPageRoute(
-                          builder: (context) {
-                            return SingleSongScreen(
-                                songs: songs, currentIndex: index);
-                          },
-                        ));
-                      });
+                  return SongListItem(
+                    song: song,
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true)
+                          .push(MaterialPageRoute(
+                        builder: (context) {
+                          return SingleSongScreen(
+                              songs: songs, currentIndex: index);
+                        },
+                      ));
+                    },
+                  );
                 },
               ),
             ),

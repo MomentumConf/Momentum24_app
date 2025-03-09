@@ -64,6 +64,7 @@ runs:
       env:
         SANITY_PROJECT_ID: ${{ inputs.sanity_project_id }}
         ONESIGNAL_APPID: ${{ inputs.onesignal_appid }}
+        SENTRY_DSN: ${{ inputs.sentry_dsn }}
       run: bash prepare_app.sh
       shell: bash
 

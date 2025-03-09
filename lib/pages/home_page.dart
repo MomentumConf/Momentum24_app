@@ -21,7 +21,8 @@ import './notifications_screen.dart';
 import './schedule_screen.dart';
 
 final List<String> enabledScreens =
-    List<String>.from(jsonDecode('["info", "map"]'));
+    const String.fromEnvironment('ENABLED_MODULES', defaultValue: 'info;map')
+        .split(';');
 
 double getBottomPaddingBasedOnDevice() {
   if (kIsWeb && html.window.navigator.userAgent.contains('iPhone')) {

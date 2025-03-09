@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/map.dart';
 import '../services/data_provider_service.dart';
 import '../widgets/map/map_view.dart';

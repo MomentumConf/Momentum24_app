@@ -1,11 +1,9 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:string_unescape/string_unescape.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/speaker.dart';
 import '../../services/data_provider_service.dart';

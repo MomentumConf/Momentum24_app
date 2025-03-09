@@ -53,7 +53,7 @@ class ConferenceApp extends StatelessWidget {
         builder: (context, _) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: "%TITLE%",
+            title: const String.fromEnvironment('TITLE'),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             theme: lightTheme,

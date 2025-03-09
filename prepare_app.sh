@@ -18,11 +18,6 @@ update_titles() {
     gsub(/%DESCRIPTION%/, app_desc);
     print;
   }' $INDEX_FILE
-  
-  awk -i inplace -v app_name="$APP_NAME" '{
-    gsub(/%TITLE%/, app_name);
-    print;
-  }' $MAIN_FILE
 }
 
 update_manifest_json() {
@@ -31,11 +26,6 @@ update_manifest_json() {
   jq --arg appName "$APP_NAME" --arg description "$APP_DESCRIPTION" --arg shortName "$SHORT_NAME" --arg themeColor "$MAIN_COLOR" \
     '.name = $appName | .description = $description | .short_name = $shortName | .theme_color = $themeColor | .background_color = $themeColor' \
     $MANIFEST_FILE > $MANIFEST_FILE.tmp && mv $MANIFEST_FILE.tmp $MANIFEST_FILE
-}
-
-update_enabled_modules() {
-  echo "Updating enabled modules"
-  awk -i inplace -v modules="$ENABLED_MODULES" '{gsub(/%ENABLED_MODULES%/, modules); print}' lib/pages/home_page.dart
 }
 
 download_images() {
@@ -121,7 +111,6 @@ main() {
   create_theme_file
   update_titles
   update_manifest_json
-  update_enabled_modules
   download_and_resize_icons
   download_images
   copy_icon_to_assets

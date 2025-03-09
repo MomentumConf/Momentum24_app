@@ -1,10 +1,10 @@
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
-import 'package:momentum24_app/widgets/pill_button.dart';
-import '../pages/information/speaker_details_screen.dart';
+
 import '../models/event.dart';
+import 'schedule/event_detail_modal.dart';
+import 'schedule/speakers_list.dart';
+import 'schedule/subevents_list.dart';
 
 class ScheduleItem extends StatelessWidget {
   const ScheduleItem({
@@ -35,7 +35,7 @@ class ScheduleItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (event.description != null && event.subevents.isEmpty) {
-          _buildBottomModal(context);
+          EventDetailModal.show(context, event);
         }
       },
       child: Container(
@@ -102,9 +102,12 @@ class ScheduleItem extends StatelessWidget {
                           const SizedBox(height: 5)
                         ],
                         if (event.subevents.isNotEmpty)
-                          ..._buildSubeventsList(event.subevents, context),
+                          SubeventsList(subevents: event.subevents),
                         if (event.speakers.isNotEmpty)
-                          _buildSpeakersList(event, context, true),
+                          SpeakersList(
+                            event: event,
+                            hasLightBackground: true,
+                          ),
                         if (event.description != null &&
                             event.subevents.isEmpty) ...[
                           const SizedBox(height: 10),
@@ -121,164 +124,5 @@ class ScheduleItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _buildSpeakersList(
-      Event event, BuildContext context, bool hasLightBackground) {
-    return Column(
-      children: [
-        for (var speaker in event.speakers)
-          PillButton(
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(
-                  builder: (context) =>
-                      SpeakerDetailsScreen(speakerId: speaker.id),
-                ),
-              );
-            },
-            child: Row(children: [
-              CircleAvatar(
-                backgroundImage:
-                    FastCachedImageProvider("${speaker.imageUrl}?w=50&h=50"),
-                radius: 12.5,
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                speaker.name,
-                maxLines: 1,
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
-              )
-            ]),
-          )
-      ],
-    );
-  }
-
-  List<Widget> _buildSubeventsList(
-      List<Event> subevents, BuildContext context) {
-    return subevents
-        .map((subevent) => PillButton(
-            child: Row(
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-                const SizedBox(width: 5),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Text(
-                    subevent.title,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontSize: 12,
-                        height: 1.1,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            onTap: () => _buildSubeventModal(context, subevent)))
-        .toList();
-  }
-
-  _buildBottomModal(BuildContext context) {
-    return showModalBottomSheet(
-        context: context,
-        showDragHandle: true,
-        useRootNavigator: true,
-        builder: (context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  event.title,
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: Markdown(
-                    data: event.description ?? '',
-                    styleSheet: MarkdownStyleSheet(
-                      p: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    )),
-              ),
-            ],
-          );
-        });
-  }
-
-  _buildSubeventModal(BuildContext context, Event subevent) {
-    return showModalBottomSheet(
-        context: context,
-        showDragHandle: true,
-        useRootNavigator: true,
-        builder: (context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  subevent.title,
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              if (subevent.location != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.location_on,
-                          color: Theme.of(context).primaryColor),
-                      const SizedBox(
-                          width:
-                              8.0), // provide some space between the icon and the text
-                      Text(
-                        subevent.location!,
-                        style: TextStyle(
-                            fontSize:
-                                Theme.of(context).textTheme.bodySmall?.fontSize,
-                            fontStyle: FontStyle.italic),
-                      ),
-                    ],
-                  ),
-                ),
-              const SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: Markdown(
-                    data: subevent.description ?? '',
-                    styleSheet: MarkdownStyleSheet(
-                      p: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    )),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 16),
-                child: _buildSpeakersList(subevent, context, false),
-              ),
-            ],
-          );
-        });
   }
 }

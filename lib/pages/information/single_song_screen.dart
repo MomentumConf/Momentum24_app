@@ -73,7 +73,6 @@ class SingleSongScreenState extends State<SingleSongScreen> {
                     ],
                     flexibleSpace: FlexibleSpaceBar(
                       title: SizedBox(
-                        width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.end,

@@ -6,13 +6,11 @@ import 'package:momentum24_app/widgets/snapping_handler.dart';
 class SpeakerDetailSheet extends StatelessWidget {
   final String content;
   final ScrollController scrollController;
-  final bool hasContent;
 
   const SpeakerDetailSheet({
     super.key,
     required this.content,
     required this.scrollController,
-    this.hasContent = true,
   });
 
   @override
@@ -29,35 +27,33 @@ class SpeakerDetailSheet extends StatelessWidget {
           topRight: Radius.circular(20),
         ),
       ),
-      child: hasContent
-          ? ListView(
-              controller: scrollController,
-              children: <Widget>[
-                const Center(child: SnappingHandler()),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 36, 8, 8),
-                  child: MarkdownBody(
-                    onTapLink: (text, href, title) {
-                      if (href != null) {
-                        launchUrl(Uri.parse(href));
-                      }
-                    },
-                    styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
-                        .copyWith(
-                      p: textStyleWhiteColor,
-                      h2: textStyleWhiteColor,
-                      strong: textStyleWhiteColor,
-                      a: textStyleWhiteColor.copyWith(
-                        decoration: TextDecoration.underline,
-                        decorationColor: textStyleWhiteColor.color,
-                      ),
-                    ),
-                    data: content,
-                  ),
-                )
-              ],
-            )
-          : null,
+      child: ListView(
+        controller: scrollController,
+        children: <Widget>[
+          const Center(child: SnappingHandler()),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 36, 8, 8),
+            child: MarkdownBody(
+              onTapLink: (text, href, title) {
+                if (href != null) {
+                  launchUrl(Uri.parse(href));
+                }
+              },
+              styleSheet:
+                  MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                p: textStyleWhiteColor,
+                h2: textStyleWhiteColor,
+                strong: textStyleWhiteColor,
+                a: textStyleWhiteColor.copyWith(
+                  decoration: TextDecoration.underline,
+                  decorationColor: textStyleWhiteColor.color,
+                ),
+              ),
+              data: content,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

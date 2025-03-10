@@ -8,6 +8,7 @@ import 'package:string_unescape/string_unescape.dart';
 import 'package:momentum24_app/models/speaker.dart';
 import 'package:momentum24_app/services/data_provider_service.dart';
 import 'package:momentum24_app/widgets/information/speaker_detail_sheet.dart';
+import 'package:momentum24_app/widgets/snapping_handler.dart';
 
 class SpeakerDetailsScreen extends StatelessWidget {
   final String speakerId;
@@ -119,11 +120,21 @@ class SpeakerDetailsScreen extends StatelessWidget {
                           sessionsHeading:
                               AppLocalizations.of(context)!.sessions);
 
-                  return SpeakerDetailSheet(
-                    content: content,
-                    scrollController: scrollController,
-                    hasContent: hasContent,
-                  );
+                  return hasContent
+                      ? SpeakerDetailSheet(
+                          content: content,
+                          scrollController: scrollController,
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.secondary,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                          ),
+                          child: Center(child: SnappingHandler()),
+                        );
                 },
               ),
             ],

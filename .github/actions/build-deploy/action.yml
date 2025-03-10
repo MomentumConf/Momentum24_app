@@ -75,7 +75,15 @@ runs:
         VERCEL_PROJECT_ID: ${{ inputs.vercel_project_id }}
         SANITY_PROJECT_ID: ${{ inputs.sanity_project_id }}
         SENTRY_DSN: ${{ inputs.sentry_dsn }}
-      run: npx vercel pull --yes --token ${{ inputs.vercel_token }} && YARN_ENABLE_IMMUTABLE_INSTALLS=false npx vercel build ${{ inputs.is_pull_request == 'true' && '' || '--prod'}} --token ${{ inputs.vercel_token }}
+        IS_PR: ${{ inputs.is_pull_request }}
+      run: |
+        if [[ "$IS_PR" == "true" ]]; then
+          echo "Building for pull request without --prod flag"
+          npx vercel pull --yes --token ${{ inputs.vercel_token }} && YARN_ENABLE_IMMUTABLE_INSTALLS=false npx vercel build --token ${{ inputs.vercel_token }}
+        else
+          echo "Building for production with --prod flag"
+          npx vercel pull --yes --token ${{ inputs.vercel_token }} && YARN_ENABLE_IMMUTABLE_INSTALLS=false npx vercel build --prod --token ${{ inputs.vercel_token }}
+        fi
       shell: bash
 
     - name: Change SW to cache everything on install
@@ -90,8 +98,15 @@ runs:
         VERCEL_TOKEN: ${{ inputs.vercel_token }}
         VERCEL_ORG_ID: ${{ inputs.vercel_org_id }}
         VERCEL_PROJECT_ID: ${{ inputs.vercel_project_id }}
+        IS_PR: ${{ inputs.is_pull_request }}
       run: |
-        npx vercel deploy ${{ inputs.is_pull_request == 'true' && '' || '--prod'}} --prebuilt --token ${{ inputs.vercel_token }} &> deploy.log
+        if [[ "$IS_PR" == "true" ]]; then
+          echo "Deploying for pull request without --prod flag"
+          npx vercel deploy --prebuilt --token ${{ inputs.vercel_token }} &> deploy.log
+        else
+          echo "Deploying for production with --prod flag"
+          npx vercel deploy --prod --prebuilt --token ${{ inputs.vercel_token }} &> deploy.log
+        fi
         cat deploy.log
         echo "url=$(grep -m1 -o 'https://[a-zA-Z0-9-]*.vercel.app' deploy.log)" >> "$GITHUB_OUTPUT"
       shell: bash

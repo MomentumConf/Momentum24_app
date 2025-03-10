@@ -8,9 +8,9 @@ import 'package:intl/date_symbol_data_local.dart' as date_symbol_data_local;
 import 'package:momentum24_app/services/theme_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import './dependency_container.dart';
-import './pages/home_page.dart';
-import './colors.dart';
+import 'package:momentum24_app/dependency_container.dart';
+import 'package:momentum24_app/pages/home_page.dart';
+import 'package:momentum24_app/colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

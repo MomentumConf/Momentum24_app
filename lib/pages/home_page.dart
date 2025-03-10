@@ -1,35 +1,20 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:web/web.dart' as html;
 
 import 'package:async/async.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:momentum24_app/pages/information/speakers_screen.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-import '../services/api_service.dart';
-import '../services/cache_manager.dart';
-import '../services/data_provider_service.dart';
-import '../widgets/persistent_navbar_style.dart';
-import './information_screen.dart';
-import './map_screen.dart';
-import './notifications_screen.dart';
-import './schedule_screen.dart';
+import 'package:momentum24_app/services/api_service.dart';
+import 'package:momentum24_app/services/cache_manager.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/loading_screen.dart';
+import 'package:momentum24_app/widgets/navigation/app_navigation_tabs.dart';
+import 'package:momentum24_app/widgets/navigation/home_page_content.dart';
 
 final List<String> enabledScreens =
     const String.fromEnvironment('ENABLED_MODULES', defaultValue: 'info;map')
         .split(';');
-
-double getBottomPaddingBasedOnDevice() {
-  if (kIsWeb && html.window.navigator.userAgent.contains('iPhone')) {
-    return 20.0;
-  }
-  return 5.0;
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,12 +28,6 @@ class HomePageState extends State<HomePage> {
   final _updateInterval = const Duration(minutes: 1);
 
   int unreadNotifications = 0;
-  final List<Widget> _screens = [
-    const SafeArea(child: ScheduleScreen()),
-    const SafeArea(child: NotificationsScreen()),
-    const SafeArea(child: InformationScreen()),
-    const SafeArea(child: MapScreen()),
-  ];
 
   final ApiService _apiService = GetIt.instance.get<ApiService>();
   final CacheManager _cacheManager = GetIt.instance.get<CacheManager>();
@@ -119,20 +98,7 @@ class HomePageState extends State<HomePage> {
       builder: (context, snapshot) {
         Widget child;
         if (snapshot.connectionState != ConnectionState.done) {
-          child = Scaffold(
-            body: Container(
-              color: Theme.of(context).primaryColor,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primary)
-                  ],
-                ),
-              ),
-            ),
-          );
+          child = const LoadingScreen();
         } else {
           child = buildHomePage(context);
         }
@@ -144,110 +110,19 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget buildHomePage(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: PersistentTabView(
-          popAllScreensOnTapOfSelectedTab: true,
-          onTabChanged: (value) {
-            if (value == 1) {
-              setState(() {
-                _cacheManager
-                    .saveLastReadNotificationDate(DateTime.now().toUtc());
-                unreadNotifications = 0;
-              });
-            }
-          },
-          tabs: [
-            // Schedule
-            PersistentTabConfig(
-                screen: _screens[0],
-                item: ItemConfig(
-                  icon: Icon(
-                    Icons.schedule,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                  inactiveIcon: const Icon(Icons.schedule_outlined),
-                  title: AppLocalizations.of(context)!.schedule,
-                  activeForegroundColor: Theme.of(context).colorScheme.tertiary,
-                  inactiveForegroundColor:
-                      Theme.of(context).colorScheme.onPrimary,
-                )),
-            // Notifications
-            PersistentTabConfig(
-              screen: _screens[1],
-              item: ItemConfig(
-                  icon: Icon(
-                    Icons.notifications,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                  title: AppLocalizations.of(context)!.notifications,
-                  inactiveIcon: Badge(
-                      backgroundColor: Theme.of(context).colorScheme.tertiary,
-                      isLabelVisible: unreadNotifications > 0,
-                      label: Text(
-                        unreadNotifications.toString(),
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onTertiary),
-                      ),
-                      child: const Icon(Icons.notifications_outlined)),
-                  activeForegroundColor: Theme.of(context).colorScheme.tertiary,
-                  inactiveForegroundColor:
-                      Theme.of(context).colorScheme.onPrimary),
-            ),
-            if (enabledScreens.contains('info'))
-              PersistentTabConfig(
-                  screen: _screens[2],
-                  item: ItemConfig(
-                      icon: Icon(
-                        Icons.info,
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                      inactiveIcon: const Icon(Icons.info_outline),
-                      title: AppLocalizations.of(context)!.information,
-                      activeForegroundColor:
-                          Theme.of(context).colorScheme.tertiary,
-                      inactiveForegroundColor:
-                          Theme.of(context).colorScheme.onPrimary)),
-            if (enabledScreens.contains('speakers'))
-              PersistentTabConfig(
-                  screen: const SafeArea(child: SpeakersScreen()),
-                  item: ItemConfig(
-                      icon: Icon(
-                        Icons.people_alt,
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                      inactiveIcon: const Icon(Icons.people_alt_outlined),
-                      title: AppLocalizations.of(context)!.speakers,
-                      activeForegroundColor:
-                          Theme.of(context).colorScheme.tertiary,
-                      inactiveForegroundColor:
-                          Theme.of(context).colorScheme.onSurface)),
-            if (enabledScreens.contains('map'))
-              PersistentTabConfig(
-                  screen: _screens[3],
-                  item: ItemConfig(
-                      icon: Icon(
-                        Icons.map,
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                      inactiveIcon: const Icon(Icons.map_outlined),
-                      title: AppLocalizations.of(context)!.map,
-                      activeForegroundColor:
-                          Theme.of(context).colorScheme.tertiary,
-                      inactiveForegroundColor:
-                          Theme.of(context).colorScheme.onPrimary))
-          ],
-          navBarBuilder: (navBarConfig) => PersistentNavBarStyle(
-            navBarConfig: navBarConfig.copyWith(
-              navBarHeight: 60 + (getBottomPaddingBasedOnDevice() / 2),
-            ),
-            navBarDecoration: NavBarDecoration(
-                color: Theme.of(context).primaryColor,
-                padding: EdgeInsets.fromLTRB(
-                    2, 5, 2, getBottomPaddingBasedOnDevice())),
-          ),
-        ),
+    return HomePageContent(
+      navigationTabs: AppNavigationTabs(
+        enabledScreens: enabledScreens,
+        unreadNotifications: unreadNotifications,
       ),
+      onTabChanged: (value) {
+        if (value == 1) {
+          setState(() {
+            _cacheManager.saveLastReadNotificationDate(DateTime.now().toUtc());
+            unreadNotifications = 0;
+          });
+        }
+      },
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../client.dart';
+import 'package:momentum24_app/client.dart';
 
 abstract class ApiService {
   Future<List<dynamic>> fetchSchedule();

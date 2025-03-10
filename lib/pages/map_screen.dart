@@ -9,7 +9,6 @@ import 'package:momentum24_app/widgets/map/map_view.dart';
 import 'package:momentum24_app/widgets/map/marker_list_item.dart';
 import 'package:momentum24_app/widgets/map/navigation_button.dart';
 import 'package:momentum24_app/widgets/map/marker_icon_helper.dart';
-import 'package:momentum24_app/widgets/map/navigation_helper.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -144,10 +143,7 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
                         left: 10,
                         right: 10,
                         child: NavigationButton(
-                          onPressed: () {
-                            NavigationHelper.openNavigationApp(
-                                markers[currentMarkerIndex].coordinates);
-                          },
+                          coordinates: markers[currentMarkerIndex].coordinates,
                         ),
                       ),
                     ],

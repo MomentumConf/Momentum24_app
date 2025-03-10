@@ -78,7 +78,7 @@ ThemeData darkTheme = ThemeData(
     ),
     primaryColor: Color($mainColor),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF1E1E1E),
+      backgroundColor: Color($mainColor),
       foregroundColor: Color($textOnPrimaryColor),
     ),
     textTheme: darkTextTheme,

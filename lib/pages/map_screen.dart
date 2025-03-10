@@ -122,9 +122,6 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDarkTheme = theme.brightness == Brightness.dark;
-
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -141,7 +138,6 @@ class MapScreenState extends State<MapScreen> implements TickerProvider {
                         center: center,
                         zoom: zoom,
                         markers: _markers.toList(),
-                        isDarkTheme: isDarkTheme,
                       ),
                       Positioned(
                         bottom: 10,

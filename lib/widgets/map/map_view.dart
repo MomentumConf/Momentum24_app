@@ -7,7 +7,6 @@ class MapView extends StatelessWidget {
   final LatLng center;
   final double zoom;
   final List<map.Marker> markers;
-  final bool isDarkTheme;
 
   const MapView({
     super.key,
@@ -15,11 +14,12 @@ class MapView extends StatelessWidget {
     required this.center,
     required this.zoom,
     required this.markers,
-    required this.isDarkTheme,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return map.FlutterMap(
       mapController: mapController,
       options: map.MapOptions(

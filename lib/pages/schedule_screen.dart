@@ -109,7 +109,6 @@ class ScheduleScreenState extends State<ScheduleScreen>
   }
 
   PreferredSizeWidget getTabBar(BuildContext context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
     return TabBar(
       controller: _tabController,
       indicator: ActiveTabIndicator(
@@ -122,11 +121,8 @@ class ScheduleScreenState extends State<ScheduleScreen>
           child: AnimatedBuilder(
             animation: _tabController.animation!,
             builder: (context, child) {
-              final color = Theme.of(context).colorScheme.onPrimary;
               return DayTab(
                 day: day,
-                color: color,
-                deviceWidth: deviceWidth,
                 daysCount: uniqueDays.length,
               );
             },

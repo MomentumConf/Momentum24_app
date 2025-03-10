@@ -3,20 +3,19 @@ import 'package:intl/intl.dart';
 
 class DayTab extends StatelessWidget {
   final DateTime day;
-  final Color color;
-  final double deviceWidth;
   final int daysCount;
 
   const DayTab({
     super.key,
     required this.day,
-    required this.color,
-    required this.deviceWidth,
     required this.daysCount,
   });
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onPrimary;
+    final deviceWidth = MediaQuery.of(context).size.width;
+
     final weekday =
         DateFormat('EEE').format(day).replaceAll(RegExp(r'\.$'), '');
     final dayOfMonth = DateFormat('d').format(day);

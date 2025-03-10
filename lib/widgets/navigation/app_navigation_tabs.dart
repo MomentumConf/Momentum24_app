@@ -41,29 +41,28 @@ class AppNavigationTabs {
   List<PersistentTabConfig> buildTabs(BuildContext context) {
     final Map<String, Widget> availableScreens = getScreens();
     final List<PersistentTabConfig> tabs = [
-      _buildScheduleTab(context, availableScreens),
-      _buildNotificationsTab(context, availableScreens),
+      _buildScheduleTab(context, availableScreens['schedule']!),
+      _buildNotificationsTab(context, availableScreens['notifications']!),
     ];
 
     if (availableScreens.containsKey('info')) {
-      tabs.add(_buildInfoTab(context, availableScreens));
+      tabs.add(_buildInfoTab(context, availableScreens['info']!));
     }
 
     if (availableScreens.containsKey('speakers')) {
-      tabs.add(_buildSpeakersTab(context, availableScreens));
+      tabs.add(_buildSpeakersTab(context, availableScreens['speakers']!));
     }
 
     if (availableScreens.containsKey('map')) {
-      tabs.add(_buildMapTab(context, availableScreens));
+      tabs.add(_buildMapTab(context, availableScreens['map']!));
     }
 
     return tabs;
   }
 
-  PersistentTabConfig _buildScheduleTab(
-      BuildContext context, Map<String, Widget> screens) {
+  PersistentTabConfig _buildScheduleTab(BuildContext context, Widget screen) {
     return PersistentTabConfig(
-      screen: screens['schedule']!,
+      screen: screen,
       item: ItemConfig(
         icon: Icon(
           Icons.schedule,
@@ -78,9 +77,9 @@ class AppNavigationTabs {
   }
 
   PersistentTabConfig _buildNotificationsTab(
-      BuildContext context, Map<String, Widget> screens) {
+      BuildContext context, Widget screen) {
     return PersistentTabConfig(
-      screen: screens['notifications']!,
+      screen: screen,
       item: ItemConfig(
         icon: Icon(
           Icons.notifications,
@@ -104,10 +103,9 @@ class AppNavigationTabs {
     );
   }
 
-  PersistentTabConfig _buildInfoTab(
-      BuildContext context, Map<String, Widget> screens) {
+  PersistentTabConfig _buildInfoTab(BuildContext context, Widget screen) {
     return PersistentTabConfig(
-      screen: screens['info']!,
+      screen: screen,
       item: ItemConfig(
         icon: Icon(
           Icons.info,
@@ -121,10 +119,9 @@ class AppNavigationTabs {
     );
   }
 
-  PersistentTabConfig _buildSpeakersTab(
-      BuildContext context, Map<String, Widget> screens) {
+  PersistentTabConfig _buildSpeakersTab(BuildContext context, Widget screen) {
     return PersistentTabConfig(
-      screen: screens['speakers']!,
+      screen: screen,
       item: ItemConfig(
         icon: Icon(
           Icons.people_alt,
@@ -133,15 +130,14 @@ class AppNavigationTabs {
         inactiveIcon: const Icon(Icons.people_alt_outlined),
         title: AppLocalizations.of(context)!.speakers,
         activeForegroundColor: Theme.of(context).colorScheme.tertiary,
-        inactiveForegroundColor: Theme.of(context).colorScheme.onSurface,
+        inactiveForegroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
     );
   }
 
-  PersistentTabConfig _buildMapTab(
-      BuildContext context, Map<String, Widget> screens) {
+  PersistentTabConfig _buildMapTab(BuildContext context, Widget screen) {
     return PersistentTabConfig(
-      screen: screens['map']!,
+      screen: screen,
       item: ItemConfig(
         icon: Icon(
           Icons.map,

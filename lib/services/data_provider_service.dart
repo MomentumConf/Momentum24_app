@@ -4,13 +4,13 @@ import 'dart:developer';
 
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
-import './api_service.dart';
-import './cache_manager.dart';
-import '../models/event.dart';
-import '../models/map.dart';
-import '../models/notice.dart';
-import '../models/song.dart';
-import '../models/speaker.dart';
+import 'package:momentum24_app/services/api_service.dart';
+import 'package:momentum24_app/services/cache_manager.dart';
+import 'package:momentum24_app/models/event.dart';
+import 'package:momentum24_app/models/map.dart';
+import 'package:momentum24_app/models/notice.dart';
+import 'package:momentum24_app/models/song.dart';
+import 'package:momentum24_app/models/speaker.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class DataProviderService {

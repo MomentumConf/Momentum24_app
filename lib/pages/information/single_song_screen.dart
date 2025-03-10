@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:string_unescape/string_unescape.dart';
-import '../../models/song.dart';
-import '../../managers/TextScaleManager.dart';
+import 'package:momentum24_app/models/song.dart';
+import 'package:momentum24_app/managers/TextScaleManager.dart';
+import 'package:momentum24_app/widgets/information/song_header.dart';
+import 'package:momentum24_app/widgets/information/song_content.dart';
 
 class SingleSongScreen extends StatefulWidget {
   final List<Song> songs;
@@ -55,12 +55,8 @@ class SingleSongScreenState extends State<SingleSongScreen> {
               backgroundColor: theme.colorScheme.secondary,
               body: CustomScrollView(
                 slivers: <Widget>[
-                  SliverAppBar(
-                    expandedHeight: 120.0,
-                    pinned: true,
-                    stretch: true,
-                    backgroundColor: theme.colorScheme.secondary,
-                    foregroundColor: theme.colorScheme.onSecondary,
+                  SongHeader(
+                    song: song,
                     actions: <Widget>[
                       IconButton(
                         icon: const Icon(Icons.zoom_out),
@@ -71,55 +67,10 @@ class SingleSongScreenState extends State<SingleSongScreen> {
                         onPressed: _zoomIn,
                       ),
                     ],
-                    flexibleSpace: FlexibleSpaceBar(
-                      title: SizedBox(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              song.title,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: theme.colorScheme.onSecondary,
-                                height: 1.4,
-                              ),
-                            ),
-                            Text(
-                              song.originalTitle,
-                              style: theme.textTheme.titleSmall?.copyWith(
-                                color:
-                                    theme.colorScheme.onSecondary.withAlpha(77),
-                                height: 1.1,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
-                  SliverFillRemaining(
-                    fillOverscroll: true,
-                    hasScrollBody: false,
-                    child: Card(
-                      margin: const EdgeInsetsDirectional.symmetric(
-                          horizontal: 4.0),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                            bottom: Radius.zero, top: Radius.circular(16)),
-                      ),
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 100),
-                        child: MarkdownBody(
-                          data: unescape(song.lyrics),
-                          styleSheet: MarkdownStyleSheet.fromTheme(theme)
-                              .copyWith(
-                                  textScaler: TextScaler.linear(
-                                      textScaleManager.scaleFactor)),
-                        ),
-                      ),
-                    ),
+                  SongContent(
+                    lyrics: song.lyrics,
+                    textScaleFactor: textScaleManager.scaleFactor,
                   ),
                 ],
               ),

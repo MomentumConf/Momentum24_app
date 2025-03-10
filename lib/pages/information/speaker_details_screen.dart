@@ -1,15 +1,14 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:string_unescape/string_unescape.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../../models/speaker.dart';
-import '../../services/data_provider_service.dart';
-import '../../widgets/snapping_handler.dart';
+import 'package:momentum24_app/models/speaker.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
+import 'package:momentum24_app/widgets/information/speaker_detail_sheet.dart';
+import 'package:momentum24_app/widgets/snapping_handler.dart';
 
 class SpeakerDetailsScreen extends StatelessWidget {
   final String speakerId;
@@ -80,9 +79,6 @@ class SpeakerDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyleWhiteColor = TextStyle(
-      color: Theme.of(context).colorScheme.onSecondary,
-    );
     return FutureBuilder(
       future: getSpeaker(),
       builder: (BuildContext context, AsyncSnapshot<Speaker> speaker) {
@@ -114,50 +110,31 @@ class SpeakerDetailsScreen extends StatelessWidget {
                 snap: true,
                 builder:
                     (BuildContext context, ScrollController scrollController) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: (speaker.data!.description.isNotEmpty ||
-                            speaker.data!.events.isNotEmpty)
-                        ? ListView(
-                            controller: scrollController,
-                            children: <Widget>[
-                              const Center(child: SnappingHandler()),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 36, 8, 8),
-                                child: MarkdownBody(
-                                    onTapLink: (text, href, title) {
-                                      launchUrl(Uri.parse(href!));
-                                    },
-                                    styleSheet: MarkdownStyleSheet.fromTheme(
-                                            Theme.of(context))
-                                        .copyWith(
-                                            p: textStyleWhiteColor,
-                                            h2: textStyleWhiteColor,
-                                            strong: textStyleWhiteColor,
-                                            a: textStyleWhiteColor.copyWith(
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              decorationColor:
-                                                  textStyleWhiteColor.color,
-                                            )),
-                                    data: speaker.data!.description +
-                                        getEventsMarkdown(
-                                            events: speaker.data!.events,
-                                            currentSpeaker: speaker.data!.id,
-                                            sessionsHeading:
-                                                AppLocalizations.of(context)!
-                                                    .sessions)),
-                              )
-                            ],
-                          )
-                        : null,
-                  );
+                  final bool hasContent =
+                      speaker.data!.description.isNotEmpty ||
+                          speaker.data!.events.isNotEmpty;
+                  final String content = speaker.data!.description +
+                      getEventsMarkdown(
+                          events: speaker.data!.events,
+                          currentSpeaker: speaker.data!.id,
+                          sessionsHeading:
+                              AppLocalizations.of(context)!.sessions);
+
+                  return hasContent
+                      ? SpeakerDetailSheet(
+                          content: content,
+                          scrollController: scrollController,
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.secondary,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                          ),
+                          child: Center(child: SnappingHandler()),
+                        );
                 },
               ),
             ],

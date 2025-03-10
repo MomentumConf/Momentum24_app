@@ -9,11 +9,12 @@ ICONS_DIR="web/icons"
 FAVICON_FILE="web/favicon.png"
 
 
-update_titles() {
+update_indexhtml() {
   echo "Updating titles in $INDEX_FILE"
-  awk -i inplace -v app_name="$APP_NAME" -v app_desc="$APP_DESCRIPTION" '{
+  awk -i inplace -v app_name="$APP_NAME" -v app_desc="$APP_DESCRIPTION" -v main_color="$MAIN_COLOR" '{
     gsub(/%TITLE%/, app_name);
     gsub(/%DESCRIPTION%/, app_desc);
+    gsub(/%MAIN_COLOR%/, main_color);
     print;
   }' $INDEX_FILE
 }
@@ -120,24 +121,24 @@ show_help() {
   echo "If no command is specified, all commands will be executed."
   echo ""
   echo "Available commands:"
-  echo "  parse_settings           - Parse settings from JSON file"
-  echo "  prepare_dotenv_file      - Prepare .env file"
-  echo "  create_theme_file        - Create theme file with colors"
-  echo "  update_titles            - Update titles in index.html"
-  echo "  update_manifest_json     - Update manifest.json"
+  echo "  parse_settings            - Parse settings from JSON file"
+  echo "  prepare_dotenv_file       - Prepare .env file"
+  echo "  create_theme_file         - Create theme file with colors"
+  echo "  update_indexhtml          - Update titles in index.html"
+  echo "  update_manifest_json      - Update manifest.json"
   echo "  download_and_resize_icons - Download and resize app icons"
-  echo "  download_images          - Download images"
-  echo "  copy_icon_to_assets      - Copy icon to assets directory"
-  echo "  create_favicon           - Create favicon"
-  echo "  update_project_id        - Update project ID in files"
-  echo "  help                     - Show this help message"
+  echo "  download_images           - Download images"
+  echo "  copy_icon_to_assets       - Copy icon to assets directory"
+  echo "  create_favicon            - Create favicon"
+  echo "  update_project_id         - Update project ID in files"
+  echo "  help                      - Show this help message"
 }
 
 run_all() {
   parse_settings
   prepare_dotenv_file
   create_theme_file
-  update_titles
+  update_indexhtml
   update_manifest_json
   download_and_resize_icons
   download_images
@@ -154,7 +155,7 @@ main() {
     # Run specific command
     command="$1"
     case "$command" in
-      parse_settings|prepare_dotenv_file|create_theme_file|update_titles|update_manifest_json|download_and_resize_icons|download_images|copy_icon_to_assets|create_favicon|update_project_id)
+      parse_settings|prepare_dotenv_file|create_theme_file|update_indexhtml|update_manifest_json|download_and_resize_icons|download_images|copy_icon_to_assets|create_favicon|update_project_id)
         parse_settings  # Always parse settings first
         $command
         ;;

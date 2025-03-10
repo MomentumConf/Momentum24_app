@@ -45,7 +45,7 @@ class PersistentNavBarStyle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double itemWidth = (MediaQuery.of(context).size.width -
+    final double itemWidth = (MediaQuery.sizeOf(context).width -
             navBarDecoration.padding.horizontal) /
         navBarConfig.items.length;
 

@@ -19,7 +19,7 @@ class LoadingScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ],
           ),

@@ -1,65 +1,157 @@
 <!DOCTYPE html>
 <html lang="pl">
-    <head>
-        <base href="$FLUTTER_BASE_HREF" />
 
-        <meta charset="UTF-8" />
-        <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
-        <meta name="description" content="%DESCRIPTION%" />
+<head>
+    <base href="$FLUTTER_BASE_HREF" />
 
-        <!-- iOS meta tags & icons -->
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <meta name="apple-mobile-web-app-title" content="%TITLE%" />
-        <link rel="apple-touch-icon" sizes="57x57" href="icons/Icon-57.png" />
-        <link rel="apple-touch-icon" sizes="60x60" href="icons/Icon-60.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="icons/Icon-72.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="icons/Icon-76.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="icons/Icon-114.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="icons/Icon-120.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="icons/Icon-144.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="icons/Icon-152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="icons/Icon-180.png" />
-        <link rel="apple-touch-icon" sizes="192x192" href="icons/Icon-192.png" />
-        <link rel="apple-touch-icon" sizes="384x384" href="icons/Icon-384.png" />
-        <link rel="apple-touch-icon" sizes="512x512" href="icons/Icon-512.png" />
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta name="description" content="%DESCRIPTION%" />
 
-        <!-- Favicon -->
-        <link rel="icon" type="image/png" href="favicon.png?v=1.0.0" />
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="%TITLE%" />
+    <link rel="apple-touch-icon" sizes="57x57" href="icons/Icon-57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="icons/Icon-60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/Icon-72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="icons/Icon-76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="icons/Icon-114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="icons/Icon-120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/Icon-144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/Icon-152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/Icon-180.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/Icon-192.png" />
+    <link rel="apple-touch-icon" sizes="384x384" href="icons/Icon-384.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/Icon-512.png" />
 
-        <title>%TITLE%</title>
-        <link rel="manifest" href="manifest.json?v=1.0.0" />
-    </head>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png?v=1.0.0" />
 
-    <body>
-        <script src="flutter_bootstrap.js?v=1.0.0" async></script>
-        <!-- Matomo -->
-        <script>
-            var _paq = (window._paq = window._paq || []);
-            _paq.push(["trackPageView"]);
-            _paq.push(["enableLinkTracking"]);
-            (function () {
-                var u = "//analytics.bkweb.dev/";
-                _paq.push(["setTrackerUrl", u + "matomo.php"]);
-                _paq.push(["setSiteId", "2"]);
-                var d = document,
-                    g = d.createElement("script"),
-                    s = d.getElementsByTagName("script")[0];
-                g.async = true;
-                g.defer = true;
-                g.src = u + "matomo.js";
-                s.parentNode.insertBefore(g, s);
-            })();
-        </script>
-        <!-- Push notification -->
-        <script src="/OneSignalSDK.page.js?v=1.0.0" defer></script>
-        <script>
-            window.OneSignalDeferred = window.OneSignalDeferred || [];
-            OneSignalDeferred.push(async function (OneSignal) {
-                await OneSignal.init({
-                    appId: "",
-                });
+    <title>%TITLE%</title>
+    <link rel="manifest" href="manifest.json?v=1.0.0" />
+
+    <!-- Matomo -->
+    <script>
+        var _paq = (window._paq = window._paq || []);
+        _paq.push(["trackPageView"]);
+        _paq.push(["enableLinkTracking"]);
+        (function () {
+            var u = "//analytics.bkweb.dev/";
+            _paq.push(["setTrackerUrl", u + "matomo.php"]);
+            _paq.push(["setSiteId", "2"]);
+            var d = document,
+                g = d.createElement("script"),
+                s = d.getElementsByTagName("script")[0];
+            g.async = true;
+            g.defer = true;
+            g.src = u + "matomo.js";
+            s.parentNode.insertBefore(g, s);
+        })();
+    </script>
+    <!-- Push notification -->
+    <script src="/OneSignalSDK.page.js?v=1.0.0" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function (OneSignal) {
+            await OneSignal.init({
+                appId: "",
             });
-        </script>
-    </body>
+        });
+    </script>
+</head>
+
+<body>
+    <script src="flutter_bootstrap.js?v=1.0.0" async></script>
+
+    <style>
+        #flutter-loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: %MAIN_COLOR%;
+            z-index: 9999;
+        }
+
+        .material-spinner {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .material-spinner svg {
+            animation: material-spinner-rotate 2s linear infinite;
+            height: 100%;
+            width: 100%;
+        }
+
+        .material-spinner circle {
+            stroke: #000000;
+            stroke-dasharray: 80px, 200px;
+            stroke-dashoffset: 0;
+            animation: material-spinner-dash 1.5s ease-in-out infinite;
+            stroke-linecap: round;
+        }
+
+        @keyframes material-spinner-rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes material-spinner-dash {
+            0% {
+                stroke-dasharray: 1px, 200px;
+                stroke-dashoffset: 0;
+            }
+
+            50% {
+                stroke-dasharray: 100px, 200px;
+                stroke-dashoffset: -15px;
+            }
+
+            100% {
+                stroke-dasharray: 100px, 200px;
+                stroke-dashoffset: -125px;
+            }
+        }
+    </style>
+
+    <div id="flutter-loading-screen">
+        <div class="material-spinner">
+            <svg viewBox="22 22 44 44">
+                <circle cx="44" cy="44" r="20" fill="none" stroke-width="4"></circle>
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function () {
+            const checkFlutterLoaded = setInterval(function () {
+                if (document.querySelector('flt-glass-pane')) {
+                    clearInterval(checkFlutterLoaded);
+                    const loadingScreen = document.getElementById('flutter-loading-screen');
+                    if (loadingScreen) {
+                        loadingScreen.remove();
+                    }
+                }
+            }, 100);
+
+            setTimeout(function () {
+                clearInterval(checkFlutterLoaded);
+                const loadingScreen = document.getElementById('flutter-loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.remove();
+                }
+            }, 10000);
+        });
+    </script>
+</body>
+
 </html>

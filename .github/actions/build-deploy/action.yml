@@ -65,6 +65,10 @@ runs:
       run: bash prepare_app.sh
       shell: bash
 
+    - name: Minimize service worker
+      run: npx terser -c -m -o web/service_worker.js web/service_worker.js
+      shell: bash
+
     - name: Build with Vercel using NPX
       env:
         VERCEL_TOKEN: ${{ inputs.vercel_token }}
@@ -81,12 +85,6 @@ runs:
           echo "Building for production with --prod flag"
           npx vercel pull --yes --token ${{ inputs.vercel_token }} && YARN_ENABLE_IMMUTABLE_INSTALLS=false npx vercel build --prod --token ${{ inputs.vercel_token }}
         fi
-      shell: bash
-
-    - name: Change SW to cache everything on install
-      run: |
-        sed -i 's/caches.open(TEMP).then((cache) => {/caches.open(CACHE_NAME).then((cache) => {/' .vercel/output/static/flutter_service_worker.js
-        sed -i 's/CORE\.map((value) => new Request(value, {'\''cache'\'': '\''reload'\''})))/Object.keys(RESOURCES)/g' .vercel/output/static/flutter_service_worker.js
       shell: bash
 
     - name: Deploy prebuilt with Vercel

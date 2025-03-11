@@ -25,10 +25,12 @@ if (!workbox) {
                     if (!response.ok) {
                         throw new Error('Network response not ok');
                     }
-                    caches.open('manifest-cache').then(cache => {
-                        console.log('Storing manifest.json in cache');
-                        cache.put('manifest.json', response);
-                    });
+                    if (!caches.match('manifest.json')) {
+                        caches.open('manifest-cache').then(cache => {
+                            console.log('Storing manifest.json in cache');
+                            cache.put('manifest.json', response);
+                        });
+                    }
                     return response.json();
                 })
                 .catch(() => {
@@ -42,7 +44,7 @@ if (!workbox) {
                         });
                 })
                 .catch(err => {
-                    console.error('Błąd przy pobieraniu manifest.json:', err);
+                    console.error('Error fetching manifest.json:', err);
                     return { version: '1' };
                 });
         };

@@ -135,7 +135,8 @@ if (!workbox) {
 
         // Strategy for Sanity API – online-first, fallback to cache for 1 day
         workbox.routing.registerRoute(
-            ({ url }) => url.origin.match(/\.apicdn\.sanity\.io$/),
+            ({ url }) => url.origin.match(/\.apicdn\.sanity\.io$/) &&
+                !(url.searchParams.get('query') && url.searchParams.get('query').includes('notification')),
             new workbox.strategies.NetworkFirst({
                 cacheName: 'sanity-api-cache',
                 networkTimeoutSeconds: 5,

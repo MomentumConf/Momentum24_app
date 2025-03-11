@@ -52,7 +52,6 @@
         })();
     </script>
     <!-- Push notification -->
-    <script src="/OneSignalSDK.page.js?v=%VERSION%" defer></script>
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         OneSignalDeferred.push(async function (OneSignal) {
@@ -64,7 +63,15 @@
 </head>
 
 <body>
-    <script src="flutter_bootstrap.js?v=%VERSION%" async></script>
+    <script async>
+        {{flutter_js}}
+        {{flutter_build_config}}
+        _flutter.loader.load({
+            config: {
+                canvasKitBaseUrl: "/canvaskit/",
+            },
+        });
+    </script>
 
     <style>
         #flutter-loading-screen {
@@ -153,6 +160,17 @@
                 }
             }, 10000);
         });
+
+        if ('serviceWorker' in navigator) {
+            (navigator.serviceWorker.getRegistrations() || []).then(registrations => {
+                (registrations || []).forEach(registration => {
+                    if (registration.scope.includes('flutter_service_worker.js')) {
+                        registration.unregister();
+                    }
+                });
+            });
+            navigator.serviceWorker.register('service_worker.js?v=%VERSION%');
+        }
     </script>
 </body>
 

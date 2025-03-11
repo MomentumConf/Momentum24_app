@@ -1,5 +1,5 @@
 {
-    "buildCommand": "flutter build web --wasm --dart-define-from-file=.env --release",
+    "buildCommand": "flutter build web --wasm --dart-define-from-file=.env --pwa-strategy=none --release",
     "outputDirectory": "build/web/",
     "installCommand": "flutter pub get",
     "rewrites": [

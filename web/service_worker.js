@@ -6,6 +6,43 @@ if (!workbox) {
 } else {
     console.log('Workbox loaded - time for magic!');
 
+    // Checking for version parameter
+    const scriptURL = self.location.href;
+    const urlParams = new URL(scriptURL).searchParams;
+    const versionParam = urlParams.get('v');
+    console.log('Service Worker Version parameter:', versionParam);
+
+    // Function to use version value in cache names
+    const getCacheVersion = () => {
+        return versionParam || (new Date()).getTime().toString();
+    };
+
+    // Adding version to cache names
+    const CACHE_VERSION = getCacheVersion();
+    const CACHE_NAMES = {
+        static: `static-assets-${CACHE_VERSION}`,
+        dynamic: `dynamic-content-${CACHE_VERSION}`,
+        pages: `pages-${CACHE_VERSION}`,
+        flutter: `flutter-runtime-${CACHE_VERSION}`,
+        maps: `maps-${CACHE_VERSION}`,
+        api: `api-${CACHE_VERSION}`,
+        images: `images-${CACHE_VERSION}`,
+    };
+
+    // Using version in service worker activation
+    self.addEventListener('activate', event => {
+        event.waitUntil(
+            Promise.all(
+                caches.keys().map(async (cacheName) => {
+                    if (!Object.values(CACHE_NAMES).includes(cacheName)) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            )
+        );
+        self.clients.claim();
+    });
+
     // Check if hostname starts with localhost
     const isLocalhost = self.location.hostname.startsWith('localhost');
 
@@ -18,107 +55,78 @@ if (!workbox) {
         self.skipWaiting();
         self.clients.claim();
     } else {
-        // Function to load manifest.json with a network-first strategy and fallback to cache
-        const loadManifest = () => {
-            return fetch('manifest.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response not ok');
-                    }
-                    if (!caches.match('manifest.json')) {
-                        caches.open('manifest-cache').then(cache => {
-                            console.log('Storing manifest.json in cache');
-                            cache.put('manifest.json', response);
-                        });
-                    }
-                    return response.json();
-                })
-                .catch(() => {
-                    // Network failed, try to retrieve manifest.json from cache
-                    return caches.match('manifest.json')
-                        .then(cachedResponse => {
-                            if (cachedResponse) {
-                                return cachedResponse.json();
-                            }
-                            throw new Error('No cached manifest.json');
-                        });
-                })
-                .catch(err => {
-                    console.error('Error fetching manifest.json:', err);
-                    return { version: '1' };
-                });
-        };
-
-        // Download manifest.json, to get the version for revision
-        const precachePromise = loadManifest().then(manifestData => {
-            const version = manifestData.version;
+        const precacheFiles = () => {
             const precacheFiles = [
-                { url: '/', revision: version },
-                { url: 'index.html', revision: version },
-                { url: 'main.dart.js', revision: version },
-                { url: 'flutter_bootstrap.js', revision: version },
-                { url: 'flutter.js', revision: version },
-                { url: 'favicon.png', revision: version },
-                { url: 'icons/Icon-256.png', revision: version },
-                { url: 'icons/Icon-120.png', revision: version },
-                { url: 'icons/Icon-144.png', revision: version },
-                { url: 'icons/Icon-192.png', revision: version },
-                { url: 'icons/Icon-384.png', revision: version },
-                { url: 'icons/Icon-76.png', revision: version },
-                { url: 'icons/Icon-60.png', revision: version },
-                { url: 'icons/Icon-152.png', revision: version },
-                { url: 'icons/Icon-180.png', revision: version },
-                { url: 'icons/Icon-72.png', revision: version },
-                { url: 'icons/Icon-57.png', revision: version },
-                { url: 'icons/Icon-96.png', revision: version },
-                { url: 'icons/Icon-128.png', revision: version },
-                { url: 'icons/Icon-114.png', revision: version },
-                { url: 'icons/Icon-512.png', revision: version },
-                { url: 'manifest.json', revision: version },
-                { url: 'version.json', revision: version },
-                { url: 'assets/AssetManifest.json', revision: version },
-                { url: 'assets/NOTICES', revision: version },
-                { url: 'assets/FontManifest.json', revision: version },
-                { url: 'assets/AssetManifest.bin.json', revision: version },
-                { url: 'assets/packages/cupertino_icons/assets/CupertinoIcons.ttf', revision: version },
-                { url: 'assets/shaders/ink_sparkle.frag', revision: version },
-                { url: 'assets/AssetManifest.bin', revision: version },
-                { url: 'assets/fonts/MaterialIcons-Regular.otf', revision: version },
-                { url: 'assets/assets/images/regulamin.jpg', revision: version },
-                { url: 'assets/assets/images/icon.png', revision: version },
-                { url: 'assets/assets/images/mowcy.jpg', revision: version },
-                { url: 'assets/assets/images/logo.svg', revision: version },
-                { url: 'assets/assets/images/teksty.jpg', revision: version },
-                { url: 'assets/google_fonts/Lato-Italic.ttf', revision: version },
-                { url: 'assets/google_fonts/Lato-Bold.ttf', revision: version },
-                { url: 'assets/google_fonts/Lato-Black.ttf', revision: version },
-                { url: 'assets/google_fonts/Lato-Regular.ttf', revision: version },
-                { url: 'assets/google_fonts/Lato-BoldItalic.ttf', revision: version },
-                { url: 'canvaskit/skwasm.js', revision: version },
-                { url: 'canvaskit/skwasm.js.symbols', revision: version },
-                { url: 'canvaskit/canvaskit.js.symbols', revision: version },
-                { url: 'canvaskit/skwasm.wasm', revision: version },
-                { url: 'canvaskit/chromium/canvaskit.js.symbols', revision: version },
-                { url: 'canvaskit/chromium/canvaskit.js', revision: version },
-                { url: 'canvaskit/chromium/canvaskit.wasm', revision: version },
-                { url: 'canvaskit/canvaskit.js', revision: version },
-                { url: 'canvaskit/canvaskit.wasm', revision: version },
-                { url: 'canvaskit/skwasm.worker.js', revision: version },
+                { url: '/', revision: CACHE_VERSION },
+                { url: '/index.html', revision: CACHE_VERSION },
+                { url: 'flutter_bootstrap.js', revision: CACHE_VERSION },
+                { url: 'flutter.js', revision: CACHE_VERSION },
+                { url: 'version.json', revision: CACHE_VERSION },
+                { url: 'favicon.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-256.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-120.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-144.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-192.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-384.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-76.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-60.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-152.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-180.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-72.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-57.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-96.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-128.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-114.png', revision: CACHE_VERSION },
+                { url: 'icons/Icon-512.png', revision: CACHE_VERSION },
+                { url: 'manifest.json', revision: CACHE_VERSION },
+                { url: 'main.dart.wasm', revision: CACHE_VERSION },
+                { url: 'main.dart.mjs', revision: CACHE_VERSION },
+                { url: 'assets/AssetManifest.json', revision: CACHE_VERSION },
+                { url: 'assets/NOTICES', revision: CACHE_VERSION },
+                { url: 'assets/FontManifest.json', revision: CACHE_VERSION },
+                { url: 'assets/AssetManifest.bin.json', revision: CACHE_VERSION },
+                { url: 'assets/packages/cupertino_icons/assets/CupertinoIcons.ttf', revision: CACHE_VERSION },
+                { url: 'assets/shaders/ink_sparkle.frag', revision: CACHE_VERSION },
+                { url: 'assets/AssetManifest.bin', revision: CACHE_VERSION },
+                { url: 'assets/fonts/MaterialIcons-Regular.otf', revision: CACHE_VERSION },
+                { url: 'assets/assets/images/regulamin.jpg', revision: CACHE_VERSION },
+                { url: 'assets/assets/images/icon.png', revision: CACHE_VERSION },
+                { url: 'assets/assets/images/mowcy.jpg', revision: CACHE_VERSION },
+                { url: 'assets/assets/images/logo.svg', revision: CACHE_VERSION },
+                { url: 'assets/assets/images/teksty.jpg', revision: CACHE_VERSION },
+                { url: 'assets/google_fonts/Lato-Italic.ttf', revision: CACHE_VERSION },
+                { url: 'assets/google_fonts/Lato-Bold.ttf', revision: CACHE_VERSION },
+                { url: 'assets/google_fonts/Lato-Black.ttf', revision: CACHE_VERSION },
+                { url: 'assets/google_fonts/Lato-Regular.ttf', revision: CACHE_VERSION },
+                { url: 'assets/google_fonts/Lato-BoldItalic.ttf', revision: CACHE_VERSION },
+                { url: 'canvaskit/skwasm_st.js', revision: CACHE_VERSION },
+                { url: 'canvaskit/skwasm.js', revision: CACHE_VERSION },
+                { url: 'canvaskit/skwasm.js.symbols', revision: CACHE_VERSION },
+                { url: 'canvaskit/canvaskit.js.symbols', revision: CACHE_VERSION },
+                { url: 'canvaskit/skwasm.wasm', revision: CACHE_VERSION },
+                { url: 'canvaskit/chromium/canvaskit.js.symbols', revision: CACHE_VERSION },
+                { url: 'canvaskit/chromium/canvaskit.js', revision: CACHE_VERSION },
+                { url: 'canvaskit/chromium/canvaskit.wasm', revision: CACHE_VERSION },
+                { url: 'canvaskit/skwasm_st.js.symbols', revision: CACHE_VERSION },
+                { url: 'canvaskit/canvaskit.js', revision: CACHE_VERSION },
+                { url: 'canvaskit/canvaskit.wasm', revision: CACHE_VERSION },
+                { url: 'canvaskit/skwasm_st.wasm', revision: CACHE_VERSION },
             ];
             workbox.precaching.precacheAndRoute(precacheFiles);
-        });
+        };
 
         // Wait for manifest download before completing installation
         self.addEventListener('install', event => {
-            event.waitUntil(precachePromise);
+            event.waitUntil(precacheFiles);
             self.skipWaiting();
         });
+
 
         // Strategy for assets: Offline First with 30-day cache
         workbox.routing.registerRoute(
             ({ url }) => url.pathname.startsWith('/assets/'),
             new workbox.strategies.CacheFirst({
-                cacheName: 'assets-cache',
+                cacheName: CACHE_NAMES.static,
                 plugins: [
                     new workbox.expiration.ExpirationPlugin({
                         maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
@@ -131,7 +139,7 @@ if (!workbox) {
         workbox.routing.registerRoute(
             ({ url }) => url.hostname.match(/^cartodb-basemaps-.*\.global\.ssl\.fastly\.net$/),
             new workbox.strategies.CacheFirst({
-                cacheName: 'maps'
+                cacheName: CACHE_NAMES.maps
             })
         );
 
@@ -140,7 +148,7 @@ if (!workbox) {
             ({ url }) => url.origin.match(/\.apicdn\.sanity\.io$/) &&
                 !(url.searchParams.get('query') && url.searchParams.get('query').includes('notification')),
             new workbox.strategies.NetworkFirst({
-                cacheName: 'sanity-api-cache',
+                cacheName: CACHE_NAMES.api,
                 networkTimeoutSeconds: 5,
                 plugins: [
                     new workbox.expiration.ExpirationPlugin({
@@ -154,7 +162,7 @@ if (!workbox) {
         workbox.routing.registerRoute(
             ({ url }) => url.origin === 'https://cdn.sanity.io',
             new workbox.strategies.CacheFirst({
-                cacheName: 'sanity-images',
+                cacheName: CACHE_NAMES.images,
                 plugins: [
                     new workbox.expiration.ExpirationPlugin({
                         maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
@@ -162,5 +170,33 @@ if (!workbox) {
                 ]
             })
         );
+
+        // Handle Flutter runtime files
+        workbox.routing.registerRoute(
+            ({ url }) => url.pathname.endsWith('.mjs') ||
+                url.pathname.endsWith('.wasm'),
+            new workbox.strategies.CacheFirst({
+                cacheName: CACHE_NAMES.flutter,
+                plugins: [
+                    new workbox.expiration.ExpirationPlugin({
+                        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+                    }),
+                ],
+            })
+        );
+
+
+        // Offline fallback for all navigation requests
+        workbox.routing.setCatchHandler(({ event }) => {
+            if (event.request.destination === 'document' || event.request.mode === 'navigate') {
+                return caches.match('/index.html')
+                    .then(response => {
+                        if (response) return response;
+                        return caches.match('/');
+                    })
+                    .catch(() => caches.match('/'));
+            }
+            return Response.error();
+        });
     }
 }

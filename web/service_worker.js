@@ -55,8 +55,8 @@ if (!workbox) {
             const precacheFiles = [
                 { url: '/', revision: version },
                 { url: 'index.html', revision: version },
-                { url: 'main.dart.js', revision: version },
                 { url: 'flutter_bootstrap.js', revision: version },
+                { url: 'version.json', revision: version },
                 { url: 'flutter.js', revision: version },
                 { url: 'favicon.png', revision: version },
                 { url: 'icons/Icon-256.png', revision: version },
@@ -75,7 +75,8 @@ if (!workbox) {
                 { url: 'icons/Icon-114.png', revision: version },
                 { url: 'icons/Icon-512.png', revision: version },
                 { url: 'manifest.json', revision: version },
-                { url: 'version.json', revision: version },
+                { url: 'main.dart.wasm', revision: version },
+                { url: 'main.dart.mjs', revision: version },
                 { url: 'assets/AssetManifest.json', revision: version },
                 { url: 'assets/NOTICES', revision: version },
                 { url: 'assets/FontManifest.json', revision: version },
@@ -94,6 +95,7 @@ if (!workbox) {
                 { url: 'assets/google_fonts/Lato-Black.ttf', revision: version },
                 { url: 'assets/google_fonts/Lato-Regular.ttf', revision: version },
                 { url: 'assets/google_fonts/Lato-BoldItalic.ttf', revision: version },
+                { url: 'canvaskit/skwasm_st.js', revision: version },
                 { url: 'canvaskit/skwasm.js', revision: version },
                 { url: 'canvaskit/skwasm.js.symbols', revision: version },
                 { url: 'canvaskit/canvaskit.js.symbols', revision: version },
@@ -101,9 +103,10 @@ if (!workbox) {
                 { url: 'canvaskit/chromium/canvaskit.js.symbols', revision: version },
                 { url: 'canvaskit/chromium/canvaskit.js', revision: version },
                 { url: 'canvaskit/chromium/canvaskit.wasm', revision: version },
+                { url: 'canvaskit/skwasm_st.js.symbols', revision: version },
                 { url: 'canvaskit/canvaskit.js', revision: version },
                 { url: 'canvaskit/canvaskit.wasm', revision: version },
-                { url: 'canvaskit/skwasm.worker.js', revision: version },
+                { url: 'canvaskit/skwasm_st.wasm', revision: version },
             ];
             workbox.precaching.precacheAndRoute(precacheFiles);
         });
@@ -162,5 +165,64 @@ if (!workbox) {
                 ]
             })
         );
+
+        // Handle Flutter runtime files
+        workbox.routing.registerRoute(
+            ({ url }) => url.pathname.endsWith('.mjs') ||
+                url.pathname.endsWith('.wasm'),
+            new workbox.strategies.CacheFirst({
+                cacheName: 'flutter-runtime',
+                plugins: [
+                    new workbox.expiration.ExpirationPlugin({
+                        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+                    }),
+                ],
+            })
+        );
+
+        // Critical JavaScript files for app functionality
+        workbox.routing.registerRoute(
+            ({ url }) => url.pathname.endsWith('.js') &&
+                !url.pathname.includes('service_worker.js') &&
+                !url.pathname.includes('matomo.js'),
+            new workbox.strategies.CacheFirst({
+                cacheName: 'app-scripts',
+                plugins: [
+                    new workbox.expiration.ExpirationPlugin({
+                        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+                    }),
+                ],
+            })
+        );
+
+        // Ensure root path is handled correctly in offline mode
+        const navigationHandler = workbox.precaching.createHandlerBoundToURL('/');
+        workbox.routing.registerRoute(
+            ({ request }) => request.mode === 'navigate',
+            new workbox.strategies.NetworkFirst({
+                cacheName: 'navigations',
+                plugins: [
+                    new workbox.expiration.ExpirationPlugin({
+                        maxEntries: 10,
+                    }),
+                ],
+                networkTimeoutSeconds: 3,
+                fetchOptions: {
+                    credentials: 'include',
+                },
+                matchOptions: {
+                    ignoreSearch: true
+                },
+                fallbackToNetwork: false
+            })
+        );
+
+        // Offline fallback for all navigation requests
+        workbox.routing.setCatchHandler(({ event }) => {
+            if (event.request.mode === 'navigate') {
+                return caches.match('/');
+            }
+            return Response.error();
+        });
     }
 }

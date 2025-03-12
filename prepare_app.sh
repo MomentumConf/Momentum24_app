@@ -11,19 +11,24 @@ FAVICON_FILE="web/favicon.png"
 
 update_indexhtml() {
   echo "Updating titles in $INDEX_FILE"
-  awk -i inplace -v app_name="$APP_NAME" -v app_desc="$APP_DESCRIPTION" -v main_color="$MAIN_COLOR" '{
+  awk -i inplace -v app_name="$APP_NAME" -v app_desc="$APP_DESCRIPTION" -v main_color="$MAIN_COLOR" -v version="$VERSION" '{
     gsub(/%TITLE%/, app_name);
     gsub(/%DESCRIPTION%/, app_desc);
     gsub(/%MAIN_COLOR%/, main_color);
+    gsub(/%VERSION%/, version);
     print;
   }' $INDEX_FILE
+  awk -i inplace -v version="$VERSION" '{
+    gsub(/version: .*/, "version: " version);
+    print;
+  }' pubspec.yaml
 }
 
 update_manifest_json() {
   echo "Updating manifest.json"
   SHORT_NAME=$(echo $APP_NAME | awk '{print $NF}')
-  jq --arg appName "$APP_NAME" --arg description "$APP_DESCRIPTION" --arg shortName "$SHORT_NAME" --arg themeColor "$MAIN_COLOR" \
-    '.name = $appName | .description = $description | .short_name = $shortName | .theme_color = $themeColor | .background_color = $themeColor' \
+  jq --arg appName "$APP_NAME" --arg description "$APP_DESCRIPTION" --arg shortName "$SHORT_NAME" --arg themeColor "$MAIN_COLOR" --arg version "$VERSION" \
+    '.name = $appName | .description = $description | .short_name = $shortName | .theme_color = $themeColor | .background_color = $themeColor | .version = $version' \
     $MANIFEST_FILE > $MANIFEST_FILE.tmp && mv $MANIFEST_FILE.tmp $MANIFEST_FILE
 }
 
@@ -111,8 +116,8 @@ prepare_dotenv_file() {
 }
 
 update_project_id() {
-  awk -i inplace '{gsub(/_paq.push\(\["setSiteId", "[0-9]*"\]\)/, "_paq.push([\"setSiteId\", \"'${ANALYTICS_ID}'\"])"); print}' $INDEX_FILE
-  awk -i inplace '{gsub(/appId: .*,$/, "appId: '\''${ONESIGNAL_APPID}'\'',"); print}' $INDEX_FILE
+  awk -i inplace -v analytics_id="$ANALYTICS_ID" '{gsub(/_paq.push\(\["setSiteId", "[0-9]*"\]\)/, "_paq.push([\"setSiteId\", \"" analytics_id "\"])"); print}' $INDEX_FILE
+  awk -i inplace -v appid="$ONESIGNAL_APPID" '{gsub(/appId: .*,$/, "appId: \"" appid "\","); print}' $INDEX_FILE
 }
 
 show_help() {

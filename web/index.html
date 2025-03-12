@@ -70,6 +70,18 @@
             config: {
                 canvasKitBaseUrl: "/canvaskit/",
             },
+            onEntrypointLoaded: function (engineInitializer) {
+                if ('caches' in window) {
+                    caches.open('flutter-app-shell').then(function (cache) {
+                        cache.add('/');
+                        cache.add('index.html');
+                        cache.add('main.dart.js');
+                        cache.add('main.dart.mjs');
+                        cache.add('main.dart.wasm');
+                        cache.add('flutter.js');
+                    });
+                }
+            }
         });
     </script>
 

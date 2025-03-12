@@ -25,6 +25,12 @@ jobs:
                   fetch-depth: 0
                   ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || 'refs/heads/master' }}
 
+            - name: Determine version
+              id: determine_version
+              uses: ./.github/actions/version-bump
+              with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+
             - name: Build and Deploy
               uses: ./.github/actions/build-deploy
               with:
@@ -34,4 +40,5 @@ jobs:
                 vercel_org_id: ${{ secrets.VERCEL_ORG_ID }}
                 vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID_MOMENTUM }}
                 sentry_dsn: ${{ secrets.SENTRY_DSN_MOMENTUM }}
+                version: ${{ steps.determine_version.outputs.new_version }}
                 analytics_id: 1

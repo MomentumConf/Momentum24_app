@@ -1,0 +1,69 @@
+name: 'Version Bump Action'
+description: Action that bumps the version. After merge to master it creates a new tag. For PR builds it creates a virtual version.
+inputs:
+  github_token:
+    description: 'Token to authenticate (GITHUB_TOKEN)'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Determine version and optionally create tag
+      id: determine_version
+      env:
+        GITHUB_REF: ${{ github.ref }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+      run: |
+        git fetch --tags
+        last_tag=$(git tag --sort=-v:refname | head -n 1)
+        if [ -z "$last_tag" ]; then
+          last_tag="1.0.0"
+        fi
+        echo "Last tag: $last_tag"
+
+        # Calculate the next version (for both PR and master)
+        bump_type="patch"
+        if [ -n "$PR_NUMBER" ]; then
+          labels=$(gh pr view "$PR_NUMBER" --json labels --jq '.labels[].name' || echo "")
+          echo "Labels: $labels"
+          if echo "$labels" | grep -iq "minor"; then
+            bump_type="minor"
+          fi
+        fi
+        
+        IFS='.' read -r major minor patch <<< "$last_tag"
+        if [ "$bump_type" = "minor" ]; then
+          minor=$((minor + 1))
+          patch=0
+        else
+          patch=$((patch + 1))
+        fi
+        calculated_version="${major}.${minor}.${patch}"
+        
+        # If we are building PR (GITHUB_REF has format refs/pull/...)
+        if [[ "$GITHUB_REF" == refs/pull/* ]]; then
+          if [ -z "$PR_NUMBER" ]; then
+            echo "Failed to extract PR number, using pre0"
+            pr_number=0
+          else
+            pr_number=$PR_NUMBER
+          fi
+          new_version="${calculated_version}-pre.${pr_number}"
+          echo "Build PR: version $new_version (based on next version $calculated_version)"
+        else
+          # Build on master - use the calculated version and create tag
+          new_version="${calculated_version}"
+          echo "Merge to master: bump_type=$bump_type, new version $new_version"
+          git tag "$new_version"
+          git push origin "$new_version"
+        fi
+
+        # Save output using new method (GITHUB_OUTPUT)
+        echo "new_version=$new_version" >> $GITHUB_OUTPUT
+      shell: bash
+
+outputs:
+  new_version:
+    description: 'New version'
+    value: ${{ steps.determine_version.outputs.new_version }}

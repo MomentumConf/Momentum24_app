@@ -23,6 +23,9 @@ inputs:
   analytics_id:
     description: 'Analytics ID'
     required: true
+  version:
+    description: 'Version'
+    required: true
 
 outputs:
   deployment_url:
@@ -58,6 +61,7 @@ runs:
         SANITY_PROJECT_ID: ${{ inputs.sanity_project_id }}
         ONESIGNAL_APPID: ${{ inputs.onesignal_appid }}
         SENTRY_DSN: ${{ inputs.sentry_dsn }}
+        VERSION: ${{ inputs.version }}
       run: bash prepare_app.sh
       shell: bash
 

@@ -26,20 +26,22 @@
     <link rel="apple-touch-icon" sizes="512x512" href="icons/Icon-512.png" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png?v=1.0.0" />
+    <link rel="icon" type="image/png" href="favicon.png?v=%VERSION%" />
 
     <title>%TITLE%</title>
-    <link rel="manifest" href="manifest.json?v=1.0.0" />
+    <link rel="manifest" href="manifest.json?v=%VERSION%" />
 
     <!-- Matomo -->
     <script>
         var _paq = (window._paq = window._paq || []);
         _paq.push(["trackPageView"]);
         _paq.push(["enableLinkTracking"]);
+        _paq.push(['enableHeartBeatTimer']);
         (function () {
             var u = "//analytics.bkweb.dev/";
             _paq.push(["setTrackerUrl", u + "matomo.php"]);
             _paq.push(["setSiteId", "2"]);
+            _paq.push(["setCustomVariable", 1, "Version", "%VERSION%"]);
             var d = document,
                 g = d.createElement("script"),
                 s = d.getElementsByTagName("script")[0];
@@ -50,7 +52,7 @@
         })();
     </script>
     <!-- Push notification -->
-    <script src="/OneSignalSDK.page.js?v=1.0.0" defer></script>
+    <script src="/OneSignalSDK.page.js?v=%VERSION%" defer></script>
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         OneSignalDeferred.push(async function (OneSignal) {
@@ -62,7 +64,7 @@
 </head>
 
 <body>
-    <script src="flutter_bootstrap.js?v=1.0.0" async></script>
+    <script src="flutter_bootstrap.js?v=%VERSION%" async></script>
 
     <style>
         #flutter-loading-screen {

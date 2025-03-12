@@ -18,12 +18,21 @@ jobs:
     build:
         runs-on: ubuntu-latest
         if: "!contains(github.event.head_commit.message, '[skip ci]')"
+        permissions:
+            contents: write
+            actions: write
 
         steps:
             - uses: actions/checkout@v2
               with:
                   fetch-depth: 0
                   ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || 'refs/heads/master' }}
+
+            - name: Determine version
+              id: determine_version
+              uses: ./.github/actions/version-bump
+              with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Build and Deploy
               uses: ./.github/actions/build-deploy
@@ -34,6 +43,5 @@ jobs:
                 vercel_org_id: ${{ secrets.VERCEL_ORG_ID }}
                 vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID_ZDOBYWCY }}
                 sentry_dsn: ${{ secrets.SENTRY_DSN_ZDOBYWCY }}
-                is_pull_request: ${{ github.event_name == 'pull_request' && 'true' || 'false' }}
-                pr_number: ${{ github.event.pull_request.number }}
+                version: ${{ steps.determine_version.outputs.new_version }}
                 analytics_id: 2

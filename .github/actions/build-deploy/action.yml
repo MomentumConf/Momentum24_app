@@ -20,13 +20,6 @@ inputs:
   sentry_dsn:
     description: 'Sentry DSN'
     required: true
-  is_pull_request:
-    description: 'Whether this is a pull request'
-    required: true
-  pr_number:
-    description: 'Pull request number'
-    required: false
-    default: ''
   analytics_id:
     description: 'Analytics ID'
     required: true
@@ -75,7 +68,7 @@ runs:
         VERCEL_PROJECT_ID: ${{ inputs.vercel_project_id }}
         SANITY_PROJECT_ID: ${{ inputs.sanity_project_id }}
         SENTRY_DSN: ${{ inputs.sentry_dsn }}
-        IS_PR: ${{ inputs.is_pull_request }}
+        IS_PR: ${{ github.event_name == 'pull_request' }}
       run: |
         if [[ "$IS_PR" == "true" ]]; then
           echo "Building for pull request without --prod flag"
@@ -98,7 +91,7 @@ runs:
         VERCEL_TOKEN: ${{ inputs.vercel_token }}
         VERCEL_ORG_ID: ${{ inputs.vercel_org_id }}
         VERCEL_PROJECT_ID: ${{ inputs.vercel_project_id }}
-        IS_PR: ${{ inputs.is_pull_request }}
+        IS_PR: ${{ github.event_name == 'pull_request' }}
       run: |
         if [[ "$IS_PR" == "true" ]]; then
           echo "Deploying for pull request without --prod flag"
@@ -112,10 +105,10 @@ runs:
       shell: bash
 
     - name: Comment Pull Request with URL
-      if: inputs.is_pull_request == 'true'
+      if: github.event_name == 'pull_request'
       uses: thollander/actions-comment-pull-request@v2
       with:
         message: |
           :rocket: Deployed to Vercel Preview URL: ${{ steps.deploy.outputs.url }}
         GITHUB_TOKEN: ${{ github.token }}
-        pr_number: ${{ inputs.pr_number }} 
+        pr_number: ${{ github.event.pull_request.number }} 

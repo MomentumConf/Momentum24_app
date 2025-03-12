@@ -34,6 +34,4 @@ jobs:
                 vercel_org_id: ${{ secrets.VERCEL_ORG_ID }}
                 vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID_MOMENTUM }}
                 sentry_dsn: ${{ secrets.SENTRY_DSN_MOMENTUM }}
-                is_pull_request: ${{ github.event_name == 'pull_request' && 'true' || 'false' }}
-                pr_number: ${{ github.event.pull_request.number }}
                 analytics_id: 1

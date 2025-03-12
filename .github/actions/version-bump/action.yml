@@ -35,7 +35,7 @@ runs:
         # Calculate the next version (for both PR and master)
         bump_type="patch"
         if [ -n "$PR_NUMBER" ]; then
-          labels=$(gh pr view "$PR_NUMBER" --json labels --jq '.labels[].name' || echo "")
+          labels=$(gh pr view "$PR_NUMBER" --json labels --jq ".labels[].name" || echo "")
           echo "Labels: $labels"
           if echo "$labels" | grep -iq "minor"; then
             bump_type="minor"
@@ -48,6 +48,9 @@ runs:
           patch=0
         else
           patch=$((patch + 1))
+          if [ -n "$PR_NUMBER" ] && ! echo "$labels" | grep -q "patch"; then
+            gh pr edit "$PR_NUMBER" --add-label "patch"
+          fi          
         fi
         calculated_version="${major}.${minor}.${patch}"
         

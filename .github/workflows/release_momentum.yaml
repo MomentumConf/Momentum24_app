@@ -29,6 +29,7 @@ jobs:
               uses: ./.github/actions/version-bump
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
+                create_tag: true
 
             - name: Build and Deploy
               uses: ./.github/actions/build-deploy

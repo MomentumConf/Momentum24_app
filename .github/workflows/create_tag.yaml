@@ -1,0 +1,42 @@
+name: Create Version Tag
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    permissions:
+      contents: write
+      actions: write
+      pull-requests: read
+    
+    outputs:
+      new_version: ${{ steps.determine_version.outputs.new_version }}
+      
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: Determine version and create tag
+        id: determine_version
+        uses: ./.github/actions/version-bump
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Save version as artifact
+        run: |
+          echo "${{ steps.determine_version.outputs.new_version }}" > version.txt
+        shell: bash
+        
+      - name: Upload version artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: version
+          path: version.txt
+          retention-days: 1 

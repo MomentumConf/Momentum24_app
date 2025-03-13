@@ -3,16 +3,21 @@ name: Momentum Build
 on:
     pull_request:
         types: [opened, synchronize, reopened]
-    push:
-        branches:
-            - master
     workflow_dispatch:
     repository_dispatch:
+    workflow_run:
+        workflows: ["Create Version Tag"]
+        types:
+            - completed
+        branches:
+            - master
 
 jobs:
     build:
         runs-on: ubuntu-latest
-        if: "!contains(github.event.head_commit.message, '[skip ci]')"
+        if: |
+          (github.event_name == 'pull_request' && !contains(github.event.head_commit.message, '[skip ci]')) ||
+          (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
         permissions:
             contents: write
             actions: write
@@ -24,8 +29,25 @@ jobs:
                   fetch-depth: 0
                   ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || 'refs/heads/master' }}
 
-            - name: Determine version
+            - name: Get version
+              id: get_version
+              if: github.event_name == 'workflow_run'
+              uses: dawidd6/action-download-artifact@v9
+              with:
+                workflow: create_tag.yaml
+                name: version
+                path: .
+                
+            - name: Read version from file
+              id: read_version
+              if: github.event_name == 'workflow_run'
+              run: |
+                echo "version=$(cat version.txt)" >> $GITHUB_OUTPUT
+              shell: bash
+              
+            - name: Determine version for PR
               id: determine_version
+              if: github.event_name == 'pull_request'
               uses: ./.github/actions/version-bump
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -39,5 +61,5 @@ jobs:
                 vercel_org_id: ${{ secrets.VERCEL_ORG_ID }}
                 vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID_MOMENTUM }}
                 sentry_dsn: ${{ secrets.SENTRY_DSN_MOMENTUM }}
-                version: ${{ steps.determine_version.outputs.new_version }}
+                version: ${{ github.event_name == 'workflow_run' && steps.read_version.outputs.version || steps.determine_version.outputs.new_version }}
                 analytics_id: 1

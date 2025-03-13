@@ -3,16 +3,21 @@ name: Zdobywcy Build
 on:
     pull_request:
         types: [opened, synchronize, reopened]
-    push:
-        branches:
-            - master
     workflow_dispatch:
     repository_dispatch:
+    workflow_run:
+        workflows: ["Momentum Build"]
+        types:
+            - completed
+        branches:
+            - master
 
 jobs:
     build:
         runs-on: ubuntu-latest
-        if: "!contains(github.event.head_commit.message, '[skip ci]')"
+        if: |
+          (github.event_name == 'pull_request' && !contains(github.event.head_commit.message, '[skip ci]')) ||
+          (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
         permissions:
             contents: write
             actions: write
@@ -29,6 +34,7 @@ jobs:
               uses: ./.github/actions/version-bump
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
+                create_tag: false
 
             - name: Build and Deploy
               uses: ./.github/actions/build-deploy

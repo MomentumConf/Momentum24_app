@@ -4,6 +4,10 @@ inputs:
   github_token:
     description: 'Token to authenticate (GITHUB_TOKEN)'
     required: true
+  create_tag:
+    description: 'Whether to create a tag (for master branch)'
+    required: false
+    default: 'false'
 
 runs:
   using: "composite"
@@ -14,6 +18,7 @@ runs:
         GITHUB_REF: ${{ github.ref }}
         GITHUB_TOKEN: ${{ inputs.github_token }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
+        CREATE_TAG: ${{ inputs.create_tag }}
       run: |
         git fetch --tags
         last_tag=$(git tag --sort=-v:refname | head -n 1)
@@ -21,6 +26,11 @@ runs:
           last_tag="1.0.0"
         fi
         echo "Last tag: $last_tag"
+
+        if [ "$CREATE_TAG" = "false" ]; then
+          echo "new_version=$last_tag" >> $GITHUB_OUTPUT
+          exit 0
+        fi
 
         # Calculate the next version (for both PR and master)
         bump_type="patch"
@@ -55,11 +65,16 @@ runs:
           new_version="${calculated_version}-pre.${pr_number}"
           echo "Build PR: version $new_version (based on next version $calculated_version)"
         else
-          # Build on master - use the calculated version and create tag
+          # Build on master - use the calculated version and create tag (if CREATE_TAG is true)
           new_version="${calculated_version}"
           echo "Merge to master: bump_type=$bump_type, new version $new_version"
-          git tag "$new_version"
-          git push origin "$new_version"
+          if [ "$CREATE_TAG" = "true" ]; then
+            echo "Creating and pushing tag $new_version"
+            git tag "$new_version"
+            git push origin "$new_version"
+          else
+            echo "Skipping tag creation (using existing tag $new_version)"
+          fi
         fi
 
         # Save output using new method (GITHUB_OUTPUT)

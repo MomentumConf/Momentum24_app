@@ -1,14 +1,33 @@
-importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-sw.js");
-
 // Debug flag to enable console logging
 const DEBUG = true;
 
-// Custom logger function
+// Custom logger function definition (na samym początku, żeby była dostępna od razu)
 function logger(message) {
     if (DEBUG) {
         console.log(`[Service Worker] ${message}`);
     }
+}
+
+// Bezpieczne ładowanie zewnętrznych skryptów
+const loadScript = (url) => {
+    try {
+        importScripts(url);
+        logger(`Successfully loaded script: ${url}`);
+        return true;
+    } catch (error) {
+        logger(`Error loading script ${url}: ${error}`);
+        return false;
+    }
+};
+
+// Próba załadowania OneSignal - jeśli się nie uda, kontynuujemy bez niego
+let oneSignalLoaded = loadScript("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+logger(`OneSignal loaded: ${oneSignalLoaded}`);
+
+// Ładowanie Workbox - to jest krytyczne dla service workera
+let workboxLoaded = loadScript("https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-sw.js");
+if (!workboxLoaded) {
+    logger("Critical error: Workbox failed to load. Service worker functionality will be limited.");
 }
 
 // Check if Workbox loaded correctly

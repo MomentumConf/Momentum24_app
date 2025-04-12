@@ -97,7 +97,13 @@ if (!workbox) {
         "/assets/AssetManifest.json",
         "/assets/FontManifest.json",
         "/assets/fonts/MaterialIcons-Regular.otf",
+        // Google fonts
         "/assets/google_fonts/Lato-Regular.ttf",
+        "/assets/google_fonts/Lato-Bold.ttf",
+        "/assets/google_fonts/Lato-Italic.ttf",
+        "/assets/google_fonts/Lato-BoldItalic.ttf",
+        "/assets/google_fonts/Lato-Black.ttf",
+        // App assets
         "/assets/assets/images/logo.svg",
         "/assets/assets/images/mowcy.jpg",
         "/assets/assets/images/regulamin.jpg",
@@ -110,20 +116,34 @@ if (!workbox) {
 
         // Użycie Promise.allSettled zamiast addAll, żeby jeden błąd nie przerywał całego procesu
         event.waitUntil(
-            caches
-                .open(CACHE_NAMES.static)
-                .then((cache) => {
-                    logger("Precaching essential files");
+            Promise.all([
+                caches.open(CACHE_NAMES.static).then((cache) => {
+                    logger("Precaching static files");
 
-                    const cachePromises = precacheFiles.map((url) => {
-                        return fetch(new Request(url, { cache: "reload" }))
+                    const staticFiles = precacheFiles.filter(
+                        (url) =>
+                            !url.includes("canvaskit") &&
+                            !url.endsWith(".js") &&
+                            !url.endsWith(".wasm") &&
+                            !url.endsWith(".mjs")
+                    );
+
+                    const cachePromises = staticFiles.map((url) => {
+                        return fetch(
+                            new Request(url, {
+                                cache: "reload",
+                                mode: url.includes("/fonts/") || url.includes("/google_fonts/") ? "no-cors" : undefined,
+                            })
+                        )
                             .then((response) => {
-                                if (response && response.status === 200) {
+                                if (response && (response.status === 200 || response.type === "opaque")) {
                                     logger(`Successfully cached: ${url}`);
                                     return cache.put(url, response);
                                 } else {
                                     logger(
-                                        `Failed to cache: ${url} - status: ${response ? response.status : "unknown"}`
+                                        `Failed to cache: ${url} - status: ${
+                                            response ? response.status : "unknown"
+                                        }, type: ${response.type}`
                                     );
                                     return Promise.resolve();
                                 }
@@ -134,18 +154,62 @@ if (!workbox) {
                             });
                     });
 
-                    return Promise.allSettled(cachePromises).then((results) => {
-                        const successCount = results.filter((r) => r.status === "fulfilled").length;
-                        logger(
-                            `Precaching completed - ${successCount}/${precacheFiles.length} files cached successfully`
-                        );
+                    return Promise.allSettled(cachePromises);
+                }),
+                caches.open(CACHE_NAMES.flutter).then((cache) => {
+                    logger("Precaching Flutter runtime files");
+
+                    const flutterFiles = precacheFiles.filter(
+                        (url) =>
+                            url.includes("canvaskit") ||
+                            url.endsWith(".js") ||
+                            url.endsWith(".wasm") ||
+                            url.endsWith(".mjs")
+                    );
+
+                    const cachePromises = flutterFiles.map((url) => {
+                        return fetch(new Request(url, { cache: "reload" }))
+                            .then((response) => {
+                                if (response && response.status === 200) {
+                                    logger(`Successfully cached Flutter file: ${url}`);
+                                    return cache.put(url, response);
+                                } else {
+                                    logger(
+                                        `Failed to cache Flutter file: ${url} - status: ${
+                                            response ? response.status : "unknown"
+                                        }`
+                                    );
+                                    return Promise.resolve();
+                                }
+                            })
+                            .catch((error) => {
+                                logger(`Error fetching Flutter file ${url}: ${error}`);
+                                return Promise.resolve();
+                            });
                     });
+
+                    return Promise.allSettled(cachePromises);
+                }),
+            ])
+                .then((results) => {
+                    const [staticResults, flutterResults] = results;
+                    const staticSuccess = staticResults.filter((r) => r.status === "fulfilled").length;
+                    const flutterSuccess = flutterResults.filter((r) => r.status === "fulfilled").length;
+                    const staticTotal = staticResults.length;
+                    const flutterTotal = flutterResults.length;
+
+                    logger(
+                        `Precaching completed - Static: ${staticSuccess}/${staticTotal}, Flutter: ${flutterSuccess}/${flutterTotal}`
+                    );
                 })
                 .catch((error) => {
-                    logger(`Cache opening error: ${error}`);
+                    logger(`Cache error during installation: ${error}`);
                     return Promise.resolve();
                 })
         );
+
+        // Zainstaluj natychmiast
+        self.skipWaiting();
     });
 
     // Handle manifest.json with query parameters
@@ -208,7 +272,7 @@ if (!workbox) {
         })
     );
 
-    // Strategy for assets (cache first)
+    // Strategy for assets (cache first with improved font handling)
     workbox.routing.registerRoute(
         ({ url }) => url.pathname.startsWith("/assets/"),
         new workbox.strategies.CacheFirst({
@@ -217,6 +281,31 @@ if (!workbox) {
                 new workbox.expiration.ExpirationPlugin({
                     maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
                 }),
+                {
+                    // Szczególna obsługa dla czcionek i ważnych zasobów
+                    requestWillFetch: async ({ request }) => {
+                        const url = new URL(request.url);
+                        // Dla czcionek i ważnych zasobów JSON, używaj trybu no-cors by uniknąć problemów CORS
+                        if (
+                            url.pathname.includes("/google_fonts/") ||
+                            url.pathname.includes("/fonts/") ||
+                            url.pathname.endsWith("AssetManifest.json") ||
+                            url.pathname.endsWith("FontManifest.json")
+                        ) {
+                            logger(`Special handling for font/asset: ${url.pathname}`);
+                            return new Request(request.url, {
+                                mode: "no-cors",
+                                cache: "reload",
+                            });
+                        }
+                        return request;
+                    },
+                    // Cachuj ścieżkę bez parametrów
+                    cacheKeyWillBeUsed: async ({ request }) => {
+                        const url = new URL(request.url);
+                        return url.origin + url.pathname;
+                    },
+                },
             ],
         })
     );

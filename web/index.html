@@ -50,15 +50,6 @@
                 s.parentNode.insertBefore(g, s);
             })();
         </script>
-        <!-- Push notification -->
-        <script>
-            window.OneSignalDeferred = window.OneSignalDeferred || [];
-            OneSignalDeferred.push(async function (OneSignal) {
-                await OneSignal.init({
-                    appId: "",
-                });
-            });
-        </script>
     </head>
 
     <body>
@@ -191,6 +182,15 @@
                         });
                 });
             }
+        </script>
+        <!-- Push notification -->
+        <script defer>
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            OneSignalDeferred.push(async function (OneSignal) {
+                await OneSignal.init({
+                    appId: "",
+                });
+            });
         </script>
     </body>
 </html>

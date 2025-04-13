@@ -20,10 +20,6 @@ const loadScript = (url) => {
     }
 };
 
-// Próba załadowania OneSignal - jeśli się nie uda, kontynuujemy bez niego
-let oneSignalLoaded = loadScript("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
-logger(`OneSignal loaded: ${oneSignalLoaded}`);
-
 // Ładowanie Workbox - to jest krytyczne dla service workera
 let workboxLoaded = loadScript("https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-sw.js");
 if (!workboxLoaded) {

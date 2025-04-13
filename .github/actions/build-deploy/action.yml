@@ -69,6 +69,14 @@ runs:
       run: npx terser -c -m -o web/service_worker.js web/service_worker.js
       shell: bash
 
+    - name: Add OneSignal SDK file
+      run: |
+        curl -sL https://github.com/OneSignal/OneSignal-Website-SDK/files/11480764/OneSignalSDK-v16-ServiceWorker.zip -o OneSignalSDK-v16-ServiceWorker.zip
+        unzip -o OneSignalSDK-v16-ServiceWorker.zip
+        mv OneSignalSDK-v16-ServiceWorker/* ./web
+        rm -rf OneSignalSDK-v16-ServiceWorker.zip OneSignalSDK-v16-ServiceWorker
+      shell: bash
+
     - name: Build with Vercel using NPX
       env:
         VERCEL_TOKEN: ${{ inputs.vercel_token }}

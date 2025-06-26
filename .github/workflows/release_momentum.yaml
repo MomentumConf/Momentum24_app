@@ -17,7 +17,9 @@ jobs:
         runs-on: ubuntu-latest
         if: |
           (github.event_name == 'pull_request' && !contains(github.event.head_commit.message, '[skip ci]')) ||
-          (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+          (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+          github.event_name == 'workflow_dispatch' ||
+          github.event_name == 'repository_dispatch'
         permissions:
             contents: write
             actions: write
@@ -45,6 +47,13 @@ jobs:
                 echo "version=$(cat version.txt)" >> $GITHUB_OUTPUT
               shell: bash
               
+            - name: Get latest tag
+              id: get_latest_tag
+              if: github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch'
+              run: |
+                echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+              shell: bash
+              
             - name: Determine version for PR
               id: determine_version
               if: github.event_name == 'pull_request'
@@ -61,5 +70,5 @@ jobs:
                 vercel_org_id: ${{ secrets.VERCEL_ORG_ID }}
                 vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID_MOMENTUM }}
                 sentry_dsn: ${{ secrets.SENTRY_DSN_MOMENTUM }}
-                version: ${{ github.event_name == 'workflow_run' && steps.read_version.outputs.version || steps.determine_version.outputs.new_version }}
+                version: ${{ steps.read_version.outputs.version || steps.determine_version.outputs.new_version || steps.get_latest_tag.outputs.version }}
                 analytics_id: 1

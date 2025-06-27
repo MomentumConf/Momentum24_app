@@ -9,6 +9,7 @@ import 'package:momentum24_app/services/cache_manager.dart';
 import 'package:momentum24_app/models/event.dart';
 import 'package:momentum24_app/models/map.dart';
 import 'package:momentum24_app/models/notice.dart';
+import 'package:momentum24_app/models/social_media.dart';
 import 'package:momentum24_app/models/song.dart';
 import 'package:momentum24_app/models/speaker.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -29,6 +30,7 @@ class DataProviderService {
     CacheManager.notificationsKey: 10 * MINUTE,
     CacheManager.songsKey: DAY,
     CacheManager.mapDataKey: HOUR,
+    CacheManager.socialMediaKey: DAY,
   };
 
   static void _defaultNotifier(dynamic value) {}
@@ -292,6 +294,51 @@ class DataProviderService {
     }
   }
 
+  Future<SocialMedia> getSocialMedia() async {
+    SocialMedia mapToSocialMedia(Map<String, dynamic> value) {
+      return SocialMedia.fromJson(value);
+    }
+
+    try {
+      String? cachedData = await cacheManager.getSocialMediaData();
+      if (cachedData != null) {
+        final lastUpdate =
+            await cacheManager.getLastUpdate(CacheManager.socialMediaKey);
+        if (lastUpdate != null &&
+            DateTime.now().difference(lastUpdate).inSeconds <
+                TTL[CacheManager.socialMediaKey]!) {
+          return mapToSocialMedia(
+              json.decode(cachedData) as Map<String, dynamic>);
+        }
+
+        apiService
+            .fetchSocialMedia()
+            .then((value) {
+              cacheManager.cacheSocialMediaData(json.encode(value));
+              cacheManager.setLastUpdate(
+                  CacheManager.socialMediaKey, DateTime.now());
+              return value;
+            })
+            .then(mapToSocialMedia)
+            .then(changesNotifier);
+        return mapToSocialMedia(
+            json.decode(cachedData) as Map<String, dynamic>);
+      }
+
+      final apiData = await apiService.fetchSocialMedia();
+      cacheManager.cacheSocialMediaData(json.encode(apiData));
+      cacheManager.setLastUpdate(CacheManager.socialMediaKey, DateTime.now());
+
+      final data = mapToSocialMedia(apiData);
+      changesNotifier(data);
+      return data;
+    } catch (e) {
+      await Sentry.captureException(e);
+      log("$e");
+      return SocialMedia();
+    }
+  }
+
   Future<void> prefetchAndCacheData() async {
     try {
       await Future.wait([
@@ -299,6 +346,7 @@ class DataProviderService {
         getMapData(),
         getSongs(),
         getRegulations(),
+        getSocialMedia(),
       ]);
     } catch (e) {
       await Sentry.captureException(e);

@@ -8,17 +8,20 @@ abstract class CacheManager {
   static const String lastReadNotificationKey = 'lastReadNotification';
   static const String songsKey = 'songs';
   static const String mapDataKey = 'mapData';
+  static const String socialMediaKey = 'socialMedia';
 
   Future<void> cacheMapData(String jsonData);
   Future<void> cacheNotificationsData(String jsonData);
   Future<void> cacheRegulationsData(String jsonData);
   Future<void> cacheScheduleData(String jsonData);
+  Future<void> cacheSocialMediaData(String jsonData);
   Future<void> cacheSongsData(String jsonData);
   Future<void> cacheSpeakersData(String jsonData);
   Future<String?> getMapData();
   Future<String?> getNotificationsData();
   Future<String?> getRegulationsData();
   Future<String?> getScheduleData();
+  Future<String?> getSocialMediaData();
   Future<String?> getSongsData();
   Future<String?> getSpeakersData();
   Future<DateTime?> getLastReadNotificationDate();
@@ -121,6 +124,16 @@ class PreferencesCacheManager implements CacheManager {
   @override
   Future<String?> getMapData() async {
     return (await prefs).getString(CacheManager.mapDataKey);
+  }
+
+  @override
+  Future<void> cacheSocialMediaData(String jsonData) async {
+    await (await prefs).setString(CacheManager.socialMediaKey, jsonData);
+  }
+
+  @override
+  Future<String?> getSocialMediaData() async {
+    return (await prefs).getString(CacheManager.socialMediaKey);
   }
 
   @override

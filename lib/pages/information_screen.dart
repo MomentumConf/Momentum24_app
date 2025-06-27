@@ -1,13 +1,41 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
+import 'package:momentum24_app/models/social_media.dart';
+import 'package:momentum24_app/services/data_provider_service.dart';
 import 'package:momentum24_app/widgets/momentum_appbar.dart';
 import 'package:momentum24_app/widgets/info_tile.dart';
 import 'package:momentum24_app/pages/information/regulations_screen.dart';
 import 'package:momentum24_app/pages/information/songs_screen.dart';
 import 'package:momentum24_app/pages/information/speakers_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class InformationScreen extends StatelessWidget {
+class InformationScreen extends StatefulWidget {
   const InformationScreen({super.key});
+
+  @override
+  State<InformationScreen> createState() => _InformationScreenState();
+}
+
+class _InformationScreenState extends State<InformationScreen> {
+  SocialMedia? _socialMedia;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchSocialMedia();
+  }
+
+  Future<void> _fetchSocialMedia() async {
+    final data = await GetIt.I<DataProviderService>().getSocialMedia();
+    setState(() {
+      _socialMedia = data;
+    });
+    log(_socialMedia.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +45,60 @@ class InformationScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          if (_socialMedia != null &&
+              (_socialMedia!.facebook != null ||
+                  _socialMedia!.tiktok != null ||
+                  _socialMedia!.instagram != null ||
+                  _socialMedia!.website != null))
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  if (_socialMedia!.facebook != null)
+                    IconButton(
+                      icon: const Icon(Icons.facebook),
+                      color: Theme.of(context).colorScheme.onSurface,
+                      onPressed: () =>
+                          launchUrl(Uri.parse(_socialMedia!.facebook!)),
+                    ),
+                  if (_socialMedia!.tiktok != null)
+                    IconButton(
+                      icon: const Icon(Icons.tiktok),
+                      color: Theme.of(context).colorScheme.onSurface,
+                      onPressed: () =>
+                          launchUrl(Uri.parse(_socialMedia!.tiktok!)),
+                    ),
+                  if (_socialMedia!.instagram != null)
+                    IconButton(
+                      icon: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: SvgPicture.asset(
+                            'assets/images/instagram.svg',
+                            colorFilter: ColorFilter.mode(
+                              Theme.of(context).colorScheme.onSurface,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                      ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                      onPressed: () =>
+                          launchUrl(Uri.parse(_socialMedia!.instagram!)),
+                    ),
+                  if (_socialMedia!.website != null)
+                    IconButton(
+                      icon: const Icon(Icons.web),
+                      color: Theme.of(context).colorScheme.onSurface,
+                      onPressed: () =>
+                          launchUrl(Uri.parse(_socialMedia!.website!)),
+                    ),
+                ],
+              ),
+            ),
           InfoTile(
             title: AppLocalizations.of(context)!.speakers,
             image: 'assets/images/mowcy.jpg',

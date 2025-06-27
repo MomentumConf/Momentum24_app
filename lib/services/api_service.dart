@@ -10,6 +10,7 @@ abstract class ApiService {
   Future<int> countNotificationsFromDate(DateTime fromDate);
   Future<List<dynamic>> fetchSongs();
   Future<Map<String, dynamic>> fetchMap();
+  Future<Map<String, dynamic>> fetchSocialMedia();
 }
 
 class SanityApiService implements ApiService {
@@ -133,6 +134,18 @@ class SanityApiService implements ApiService {
         zoom
       }
     """);
+
+    return data;
+  }
+
+  @override
+  Future<Map<String, dynamic>> fetchSocialMedia() async {
+    final data = await sanityClient.fetch(r"""*[_type == "socialMedia"][0]{
+        facebook,
+        tiktok,
+        instagram,
+        website
+      }""");
 
     return data;
   }

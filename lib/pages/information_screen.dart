@@ -59,15 +59,19 @@ class _InformationScreenState extends State<InformationScreen> {
                     IconButton(
                       icon: const Icon(Icons.facebook),
                       color: Theme.of(context).colorScheme.onSurface,
-                      onPressed: () =>
-                          launchUrl(Uri.parse(_socialMedia!.facebook!)),
+                      onPressed: () => launchUrl(
+                        Uri.parse(_socialMedia!.facebook!),
+                        mode: LaunchMode.externalApplication,
+                      ),
                     ),
                   if (_socialMedia!.tiktok != null)
                     IconButton(
                       icon: const Icon(Icons.tiktok),
                       color: Theme.of(context).colorScheme.onSurface,
-                      onPressed: () =>
-                          launchUrl(Uri.parse(_socialMedia!.tiktok!)),
+                      onPressed: () => launchUrl(
+                        Uri.parse(_socialMedia!.tiktok!),
+                        mode: LaunchMode.externalApplication,
+                      ),
                     ),
                   if (_socialMedia!.instagram != null)
                     IconButton(
@@ -86,15 +90,19 @@ class _InformationScreenState extends State<InformationScreen> {
                         ),
                       ),
                       color: Theme.of(context).colorScheme.onSurface,
-                      onPressed: () =>
-                          launchUrl(Uri.parse(_socialMedia!.instagram!)),
+                      onPressed: () => launchUrl(
+                        Uri.parse(_socialMedia!.instagram!),
+                        mode: LaunchMode.externalApplication,
+                      ),
                     ),
                   if (_socialMedia!.website != null)
                     IconButton(
                       icon: const Icon(Icons.web),
                       color: Theme.of(context).colorScheme.onSurface,
-                      onPressed: () =>
-                          launchUrl(Uri.parse(_socialMedia!.website!)),
+                      onPressed: () => launchUrl(
+                        Uri.parse(_socialMedia!.website!),
+                        mode: LaunchMode.externalApplication,
+                      ),
                     ),
                 ],
               ),

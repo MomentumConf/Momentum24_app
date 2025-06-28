@@ -88,14 +88,19 @@ class SanityApiService implements ApiService {
   @override
   Future<List<dynamic>> fetchNotifications() async {
     final currentDate = DateTime.now().toUtc().toIso8601String();
+    final halfYearAgo = DateTime.now()
+        .subtract(const Duration(days: 180))
+        .toUtc()
+        .toIso8601String();
     final data = await sanityClient
-        .fetch(r"""*[_type == "notification" && date <= $currentDate] | order(date desc) {
+        .fetch(r"""*[_type == "notification" && date <= $currentDate && date >= $halfYearAgo] | order(date desc) {
   _id,
   title,
   description,
   date 
 }""", params: {
       '\$currentDate': '"$currentDate"',
+      '\$halfYearAgo': '"$halfYearAgo"',
     });
 
     return data;
@@ -104,10 +109,15 @@ class SanityApiService implements ApiService {
   @override
   Future<int> countNotificationsFromDate(DateTime fromDate) async {
     final fromDateStr = fromDate.toUtc().toIso8601String();
+    final halfYearAgo = DateTime.now()
+        .subtract(const Duration(days: 180))
+        .toUtc()
+        .toIso8601String();
     final data = await sanityClient
-        .fetch(r"""count(*[_type == "notification" && date >= $fromDate] | order(date desc))""",
+        .fetch(r"""count(*[_type == "notification" && date >= $fromDate && date >= $halfYearAgo] | order(date desc))""",
             params: {
           '\$fromDate': '"$fromDateStr"',
+          '\$halfYearAgo': '"$halfYearAgo"',
         });
 
     return data;

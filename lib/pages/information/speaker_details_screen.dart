@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:momentum24_app/services/api_service.dart';
+import 'package:momentum24_app/services/cache_manager.dart';
 import 'package:string_unescape/string_unescape.dart';
 
 import 'package:momentum24_app/models/speaker.dart';
@@ -15,6 +17,8 @@ class SpeakerDetailsScreen extends StatelessWidget {
 
   final DataProviderService _dataProviderService =
       GetIt.I<DataProviderService>();
+  final CacheManager _cacheManager = GetIt.I<CacheManager>();
+  final ApiService _apiService = GetIt.I<ApiService>();
 
   SpeakerDetailsScreen({super.key, required this.speakerId});
 
@@ -67,25 +71,48 @@ class SpeakerDetailsScreen extends StatelessWidget {
     return unescape(eventsMarkdown);
   }
 
-  Future<Speaker> getSpeaker() async {
+  Future<Speaker?> getSpeaker() async {
     List<Speaker> speakers;
     try {
       speakers = await _dataProviderService.getSpeakers();
     } catch (e) {
       speakers = [];
     }
-    return speakers.firstWhere((speaker) => speaker.id == speakerId);
+
+    Speaker? speaker;
+    try {
+      speaker = speakers.firstWhere((speaker) => speaker.id == speakerId);
+    } catch (e) {
+      // Speaker not found in the first try
+      try {
+        _cacheManager.clearSpeakersCache();
+        final refreshedSpeakers = await _dataProviderService.getSpeakers();
+        speaker =
+            refreshedSpeakers.firstWhere((speaker) => speaker.id == speakerId);
+      } catch (e) {
+        // Still not found after refresh
+        return null;
+      }
+    }
+
+    return speaker;
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<Speaker?>(
       future: getSpeaker(),
-      builder: (BuildContext context, AsyncSnapshot<Speaker> speaker) {
+      builder: (BuildContext context, AsyncSnapshot<Speaker?> speaker) {
         if (speaker.connectionState != ConnectionState.done ||
             !speaker.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
+
+        if (speaker.data == null) {
+          Navigator.pop(context);
+          return const Center(child: Text("Speaker not found"));
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: Text(speaker.data!.name),

@@ -29,6 +29,7 @@ abstract class CacheManager {
   Future<void> saveLastReadNotificationDate(DateTime date);
   Future<void> setLastUpdate(String key, DateTime time);
   Future<void> clearCache();
+  Future<void> clearSpeakersCache();
 }
 
 class PreferencesCacheManager implements CacheManager {
@@ -63,6 +64,11 @@ class PreferencesCacheManager implements CacheManager {
   @override
   Future<void> cacheSpeakersData(String jsonData) async {
     await (await prefs).setString(CacheManager.speakersKey, jsonData);
+  }
+
+  @override
+  Future<void> clearSpeakersCache() async {
+    await (await prefs).remove(CacheManager.speakersKey);
   }
 
   @override

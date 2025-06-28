@@ -187,7 +187,7 @@ if (workbox) {
                                 const cache = await caches.open(CACHE_NAMES.flutter);
                                 await cache.put(request, response);
                             }
-                        } catch (retryError) {}
+                        } catch (retryError) { }
                     },
                 },
             ],
@@ -314,6 +314,10 @@ if (workbox) {
             return;
         }
 
+        if (url.pathname.includes('apicdn.sanity.io')) {
+            return;
+        }
+
         if (url.hostname === "cdn.sanity.io" && url.pathname.includes("/images/")) {
             event.respondWith(
                 caches.match(event.request).then((cachedResponse) => {
@@ -379,9 +383,9 @@ if (workbox) {
                                     const clonedResponse = networkResponse.clone();
                                     const cacheName =
                                         url.pathname.includes("canvaskit") ||
-                                        url.pathname.endsWith(".wasm") ||
-                                        url.pathname.endsWith(".mjs") ||
-                                        url.pathname.endsWith(".js")
+                                            url.pathname.endsWith(".wasm") ||
+                                            url.pathname.endsWith(".mjs") ||
+                                            url.pathname.endsWith(".js")
                                             ? CACHE_NAMES.flutter
                                             : CACHE_NAMES.static;
 

@@ -33,7 +33,7 @@ class InfoTile extends StatelessWidget {
                           fit: BoxFit.contain,
                         ),
                         Positioned(
-                          bottom: 10,
+                          bottom: 4,
                           right: 10,
                           child: Text(
                             title,

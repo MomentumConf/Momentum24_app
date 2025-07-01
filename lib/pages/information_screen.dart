@@ -58,7 +58,7 @@ class _InformationScreenState extends State<InformationScreen> {
                   if (_socialMedia!.facebook != null)
                     IconButton(
                       icon: const Icon(Icons.facebook),
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.tertiary,
                       onPressed: () => launchUrl(
                         Uri.parse(_socialMedia!.facebook!),
                         mode: LaunchMode.externalApplication,
@@ -67,7 +67,7 @@ class _InformationScreenState extends State<InformationScreen> {
                   if (_socialMedia!.tiktok != null)
                     IconButton(
                       icon: const Icon(Icons.tiktok),
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.tertiary,
                       onPressed: () => launchUrl(
                         Uri.parse(_socialMedia!.tiktok!),
                         mode: LaunchMode.externalApplication,
@@ -83,13 +83,13 @@ class _InformationScreenState extends State<InformationScreen> {
                           child: SvgPicture.asset(
                             'assets/images/instagram.svg',
                             colorFilter: ColorFilter.mode(
-                              Theme.of(context).colorScheme.onSurface,
+                              Theme.of(context).colorScheme.tertiary,
                               BlendMode.srcIn,
                             ),
                           ),
                         ),
                       ),
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.tertiary,
                       onPressed: () => launchUrl(
                         Uri.parse(_socialMedia!.instagram!),
                         mode: LaunchMode.externalApplication,
@@ -98,7 +98,7 @@ class _InformationScreenState extends State<InformationScreen> {
                   if (_socialMedia!.website != null)
                     IconButton(
                       icon: const Icon(Icons.web),
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.tertiary,
                       onPressed: () => launchUrl(
                         Uri.parse(_socialMedia!.website!),
                         mode: LaunchMode.externalApplication,

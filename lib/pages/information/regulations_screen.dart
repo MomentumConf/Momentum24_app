@@ -51,7 +51,10 @@ class RegulationsScreenState extends State<RegulationsScreen> {
           const SizedBox(
             height: 10,
           ),
-          TextButton(
+          OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.onSurface,
+              ),
               onPressed: () => {
                     showAboutDialog(
                         context: context,
@@ -62,6 +65,10 @@ class RegulationsScreenState extends State<RegulationsScreen> {
                         applicationIcon: const FlutterLogo(),
                         children: [
                           TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.onSurface,
+                            ),
                             onPressed: () {
                               launchUrl(Uri.parse(
                                   "http://konferencjamomentum.pl/2018/Polityka_Prywatnosci_MOMENTUM.pdf"));
@@ -75,11 +82,14 @@ class RegulationsScreenState extends State<RegulationsScreen> {
           const SizedBox(
             height: 10,
           ),
-          TextButton(
-              child: Text(AppLocalizations.of(context)!.clearCache),
+          OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.onSurface,
+              ),
               onPressed: () {
                 _dataProviderService.clearCache();
-              })
+              },
+              child: Text(AppLocalizations.of(context)!.clearCache))
         ],
       ),
     );

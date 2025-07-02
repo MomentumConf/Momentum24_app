@@ -75,11 +75,21 @@ class EventDetailModal extends StatelessWidget {
       showDragHandle: true,
       useRootNavigator: true,
       builder: (context) {
-        return EventDetailModal(
-          event: event,
-          isSubevent: isSubevent,
+        return FractionallySizedBox(
+          heightFactor: _getModalHeight(event, isSubevent),
+          child: EventDetailModal(
+            event: event,
+            isSubevent: isSubevent,
+          ),
         );
       },
     );
+  }
+
+  static double _getModalHeight(Event event, bool isSubevent) {
+    if (event.speakers.length >= 4 && (event.description?.length ?? 0) > 300) {
+      return 0.85;
+    }
+    return 0.5;
   }
 }

@@ -73,10 +73,11 @@ class EventDetailModal extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
+      isScrollControlled: true,
       useRootNavigator: true,
       builder: (context) {
         return FractionallySizedBox(
-          heightFactor: _getModalHeight(event, isSubevent),
+          heightFactor: _getModalHeight(event),
           child: EventDetailModal(
             event: event,
             isSubevent: isSubevent,
@@ -86,7 +87,7 @@ class EventDetailModal extends StatelessWidget {
     );
   }
 
-  static double _getModalHeight(Event event, bool isSubevent) {
+  static double _getModalHeight(Event event) {
     if (event.speakers.length >= 4 && (event.description?.length ?? 0) > 300) {
       return 0.85;
     }

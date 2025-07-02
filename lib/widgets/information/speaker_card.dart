@@ -51,7 +51,7 @@ class SpeakerCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       shadows: const <Shadow>[
                         Shadow(
                           offset: Offset(1.0, 1.0),

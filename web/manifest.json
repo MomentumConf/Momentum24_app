@@ -5,12 +5,12 @@
     "version": "1.0.1",
     "lang": "pl-PL",
     "default_locale": "pl",
-    "start_url": ".",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "",
     "theme_color": "",
     "orientation": "portrait-primary",
-    "prefer_related_applications": true,
+    "scope": "/",
     "icons": [
         {
             "src": "icons/Icon-72.png",

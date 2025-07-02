@@ -195,25 +195,6 @@ if (workbox) {
     );
 
     workbox.routing.registerRoute(
-        ({ url }) => url.hostname === "cdn.sanity.io" && url.pathname.includes("/images/"),
-        new workbox.strategies.CacheFirst({
-            cacheName: CACHE_NAMES.images,
-            plugins: [
-                new workbox.expiration.ExpirationPlugin({
-                    maxEntries: 100,
-                    maxAgeSeconds: 30 * 24 * 60 * 60,
-                }),
-                {
-                    cacheKeyWillBeUsed: async ({ request }) => {
-                        const url = new URL(request.url);
-                        return url.origin + url.pathname;
-                    },
-                },
-            ],
-        })
-    );
-
-    workbox.routing.registerRoute(
         ({ url }) => url.pathname.startsWith("/assets/"),
         new workbox.strategies.CacheFirst({
             cacheName: CACHE_NAMES.static,
@@ -307,52 +288,11 @@ if (workbox) {
             url.origin !== self.location.origin &&
             !(
                 url.pathname.includes("canvaskit") ||
-                url.pathname.includes("cdn.onesignal.com") ||
-                url.hostname.includes("cdn.sanity.io")
+                url.pathname.includes("cdn.onesignal.com")
             )
         ) {
             return;
         }
-
-        if (url.pathname.includes('apicdn.sanity.io')) {
-            return;
-        }
-
-        if (url.hostname === "cdn.sanity.io" && url.pathname.includes("/images/")) {
-            event.respondWith(
-                caches.match(event.request).then((cachedResponse) => {
-                    if (cachedResponse) {
-                        return cachedResponse;
-                    }
-
-                    const urlWithoutQuery = url.origin + url.pathname;
-                    return caches.match(urlWithoutQuery).then((cachedResponseNoQuery) => {
-                        if (cachedResponseNoQuery) {
-                            return cachedResponseNoQuery;
-                        }
-
-                        return fetch(event.request)
-                            .then((networkResponse) => {
-                                if (networkResponse && networkResponse.status === 200) {
-                                    const clonedResponse = networkResponse.clone();
-                                    caches.open(CACHE_NAMES.images).then((cache) => {
-                                        cache.put(event.request, networkResponse.clone());
-                                        if (event.request.url !== urlWithoutQuery) {
-                                            cache.put(urlWithoutQuery, clonedResponse);
-                                        }
-                                    });
-                                }
-                                return networkResponse;
-                            })
-                            .catch((error) => {
-                                return caches.match(url.pathname).then((response) => response || Response.error());
-                            });
-                    });
-                })
-            );
-            return;
-        }
-
         const isStrategicFile =
             url.pathname.endsWith(".mjs") ||
             url.pathname.endsWith(".wasm") ||

@@ -32,7 +32,10 @@ class EventDetailModal extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               children: <Widget>[
-                Icon(Icons.location_on, color: Theme.of(context).primaryColor),
+                Icon(Icons.location_on,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Theme.of(context).colorScheme.secondary
+                        : Theme.of(context).primaryColor),
                 const SizedBox(width: 8.0),
                 Text(
                   event.location!,

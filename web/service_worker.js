@@ -146,7 +146,7 @@ if (workbox) {
 
     workbox.routing.registerRoute(
         ({ url }) => url.pathname.endsWith("manifest.json"),
-        new workbox.strategies.CacheFirst({
+        new workbox.strategies.NetworkFirst({
             cacheName: CACHE_NAMES.static,
             plugins: [
                 new workbox.expiration.ExpirationPlugin({
@@ -227,13 +227,26 @@ if (workbox) {
         })
     );
 
+    workbox.routing.registerRoute(({ url }) => url.hostname.includes('cdn.sanity.io'),
+        new workbox.strategies.NetworkFirst({
+            cacheName: CACHE_NAMES.dynamic,
+            plugins: [
+                new workbox.expiration.ExpirationPlugin({
+                    maxEntries: 100,
+                    maxAgeSeconds: 24 * 60 * 60,
+                }),
+            ],
+        })
+    );
+
+
     workbox.routing.setDefaultHandler(
         new workbox.strategies.StaleWhileRevalidate({
             cacheName: CACHE_NAMES.dynamic,
             plugins: [
                 new workbox.expiration.ExpirationPlugin({
                     maxEntries: 100,
-                    maxAgeSeconds: 7 * 24 * 60 * 60,
+                    maxAgeSeconds: 24 * 60 * 60,
                 }),
             ],
         })
@@ -279,89 +292,5 @@ if (workbox) {
         }
 
         return Response.error();
-    });
-
-    self.addEventListener("fetch", (event) => {
-        const url = new URL(event.request.url);
-
-        if (
-            url.origin !== self.location.origin &&
-            !(
-                url.pathname.includes("canvaskit") ||
-                url.pathname.includes("cdn.onesignal.com")
-            )
-        ) {
-            return;
-        }
-        const isStrategicFile =
-            url.pathname.endsWith(".mjs") ||
-            url.pathname.endsWith(".wasm") ||
-            url.pathname.endsWith("flutter.js") ||
-            url.pathname.endsWith("flutter_bootstrap.js") ||
-            url.pathname.endsWith("main.dart.js") ||
-            url.pathname.includes("canvaskit") ||
-            url.pathname.includes("skwasm") ||
-            url.pathname === "/" ||
-            url.pathname === "/index.html";
-
-        if (isStrategicFile) {
-            event.respondWith(
-                caches.match(event.request).then((cachedResponse) => {
-                    if (cachedResponse) {
-                        return cachedResponse;
-                    }
-
-                    const urlWithoutQuery = url.origin + url.pathname;
-                    return caches.match(urlWithoutQuery).then((cachedResponseNoQuery) => {
-                        if (cachedResponseNoQuery) {
-                            return cachedResponseNoQuery;
-                        }
-
-                        return fetch(event.request)
-                            .then((networkResponse) => {
-                                if (networkResponse && networkResponse.status === 200) {
-                                    const clonedResponse = networkResponse.clone();
-                                    const cacheName =
-                                        url.pathname.includes("canvaskit") ||
-                                            url.pathname.endsWith(".wasm") ||
-                                            url.pathname.endsWith(".mjs") ||
-                                            url.pathname.endsWith(".js")
-                                            ? CACHE_NAMES.flutter
-                                            : CACHE_NAMES.static;
-
-                                    caches.open(cacheName).then((cache) => {
-                                        cache.put(event.request, networkResponse.clone());
-                                        if (event.request.url !== urlWithoutQuery) {
-                                            cache.put(urlWithoutQuery, clonedResponse);
-                                        }
-                                    });
-                                }
-                                return networkResponse;
-                            })
-                            .catch((error) => {
-                                return caches.match(url.pathname).then((response) => response || Response.error());
-                            });
-                    });
-                })
-            );
-        } else if (url.pathname.includes("/assets/")) {
-            event.respondWith(
-                caches.match(event.request).then((response) => {
-                    if (response) {
-                        return response;
-                    }
-
-                    return fetch(event.request).then((networkResponse) => {
-                        if (networkResponse && networkResponse.status === 200) {
-                            const clonedResponse = networkResponse.clone();
-                            caches.open(CACHE_NAMES.static).then((cache) => {
-                                cache.put(event.request, clonedResponse);
-                            });
-                        }
-                        return networkResponse;
-                    });
-                })
-            );
-        }
     });
 }

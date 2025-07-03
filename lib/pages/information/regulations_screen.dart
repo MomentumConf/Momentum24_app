@@ -58,7 +58,7 @@ class RegulationsScreenState extends State<RegulationsScreen> {
               onPressed: () => {
                     showAboutDialog(
                         context: context,
-                        applicationName: packageInfo.appName,
+                        applicationName: "Momentum App",
                         applicationVersion: packageInfo.version,
                         applicationLegalese:
                             "© ${DateTime.now().year} Bartosz Kazuła (kazula.eu)",

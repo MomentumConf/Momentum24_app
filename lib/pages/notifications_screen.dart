@@ -60,6 +60,7 @@ class NotificationsScreenState extends State<NotificationsScreen> {
     return Scaffold(
       appBar: const MomentumAppBar(),
       body: RefreshIndicator(
+        color: Theme.of(context).colorScheme.tertiary,
         onRefresh: refreshNotifications,
         child: SizedBox(
           height: double.infinity,

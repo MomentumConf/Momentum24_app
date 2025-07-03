@@ -73,8 +73,8 @@ runs:
       run: |
         curl -sL https://github.com/OneSignal/OneSignal-Website-SDK/files/11480764/OneSignalSDK-v16-ServiceWorker.zip -o OneSignalSDK-v16-ServiceWorker.zip
         unzip -o OneSignalSDK-v16-ServiceWorker.zip
-        mv OneSignalSDK-v16-ServiceWorker/* ./web
-        rm -rf OneSignalSDK-v16-ServiceWorker.zip OneSignalSDK-v16-ServiceWorker
+        mv OneSignalSDK-v16-ServiceWorker/ ./web/notifications/
+        rm -rf OneSignalSDK-v16-ServiceWorker.zip
       shell: bash
 
     - name: Build with Vercel using NPX

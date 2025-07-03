@@ -49,6 +49,7 @@ class SongsScreenState extends State<SongsScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
+              color: Theme.of(context).colorScheme.tertiary,
               onRefresh: () {
                 return _dataProviderService.getSongs(forceNewData: true);
               },

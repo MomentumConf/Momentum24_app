@@ -22,6 +22,7 @@ class EventDayList extends StatelessWidget {
   Widget build(BuildContext context) {
     final events = filterEventsForDay(day);
     return RefreshIndicator(
+      color: Theme.of(context).colorScheme.tertiary,
       onRefresh: () {
         return dataProviderService
             .getSchedule(forceNewData: true)

@@ -17,7 +17,8 @@ class MarkerListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = isSelected ? theme.primaryColor : theme.colorScheme.onSurface;
+    final color =
+        isSelected ? theme.colorScheme.tertiary : theme.colorScheme.onSurface;
     final icon = MarkerIconHelper.getMarkerIcon(marker.icon);
 
     return Container(

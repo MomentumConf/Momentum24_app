@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:string_unescape/string_unescape.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SongContent extends StatelessWidget {
   final String lyrics;

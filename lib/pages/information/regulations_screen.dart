@@ -46,7 +46,12 @@ class RegulationsScreenState extends State<RegulationsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(4.0),
-            child: MarkdownBody(data: regulationContent),
+            child: MarkdownBody(
+              data: regulationContent, 
+              onTapLink: (text, href, title) {
+                  launchUrl(Uri.parse(href!));
+                }
+              ),
           ),
           const SizedBox(
             height: 10,

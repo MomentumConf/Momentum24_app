@@ -34,6 +34,9 @@ class SongContent extends StatelessWidget {
             styleSheet: MarkdownStyleSheet.fromTheme(theme).copyWith(
               textScaler: TextScaler.linear(textScaleFactor),
             ),
+            onTapLink: (text, href, title) {
+              launchUrl(Uri.parse(href!));
+            }
           ),
         ),
       ),

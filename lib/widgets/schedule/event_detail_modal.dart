@@ -54,6 +54,9 @@ class EventDetailModal extends StatelessWidget {
             styleSheet: MarkdownStyleSheet(
               p: const TextStyle(fontSize: 16),
             ),
+            onTapLink: (text, href, title) {
+              launchUrl(Uri.parse(href!));
+            }
           ),
         ),
         if (event.speakers.isNotEmpty && isSubevent)

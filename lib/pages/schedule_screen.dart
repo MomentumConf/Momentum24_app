@@ -116,7 +116,9 @@ class ScheduleScreenState extends State<ScheduleScreen>
       indicatorSize: TabBarIndicatorSize.label,
       indicatorPadding: const EdgeInsets.all(0),
       dividerHeight: 0,
-      tabs: uniqueDays.map((day) {
+      tabs: uniqueDays.asMap().entries.map((entry) {
+        final index = entry.key;
+        final day = entry.value;
         return Tab(
           child: AnimatedBuilder(
             animation: _tabController.animation!,

@@ -4,16 +4,19 @@ import 'package:intl/intl.dart';
 class DayTab extends StatelessWidget {
   final DateTime day;
   final int daysCount;
+  final bool isHighlighted;
 
   const DayTab({
     super.key,
     required this.day,
     required this.daysCount,
+    required this.isHighlighted,
   });
 
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.onPrimary;
+    final colorHighlighted = Theme.of(context).colorScheme.onSurface;
     final deviceWidth = MediaQuery.of(context).size.width;
 
     final weekday =
@@ -33,7 +36,7 @@ class DayTab extends StatelessWidget {
                 .toUpperCase(),
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: color,
+              color: isHighlighted? colorHighlighted : color,
               fontSize: 12,
             ),
           ),
@@ -41,7 +44,7 @@ class DayTab extends StatelessWidget {
             dayOfMonth,
             style: TextStyle(
               fontSize: 16,
-              color: color,
+              color: isHighlighted? colorHighlighted : color,
               fontWeight: FontWeight.bold,
             ),
           ),

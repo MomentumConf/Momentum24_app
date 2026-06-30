@@ -124,6 +124,7 @@ class ScheduleScreenState extends State<ScheduleScreen>
               return DayTab(
                 day: day,
                 daysCount: uniqueDays.length,
+                isHighlighted: _tabController.index == index,
               );
             },
           ),

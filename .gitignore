@@ -60,3 +60,6 @@ web/icons
 web/favicon.png
 web/manifest.json
 assets/images/
+
+# FVM Version Cache
+.fvm/

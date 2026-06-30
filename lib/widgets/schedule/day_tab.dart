@@ -16,7 +16,7 @@ class DayTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.onPrimary;
-    final colorHighlighted = Theme.of(context).colorScheme.onSurface;
+    final colorHighlighted = Theme.of(context).colorScheme.onTertiary;
     final deviceWidth = MediaQuery.of(context).size.width;
 
     final weekday =
@@ -36,7 +36,7 @@ class DayTab extends StatelessWidget {
                 .toUpperCase(),
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: isHighlighted? colorHighlighted : color,
+              color: isHighlighted ? colorHighlighted : color,
               fontSize: 12,
             ),
           ),
@@ -44,7 +44,7 @@ class DayTab extends StatelessWidget {
             dayOfMonth,
             style: TextStyle(
               fontSize: 16,
-              color: isHighlighted? colorHighlighted : color,
+              color: isHighlighted ? colorHighlighted : color,
               fontWeight: FontWeight.bold,
             ),
           ),
